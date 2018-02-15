@@ -15,11 +15,37 @@ public class Main {
 			 		 {"X"," ","I"," ","I"," ","X"," "," ","X"},
 			 		 {"X","X","X","X","X","X","X","X","X","X"}};
 	
+	public static void push_remove(String str, int atX, int atY, int byeX, int byeY){
+		
+		if(atX >= 0){
+			System.out.print("\nPush: " + atX + ", " + atY);
+			map[atX][atY] = str;
+		}
+		if(byeX >= 0){
+			System.out.print("\nRemove: " + byeX + ", " + byeY);
+			map[byeX][byeY] = " ";
+		}
+	}
+
+	public static void push(String str, int atX, int atY){
+		push_remove(str, atX, atY, -1, -1);
+	}
+
+	public static void remove(int byeX, int byeY){
+		push_remove("", -1, -1, byeX, byeY);
+	}
+
 	public static void printscreen()
 	{
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				System.out.print(map[i][j]);
+		System.out.print("\n\n\n\n");
+
+		for (int i=0; i<map.length; i++) {
+			for (int j=0; j<map[i].length; j++) {
+
+				if(map[i][j] == null){
+					map[i][j] = " ";
+				}
+				System.out.print(map[i][j] + "|");
 			}
 			System.out.print("\n");
 		}
