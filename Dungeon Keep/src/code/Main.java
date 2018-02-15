@@ -14,10 +14,16 @@ public class Main {
 			 		 {"X","X","X"," ","X","X","X","X"," ","X"},
 			 		 {"X"," ","I"," ","I"," ","X"," "," ","X"},
 			 		 {"X","X","X","X","X","X","X","X","X","X"}};
+	static String[][] copy=map;
 	
-	public static void push_remove(String str, int atX, int atY, int byeX, int byeY){
+	static int positionX=1;
+	static int positionY=1;
+	
+	public static boolean push_remove(String str, int atX, int atY, int byeX, int byeY){
 		
 		if(atX >= 0){
+			// whether there is a wall, do something
+			
 			System.out.print("\nPush: " + atX + ", " + atY);
 			map[atX][atY] = str;
 		}
@@ -25,10 +31,14 @@ public class Main {
 			System.out.print("\nRemove: " + byeX + ", " + byeY);
 			map[byeX][byeY] = " ";
 		}
+		
+		return true;
 	}
 
 	public static void push(String str, int atX, int atY){
-		push_remove(str, atX, atY, -1, -1);
+		boolean can_move= push_remove(str, atX, atY, positionX, positionY );
+		positionX = atX;
+		positionY = atY;
 	}
 
 	public static void remove(int byeX, int byeY){
@@ -51,10 +61,10 @@ public class Main {
 		}
 	}
 	/*Transforms the input:
-	 * W-1
-	 * S-2
-	 * A-3
-	 * D-4
+	 * W-1 UP
+	 * S-2 Down
+	 * A-3 Left
+	 * D-4 Right
 	 * P(Exit)-0
 	 * Error- -1
 	 */
@@ -99,7 +109,16 @@ public class Main {
 			}
 			switch(movement)
 			{
-			
+			//moving 
+			case 1:push("H",positionX-1,positionY);
+				
+				break;
+			case 2:push("H",positionX+1,positionY);
+				break;
+			case 3:push("H",positionX,positionY-1);
+				break;
+			case 4:push("H",positionX,positionY+1);
+				break;
 			}
 			
 		}
