@@ -1,63 +1,32 @@
 package code;
 
-import java.util.Scanner;
-
 public class Main {
-	
-	static String[][] map= {{"X","X","X","X","X","X","X","X","X","X"},
-			 		 {"X","H"," "," ","I"," ","X"," ","G","X"},
-			 		 {"X","X","X"," ","X","X","X"," "," ","X"},
-			 		 {"X"," ","I"," ","I"," ","X"," "," ","X"},
-			 		 {"X","X","X"," ","X","X","X"," "," ","X"},
-			 		 {"I"," "," "," "," "," "," "," "," ","X"},
-			 		 {"I"," "," "," "," "," "," "," "," ","X"},
-			 		 {"X","X","X"," ","X","X","X","X"," ","X"},
-			 		 {"X"," ","I"," ","I"," ","X"," "," ","X"},
-			 		 {"X","X","X","X","X","X","X","X","X","X"}};
-	
-	public static void printscreen()
-	{
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				System.out.print(map[i][j]);
-			}
-			System.out.print("\n");
+
+	static String[][] map = new String[10][10];
+
+	public static void push_remove(String str, int atX, int atY, int byeX, int byeY){
+		
+		if(atX >= 0){
+			System.out.print("\nPush: " + atX + ", " + atY);
+			map[atX][atY] = str;
 		}
-	}
-	/*Transforms the input:
-	 * W-1
-	 * S-2
-	 * A-3
-	 * D-4
-	 * P(Exit)-0
-	 * Error- -1
-	 */
-	public static int transformInput(String input)
-	
-	{
-		switch(input)
-		{
-		case "W":return 1;
-		case "w":return 1;
-		case "S":return 2;
-		case "s":return 2;
-		case "A":return 3;
-		case "a":return 3;
-		case "D":return 4;
-		case "d":return 4;
-		case "P":return 0;
-		case "p":return 0;
+		if(byeX >= 0){
+			System.out.print("\nRemove: " + byeX + ", " + byeY);
+			map[byeX][byeY] = " ";
 		}
-		return -1;
 	}
 
-	public static void main(String[] args) {
-		boolean sair=false;
+	public static void push(String str, int atX, int atY){
+		push_remove(str, atX, atY, -1, -1);
+	}
+
+	public static void remove(int byeX, int byeY){
+		push_remove("", -1, -1, byeX, byeY);
+	}
+
+	public static void render(){
 		
-		Scanner s= new Scanner(System.in);
-		
-		String input;
-		
+<<<<<<< Updated upstream
 		while(sair==false)
 		{
 			printscreen();
@@ -74,10 +43,30 @@ public class Main {
 			switch(movement)
 			{
 			///asads
+=======
+		System.out.print("\n\n\n\n");
+
+		for (int i=0; i<map.length; i++) {
+			for (int j=0; j<map[i].length; j++) {
+
+				if(map[i][j] == null){
+					map[i][j] = " ";
+				}
+				System.out.print(map[i][j] + "|");
+>>>>>>> Stashed changes
 			}
-			
+			System.out.print("\n");
 		}
-		s.close();
+	}
+
+	public static void main(String[] args) {
+		push("X", 2,2);
+		push("I", 4,5);
+		render();
+		remove(2,2);
+		render();
+		push_remove("X", 7,3, 4,5);
+		render();
 	}
 
 }
