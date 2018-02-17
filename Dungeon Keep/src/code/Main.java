@@ -33,7 +33,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		int cur_level = 2;
+		int cur_level = 1;
 		GameMap map = new GameMap(cur_level);
 
 		boolean sair = false;
