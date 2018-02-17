@@ -15,27 +15,27 @@ public class Main {
 	public static int transformInput(String input)
 	
 	{
-		switch(input)
-		{
-		case "W":return 1;
-		case "w":return 1;
-		case "S":return 2;
-		case "s":return 2;
-		case "A":return 3;
-		case "a":return 3;
-		case "D":return 4;
-		case "d":return 4;
-		case "P":return 0;
-		case "p":return 0;
-		case "0":return 0;
+		switch(input) {
+			case "W": return 1;
+			case "w": return 1;
+			case "S": return 2;
+			case "s": return 2;
+			case "A": return 3;
+			case "a": return 3;
+			case "D": return 4;
+			case "d": return 4;
+			case "P": return 0;
+			case "p": return 0;
+			case "0": return 0;
 		}
 		return -1;
 	}
 
 	public static void main(String[] args) {
 
-		GameMap map = new GameMap();
-		
+		int cur_level = 2;
+		GameMap map = new GameMap(cur_level);
+
 		boolean sair = false;
 
 		String input;
@@ -64,8 +64,14 @@ public class Main {
 				int state=map.moveHeroTo(movement);
 				if(state==1)
 				{
-					System.out.println("Victory");
-					break;
+					if(cur_level==1){
+						cur_level++;
+						map = new GameMap(cur_level);
+					}
+					else{
+						System.out.println("Victory");
+						break;
+					}
 				}
 				else if(state==2)
 				{

@@ -1,30 +1,118 @@
 package code;
 
 public class GameMap {
-	String[][] map = new String[][] { { "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" },
-									  { "X", " ", " ", " ", "I", " ", "X", " ", " ", "X" }, 
-									  { "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
-									  { "X", " ", "I", " ", "I", " ", "X", " ", " ", "X" }, 
-									  { "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
-									  { "I", " ", " ", " ", " ", " ", " ", " ", " ", "X" }, 
-									  { "I", " ", " ", " ", " ", " ", " ", " ", " ", "X" },
-									  { "X", "X", "X", " ", "X", "X", "X", "X", " ", "X" }, 
-									  { "X", " ", "I", " ", "I", " ", "X", "k", " ", "X" },
-									  { "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" } };
-	String[][] copy=new String[map.length][map[0].length];
 
-	Character hero = new Character();
-	Character guard = new Character();;
+/*======DEFINITIONS======*/
+
+	String _wall        = "X";
+	String _door        = "I";
+	String _opened_door = "S";
+	String _lever       = "k";
+	String _empty_cell  = " ";
+
+	String _hero        = "H";
+	String _hero_at_key = "$";
+
+	String _guard       = "G";
+
+	String _crazy_ogre  = "0";
+	String _ogre_at_key = "K";
+
+	String _ogre_club   = "*";
+	String _club_at_key = "$";
+
+
+	// Pre-defined map.
+	String[][][] map_warehouse = new String[][][] {
+		{
+			{ "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" },
+			{ "X", " ", " ", " ", "I", " ", "X", " ", " ", "X" }, 
+			{ "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
+			{ "X", " ", "I", " ", "I", " ", "X", " ", " ", "X" }, 
+			{ "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
+			{ "I", " ", " ", " ", " ", " ", " ", " ", " ", "X" }, 
+			{ "I", " ", " ", " ", " ", " ", " ", " ", " ", "X" },
+			{ "X", "X", "X", " ", "X", "X", "X", "X", " ", "X" }, 
+			{ "X", " ", "I", " ", "I", " ", "X", "k", " ", "X" },
+			{ "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" }
+		},
+
+		{
+			{ "X","X","X","X","X","X","X","X","X" },
+			{ "I"," "," "," "," "," "," ","k","X" },
+			{ "X"," "," "," "," "," "," "," ","X" },
+			{ "X"," "," "," "," "," "," "," ","X" },
+			{ "X"," "," "," "," "," "," "," ","X" },
+			{ "X"," "," "," "," "," "," "," ","X" },
+			{ "X"," "," "," "," "," "," "," ","X" },
+			{ "X"," "," "," "," "," "," "," ","X" },
+			{ "X","X","X","X","X","X","X","X","X" }
+		}
+	};
+
+/*======REAL FUNCTIONS======*/
+
+	String[][] map;
+	String[][] copied_map;
+
+	// init characters
+	Hero hero = new Hero();
+	Guard guard = new Guard();
+	Club club = new Club();
+
+	// mark current level for display
+	int current_level;
 
 	// Class constructor
-	public GameMap() {
-		hero.positionX = 1;
-		hero.positionY = 1;
-		guard.positionX = 1;
-		guard.positionY = 8;
-		for(int i=0;i<map.length;i++)
-		{
-			System.arraycopy(map[i], 0, copy[i], 0, map[i].length);
+	public GameMap(int level) {
+
+		if(level == 2){
+			hero.positionX = 7;
+			hero.positionY = 1;
+			guard.positionX = 1;
+			guard.positionY = 4;
+		}
+		else {	// level 1
+			level = 1;
+			hero.positionX = 1;
+			hero.positionY = 1;
+			guard.positionX = 1;
+			guard.positionY = 8;
+		}
+
+		// pointer only, need to copy
+		String[][] this_level_map = map_warehouse[level-1];
+
+		// mark current level
+		current_level = level;
+
+		// copy map
+		map = new String[this_level_map.length][this_level_map[0].length];
+		for(int i=0; i<this_level_map.length; i++){
+			map[i] = this_level_map[i].clone();
+		}
+
+		// copy one more time
+		copied_map = new String[map.length][map[0].length];
+		for(int i=0; i<map.length; i++){
+			copied_map[i] = map[i].clone();
+		}
+
+		// mark default position in the map, for hero & guard
+		map[hero.positionX][hero.positionY] = _hero;
+
+		if(current_level == 2){
+			map[guard.positionX][guard.positionY] = _crazy_ogre;
+
+			int[] pos = club.clubNextPosition(guard, this);
+			club.positionX = pos[0];
+			club.positionY = pos[1];
+
+			map[club.positionX][club.positionY] = _ogre_club;
+		}
+		else{
+			// level 1
+			map[guard.positionX][guard.positionY] = _guard;
 		}
 	}
 
@@ -35,15 +123,32 @@ public class GameMap {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 
-				if (i==hero.positionX && j==hero.positionY) {
-					System.out.print("H"+"|");
+				boolean char_printed = false;
+
+				// special handle for the key in level 2
+				if(current_level == 2
+					&& copied_map[i][j].equals(_lever)){
+
+					if(map[i][j].equals(_crazy_ogre)){
+
+						char_printed = true;
+						System.out.print(_ogre_at_key + "|");
+					}
+					else if(map[i][j].equals(_ogre_club)){
+						
+						char_printed = true;
+						System.out.print(_club_at_key + "|");
+					}
+					else if(map[i][j].equals(_hero)){
+						
+						char_printed = true;
+						System.out.print(_hero_at_key + "|");
+					}
 				}
-				else if(i==guard.positionX && j==guard.positionY)
-				{
-					System.out.print("G"+"|");
-				}
-				else
+				
+				if(!char_printed){
 					System.out.print(map[i][j] + "|");
+				}
 			}
 			System.out.print("\n");
 		}
@@ -53,10 +158,11 @@ public class GameMap {
 	private void openDoors() {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map.length; j++) {
-				if(map[i][j]=="I")
-				{
-					map[i][j]="S";
-					copy[i][j]="S";
+
+				if(map[i][j]==_door) {
+
+					map[i][j] = _opened_door;
+					copied_map[i][j] = _opened_door;
 				}
 			}
 		}
@@ -67,14 +173,41 @@ public class GameMap {
 
 		if (atX >= 0 && atY>=0) {
 
-			//colision detection
-			if (!map[atX][atY].equals(" ") && !map[atX][atY].equals("S") && !map[atX][atY].equals("k") ) {
-				
-				return false;
+			if(str == _hero){
+
+				boolean can_move = (
+					map[atX][atY].equals(_empty_cell) ||
+					map[atX][atY].equals(_opened_door) ||
+					map[atX][atY].equals(_lever)
+				);
+
+				// colision detection
+				if (!can_move) {
+					return false;
+				}
+
+				if(map[atX][atY].equals(_lever)) //Open doors
+				{
+					openDoors();
+
+					if(current_level == 2){
+						// remove the key
+						copied_map[atX][atY] = _empty_cell;
+					}
+				}
 			}
-			if(map[atX][atY].equals("k")) //Open doors
-			{
-				openDoors();
+			else{
+				// guard
+
+				boolean can_move = (
+					map[atX][atY].equals(_empty_cell) ||
+					map[atX][atY].equals(_lever)
+				);
+
+				// colision detection
+				if (!can_move) {
+					return false;
+				}
 			}
 
 			System.out.print("\nPush: " + atX + ", " + atY);
@@ -82,7 +215,7 @@ public class GameMap {
 		}
 		if (byeX >= 0 && byeY>=0) {
 			System.out.print("\nRemove: " + byeX + ", " + byeY);
-			map[byeX][byeY] = copy[byeX][byeY];
+			map[byeX][byeY] = copied_map[byeX][byeY];
 		}
 
 		return true;
@@ -90,14 +223,27 @@ public class GameMap {
 	
 	private boolean checkGuard()
 	{
-		if(map[guard.positionX+1][guard.positionY]=="H")
+		if(map[guard.positionX+1][guard.positionY].equals(_hero))
 			return true;
-		if(map[guard.positionX-1][guard.positionY]=="H")
+		if(map[guard.positionX-1][guard.positionY].equals(_hero))
 			return true;
-		if(map[guard.positionX][guard.positionY+1]=="H")
+		if(map[guard.positionX][guard.positionY+1].equals(_hero))
 			return true;
-		if(map[guard.positionX][guard.positionY-1]=="H")
+		if(map[guard.positionX][guard.positionY-1].equals(_hero))
 			return true;
+
+
+		if(current_level == 2){
+
+			if(map[club.positionX+1][club.positionY].equals(_hero))
+				return true;
+			if(map[club.positionX-1][club.positionY].equals(_hero))
+				return true;
+			if(map[club.positionX][club.positionY+1].equals(_hero))
+				return true;
+			if(map[club.positionX][club.positionY-1].equals(_hero))
+				return true;
+		}
 		
 		return false;
 	}
@@ -131,36 +277,42 @@ public class GameMap {
 		{
 			return 1;
 		}
-		boolean has_moved = push_remove("H", toX, toY, hero.positionX, hero.positionY);
+		boolean has_moved = push_remove(_hero, toX, toY, hero.positionX, hero.positionY);
 
 		if (has_moved) {
 			hero.positionX = toX;
 			hero.positionY = toY;
 		}
-		
-		//time for the guard to move
-		switch (guard.guardNextPosition()) {
-		case 1:
-			toX = guard.positionX - 1;
-			toY = guard.positionY;
-			break;
-		case 2:
-			toX = guard.positionX + 1;
-			toY = guard.positionY;
-			break;
-		case 3:
-			toX = guard.positionX;
-			toY = guard.positionY - 1;
-			break;
-		case 4:
-			toX = guard.positionX;
-			toY = guard.positionY + 1;
-			break;
+
+		int[] guard_new_pos = guard.guardNextPosition(guard, this);
+
+		toX = guard_new_pos[0];
+		toY = guard_new_pos[1];
+
+		// if current level is "2"
+		if(current_level == 2){
+			has_moved = push_remove(_crazy_ogre, toX, toY, guard.positionX, guard.positionY);
 		}
-		has_moved=push_remove("G", toX, toY, guard.positionX, guard.positionY);
+		// else
+		else{
+			// level 1
+			has_moved = push_remove(_guard, toX, toY, guard.positionX, guard.positionY);
+		}
+		
 		if (has_moved) {
 			guard.positionX = toX;
 			guard.positionY = toY;
+
+			// if level 2, move the club also.
+			if(current_level == 2){
+				int[] pos = club.clubNextPosition(guard, this);
+				has_moved = push_remove(_ogre_club, pos[0], pos[1], club.positionX, club.positionY);
+
+				if(has_moved) {
+					club.positionX = pos[0];
+					club.positionY = pos[1];
+				}
+			}
 		}
 		//check if the guard sees the hero
 		if(checkGuard()==true)
