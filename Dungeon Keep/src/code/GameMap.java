@@ -11,12 +11,12 @@ public class GameMap {
 	String _empty_cell  = " ";
 
 	String _hero        = "H";
-	String _hero_at_key = "$";
+	String _hero_at_key = "K";
 
 	String _guard       = "G";
 
 	String _crazy_ogre  = "0";
-	String _ogre_at_key = "K";
+	String _ogre_at_key = "$";
 
 	String _ogre_club   = "*";
 	String _club_at_key = "$";
@@ -142,6 +142,8 @@ public class GameMap {
 					else if(map[i][j].equals(_hero)){
 						
 						char_printed = true;
+						_hero=_hero_at_key;
+						copied_map[i][j] = _empty_cell;
 						System.out.print(_hero_at_key + "|");
 					}
 				}
@@ -181,6 +183,12 @@ public class GameMap {
 					map[atX][atY].equals(_lever)
 				);
 
+				if(map[atX][atY].equals(_door))
+				{
+					openDoors();
+					return false;
+				}
+
 				// colision detection
 				if (!can_move) {
 					return false;
@@ -188,11 +196,16 @@ public class GameMap {
 
 				if(map[atX][atY].equals(_lever)) //Open doors
 				{
-					openDoors();
+					
 
 					if(current_level == 2){
 						// remove the key
-						copied_map[atX][atY] = _empty_cell;
+						/*_hero=_hero_at_key;
+						copied_map[atX][atY] = _empty_cell;*/
+					}
+					else
+					{
+						openDoors();
 					}
 				}
 			}

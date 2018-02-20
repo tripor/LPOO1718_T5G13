@@ -82,16 +82,16 @@ public class Guard extends Character {
 
 			switch (path[position_path-1]) {
 				case "U":	// UP
-					pos[1]++;
-					break;
-				case "D":	// DOWN
-					pos[1]--;
-					break;
-				case "L":	// LEFT
 					pos[0]--;
 					break;
-				case "R":	// RIGHT
+				case "D":	// DOWN
 					pos[0]++;
+					break;
+				case "L":	// LEFT
+					pos[1]--;
+					break;
+				case "R":	// RIGHT
+					pos[1]++;
 					break;
 			}
 			return pos;
