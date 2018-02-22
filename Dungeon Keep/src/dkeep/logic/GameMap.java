@@ -1,4 +1,4 @@
-package code;
+package dkeep.logic;
 
 public class GameMap {
 
