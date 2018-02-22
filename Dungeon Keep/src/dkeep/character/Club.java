@@ -1,6 +1,6 @@
-package dkeep.logic;
+package dkeep.character;
 
-import java.util.Random;
+import dkeep.logic.*;
 
 public class Club extends Guard {
 

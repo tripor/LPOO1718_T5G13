@@ -1,6 +1,7 @@
-package dkeep.logic;
+package dkeep.character;
 
 import java.util.Random;
+import dkeep.logic.*;
 
 public class Guard extends Character {
 
@@ -72,7 +73,7 @@ public class Guard extends Character {
 
 		int[] pos = new int[]{guard.positionX, guard.positionY};
 
-		if(gamearea.current_level == 2){
+		if(gamearea.current_level.game_level.getValue() == 2){
 			// later.
 		}
 		else{
@@ -140,8 +141,8 @@ public class Guard extends Character {
 				// fail: out of border (bottom)
 			}
 			else if(!(
-				gamearea.map[pos[0]][pos[1]].equals(gamearea._empty_cell)
-				|| gamearea.map[pos[0]][pos[1]].equals(gamearea._lever)
+				gamearea.map[pos[0]][pos[1]].equals(defenitions._empty_cell)
+				|| gamearea.map[pos[0]][pos[1]].equals(defenitions._lever)
 			)){
 				// fail: it is a wall, a door, ...
 			}
