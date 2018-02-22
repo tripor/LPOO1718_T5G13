@@ -72,6 +72,27 @@ public class GameMap {
 		markPositions();
 
 	}
+	
+	//Updates the level
+	public void updateLevel()
+	{
+		switch(current_level.game_level.getValue())
+		{
+		case 1:
+			hero.positionX = 1;
+			hero.positionY = 1;
+			guard.positionX = 1;
+			guard.positionY = 8;
+		case 2:
+			hero.positionX = 7;
+			hero.positionY = 1; 
+			guard.positionX= 1; 
+			guard.positionY = 4;
+		}
+		updateMap();
+		
+		markPositions();
+	}
 
 	// Prints in the screen the map and the characters
 	public void printscreen() {

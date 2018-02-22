@@ -38,6 +38,7 @@ public class Main {
 				{
 					if(map.current_level.game_level.getValue()==1){
 						map.current_level.changeLevel(CurrentLevel.Level.SECOND);
+						map.updateLevel();
 					}
 					else{
 						System.out.println("Victory");
