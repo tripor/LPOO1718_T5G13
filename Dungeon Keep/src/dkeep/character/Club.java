@@ -2,7 +2,7 @@ package dkeep.character;
 
 import dkeep.logic.*;
 
-public class Club extends Guard {
+public class Club extends Ogre {
 
 	public int[] clubNextPosition(Guard guard, GameMap gamearea) {
 

@@ -1,5 +1,6 @@
 package dkeep.logic;
 
+import java.util.Random;
 import dkeep.character.*;
 
 public class GameMap {
@@ -11,11 +12,29 @@ public class GameMap {
 
 	// init characters
 	Hero hero = new Hero();
-	Guard guard = new Guard();
+	Guard guard;
 	Club club = new Club();
 
 	// mark current level for display
 	public CurrentLevel current_level;
+	
+	private void getRandomGuard()
+	{
+		int last_guard,first_guard;
+		first_guard=1;
+		last_guard=4;
+		Random rand = new Random();
+		int rand_result = rand.nextInt((last_guard-first_guard) + 1) + first_guard;
+		switch(rand_result)
+		{
+		case 1:
+			guard=new Rookie();
+		case 2:
+			//guard=new
+		case 3:
+		}
+		
+	}
 
 	// updates the game map depending on the currente level
 	private void updateMap() {
@@ -64,13 +83,16 @@ public class GameMap {
 
 		hero.positionX = 1;
 		hero.positionY = 1;
+		
+		this.getRandomGuard();
+		
 		guard.positionX = 1;
 		guard.positionY = 8;
 
-		updateMap();
+		this.updateMap();
 		
-		markPositions();
-
+		this.markPositions();
+		
 	}
 	
 	//Updates the level
@@ -84,6 +106,7 @@ public class GameMap {
 			guard.positionX = 1;
 			guard.positionY = 8;
 		case 2:
+			guard=new Ogre();
 			hero.positionX = 7;
 			hero.positionY = 1; 
 			guard.positionX= 1; 
