@@ -63,4 +63,8 @@ public class Ogre extends Guard {
 		return pos;
 	}
 
+	public String typeGuard() {
+		return "ogre";
+	}
+
 }

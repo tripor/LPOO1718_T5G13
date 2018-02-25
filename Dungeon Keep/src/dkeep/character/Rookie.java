@@ -3,6 +3,8 @@ package dkeep.character;
 import dkeep.logic.GameMap;
 
 public class Rookie extends Guard {
+	
+	
 
 	public int[] guardNextPosition(Guard guard, GameMap gamearea) {
 
@@ -27,6 +29,10 @@ public class Rookie extends Guard {
 		}
 		return pos;
 
+	}
+
+	public String typeGuard() {
+		return "rookie";
 	}
 
 }

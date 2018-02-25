@@ -56,12 +56,20 @@ public abstract class Guard extends Character {
 		}
 		return rand_result;
 	}
+	
+	protected int randomNumber(int min, int max)
+	{
+		Random rand = new Random();
+		int rand_result = rand.nextInt((max-min) + 1) + min;
+		return rand_result;
+	}
 
 
 	// OTHER THINGS...
 	
 	protected String[] path = {"L","D","D","D","D","L","L","L","L","L","L","D","R","R","R","R","R","R","R","U","U","U","U","U"};
 	protected int position_path=0;
+	protected boolean foward_walking=true;
 	/*
 	 * 1 UP
 	 * 2 Down
@@ -70,16 +78,5 @@ public abstract class Guard extends Character {
 	 */
 	public abstract int[] guardNextPosition(Guard guard, GameMap gamearea);
 	
-
-	/*public Guard(){
-		super();
-		
-		int last_guard,first_guard;
-		first_guard=1;
-		last_guard=4;
-		Random rand = new Random();
-		int rand_result = rand.nextInt((last_guard-first_guard) + 1) + first_guard;
-		
-		//type_of_guard.setValue(rand_result);
-	}*/
+	public abstract String typeGuard();
 }

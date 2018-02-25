@@ -17,23 +17,29 @@ public class GameMap {
 
 	// mark current level for display
 	public CurrentLevel current_level;
-	
-	private void getRandomGuard()
-	{
-		int last_guard,first_guard;
-		first_guard=1;
-		last_guard=4;
+
+	private void getRandomGuard() {
+		int last_guard, first_guard;
+		first_guard = 1;
+		last_guard = 3;
 		Random rand = new Random();
-		int rand_result = rand.nextInt((last_guard-first_guard) + 1) + first_guard;
-		switch(rand_result)
-		{
+		int rand_result = rand.nextInt((last_guard - first_guard) + 1) + first_guard;
+		rand_result = 2;
+		switch (rand_result) {
 		case 1:
-			guard=new Rookie();
+			guard = new Rookie();
+			System.out.println("rookie");
+			break;
 		case 2:
-			//guard=new
+			guard = new Drunken();
+			System.out.println("drunken");
+			break;
 		case 3:
+			guard = new Suspicious();
+			System.out.println("suspicious");
+			break;
 		}
-		
+
 	}
 
 	// updates the game map depending on the currente level
@@ -83,37 +89,35 @@ public class GameMap {
 
 		hero.positionX = 1;
 		hero.positionY = 1;
-		
+
 		this.getRandomGuard();
-		
+
 		guard.positionX = 1;
 		guard.positionY = 8;
 
 		this.updateMap();
-		
+
 		this.markPositions();
-		
+
 	}
-	
-	//Updates the level
-	public void updateLevel()
-	{
-		switch(current_level.game_level.getValue())
-		{
+
+	// Updates the level
+	public void updateLevel() {
+		switch (current_level.game_level.getValue()) {
 		case 1:
 			hero.positionX = 1;
 			hero.positionY = 1;
 			guard.positionX = 1;
 			guard.positionY = 8;
 		case 2:
-			guard=new Ogre();
+			guard = new Ogre();
 			hero.positionX = 7;
-			hero.positionY = 1; 
-			guard.positionX= 1; 
+			hero.positionY = 1;
+			guard.positionX = 1;
 			guard.positionY = 4;
 		}
 		updateMap();
-		
+
 		markPositions();
 	}
 
@@ -175,10 +179,10 @@ public class GameMap {
 
 			if (str == defenitions._hero) {
 
-				boolean can_move = (map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._opened_door)
-						|| map[atX][atY].equals(defenitions._lever));
+				boolean can_move = (map[atX][atY].equals(defenitions._empty_cell)
+						|| map[atX][atY].equals(defenitions._opened_door) || map[atX][atY].equals(defenitions._lever));
 
-				if (map[atX][atY].equals(defenitions._door)) {
+				if (map[atX][atY].equals(defenitions._door) && str.equals(defenitions._hero_at_key)) {
 					openDoors();
 					return false;
 				}
@@ -203,7 +207,8 @@ public class GameMap {
 			} else {
 				// guard
 
-				boolean can_move = (map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._lever));
+				boolean can_move = (map[atX][atY].equals(defenitions._empty_cell)
+						|| map[atX][atY].equals(defenitions._lever));
 
 				// colision detection
 				if (!can_move) {
@@ -223,25 +228,27 @@ public class GameMap {
 	}
 
 	private boolean checkGuard() {
-		if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero))
-			return true;
-		if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero))
-			return true;
-		if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero))
-			return true;
-		if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero))
-			return true;
+		if (!map[guard.positionX][guard.positionY].equals("g")) {
+			if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero))
+				return true;
+			if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero))
+				return true;
+			if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero))
+				return true;
+			if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero))
+				return true;
 
-		if (current_level.game_level.getValue() == 2) {
+			if (current_level.game_level.getValue() == 2) {
 
-			if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
-				return true;
-			if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
-				return true;
-			if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
-				return true;
-			if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
-				return true;
+				if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
+					return true;
+				if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
+					return true;
+				if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
+					return true;
+				if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
+					return true;
+			}
 		}
 
 		return false;

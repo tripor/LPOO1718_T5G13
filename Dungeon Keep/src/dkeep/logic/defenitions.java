@@ -12,6 +12,7 @@ public class defenitions {
 	public static String _hero_at_key = "K";
 
 	public static String _guard = "G";
+	public static String _guard_sleep = "g";
 
 	public static String _crazy_ogre = "0";
 	public static String _ogre_at_key = "$";
