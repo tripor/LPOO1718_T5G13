@@ -4,13 +4,11 @@ import dkeep.logic.*;
 import dkeep.cli.*;
 
 public class Main {
-	
-	
 
 	public static void main(String[] args) {
 
 		GameMap map = new GameMap();
-		UserInput user=new UserInput();
+		UserInput user = new UserInput();
 
 		boolean sair = false;
 

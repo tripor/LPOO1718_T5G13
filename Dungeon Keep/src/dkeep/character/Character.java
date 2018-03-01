@@ -5,9 +5,8 @@ public abstract class Character {
 	public int positionX;
 	public int positionY;
 	
-	public Character()
-	{
-		
+	public Character(){
+		System.out.print("Init Character.\n");
 	}
 	
 }

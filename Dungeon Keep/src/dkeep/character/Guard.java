@@ -5,6 +5,26 @@ import dkeep.logic.*;
 
 public abstract class Guard extends Character {
 	
+	public Guard(String[][] map){
+
+		super();
+
+		// System.out.print(map);
+
+		int xMax = map.length-1;
+		int yMax = map[0].length-1;
+
+		int x = randomNumber(0, xMax);
+		int y = randomNumber(0, yMax);
+
+		System.out.print("[Guard] new " + typeGuard() + "()\n");
+
+		positionX = x;
+		positionY = y;
+
+		System.out.print("[Guard] at " + positionX + ", " + positionY + ".\n");
+	}
+
 	// rd() will return a corner which had never failed.
 
 	// e.g., it failed because there is a wall,
@@ -25,7 +45,7 @@ public abstract class Guard extends Character {
 			}
 		}
 
-		System.out.print("\n[>> "+count_available);
+		// System.out.print("\n[>> "+count_available);
 
 		if(count_available == 0){
 			System.out.print("Error: No space for guard / club.");

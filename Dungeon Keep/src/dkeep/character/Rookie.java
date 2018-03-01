@@ -35,4 +35,8 @@ public class Rookie extends Guard {
 		return "rookie";
 	}
 
+	public Rookie(String[][] map){
+		super(map);
+	}
+
 }

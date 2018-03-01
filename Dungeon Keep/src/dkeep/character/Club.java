@@ -9,7 +9,7 @@ public class Club extends Ogre {
 		return guardNextPosition(guard, gamearea);
 	}
 
-	public Club(){
-		super();
+	public Club(String[][] map){
+		super(map);
 	}
 }
