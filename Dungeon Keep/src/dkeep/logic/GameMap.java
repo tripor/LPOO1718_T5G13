@@ -311,9 +311,40 @@ public class GameMap {
 
 	private boolean checkGuard() {
 
+		if (current_level.game_level.getValue() == 2) {
+			for(Club c : hero.clubs){
+
+				if(c.positionX+1 < map.length && c.positionY < map[0].length
+				&& map[c.positionX+1][c.positionY].equals(defenitions._crazy_ogre)){
+					map[c.positionX+1][c.positionY] = defenitions._ogre_stunned;
+				}
+				else if(c.positionX < map.length && c.positionY+1 < map[0].length
+				&& map[c.positionX][c.positionY+1].equals(defenitions._crazy_ogre)){
+					map[c.positionX][c.positionY+1] = defenitions._ogre_stunned;
+				}
+				else if(c.positionX-1 < map.length && c.positionY < map[0].length
+				&& map[c.positionX-1][c.positionY].equals(defenitions._crazy_ogre)){
+					map[c.positionX-1][c.positionY] = defenitions._ogre_stunned;
+				}
+				else if(c.positionX < map.length && c.positionY-1 < map[0].length
+				&& map[c.positionX][c.positionY-1].equals(defenitions._crazy_ogre)){
+					map[c.positionX][c.positionY-1] = defenitions._ogre_stunned;
+				}
+			}
+		}
+
+		for(Guard guard : guards){
+			if(map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned)){
+				guard.stunned = 1;
+			}
+		}
+
 		for(Guard guard : guards){
 
-			if (!map[guard.positionX][guard.positionY].equals(defenitions._guard_sleep)) {
+			if (!(
+				map[guard.positionX][guard.positionY].equals(defenitions._guard_sleep)
+				|| map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned)
+			)) {
 				if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero))
 					return true;
 				if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero))
@@ -322,22 +353,21 @@ public class GameMap {
 					return true;
 				if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero))
 					return true;
+			}
 
-				if (current_level.game_level.getValue() == 2) {
+			if (current_level.game_level.getValue() == 2) {
 
-					for(Club club : guard.clubs){
+				for(Club club : guard.clubs){
 
-						if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
-							return true;
-						if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
-							return true;
-						if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
-							return true;
-						if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
-							return true;
-					}
+					if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
+						return true;
+					if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
+						return true;
+					if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
+						return true;
+					if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
+						return true;
 				}
-
 			}
 		}
 		return false;
@@ -371,6 +401,7 @@ public class GameMap {
 		if (toX < 0 || toY < 0) {
 			return 1;
 		}
+
 		boolean has_moved = push_remove(defenitions._hero, toX, toY, hero.positionX, hero.positionY);
 
 		if (has_moved) {
@@ -380,13 +411,27 @@ public class GameMap {
 
 		for(Club club : hero.clubs){
 
-			int[] pos;
+			int[] pos = new int[2];
 
-			do{
+			boolean success = false;
+			pos[0] = 0;
+			pos[1] = 0;
+
+			for(int i=0; i<5; i++) {
+
 				pos = club.clubNextPosition(hero, this);
 				has_moved = push_remove(defenitions._hero_club, pos[0], pos[1], club.positionX, club.positionY);
 
-			} while(!has_moved);
+				if(has_moved){
+					success = true;
+					break;
+				}
+			}
+
+			if(success==false){
+				System.out.print("\n\n\n===========================\n[Hero Club] No Space to move. Error.\n\n");
+				System.exit(0);
+			}
 
 			club.positionX = pos[0];
 			club.positionY = pos[1];
@@ -394,37 +439,80 @@ public class GameMap {
 
 		for (Guard guard : guards){
 
-			do {
-				int[] guard_new_pos = guard.guardNextPosition(guard, this);
+			System.out.print("Stunned = " + guard.stunned);
 
-				toX = guard_new_pos[0];
-				toY = guard_new_pos[1];
+			if(guard.stunned > 2){
+				// 0 = no stun;
+				// 1 = just stun (1st round);
+				// 2 = stun 2nd round;
+				guard.stunned = 0;
+			}
 
-				// if current level is "2"
-				if (current_level.game_level.getValue() == 2) {
-					has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
+			if(guard.stunned > 0){
+				guard.stunned++;
+			}
+
+			if(guard.stunned == 0){
+
+				boolean success = false;
+
+				for(int i=0; i<5; i++) {
+
+					int[] guard_new_pos = guard.guardNextPosition(guard, this);
+
+					toX = guard_new_pos[0];
+					toY = guard_new_pos[1];
+
+					// if current level is "2"
+					if (current_level.game_level.getValue() == 2) {
+						has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
+					}
+					// else
+					else {
+						// level 1
+						has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
+					}
+
+					if(has_moved){
+						success = true;
+						break;
+					}
 				}
-				// else
-				else {
-					// level 1
-					has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
-				}
-			} while(!has_moved);
 
-			guard.positionX = toX;
-			guard.positionY = toY;
+				if(success==false){
+					System.out.print("\n\n\n===========================\n[Guard] No Space. Error.\n\n");
+					System.exit(0);
+				}
+
+				guard.positionX = toX;
+				guard.positionY = toY;
+			}
 
 			// if level 2, move the club also.
 			if (current_level.game_level.getValue() == 2) {
 				for (Club club : guard.clubs){
 
-					int[] pos;
+					int[] pos = new int[2];
 
-					do{
+					boolean success = false;
+					pos[0] = 0;
+					pos[1] = 0;
+
+					for(int i=0; i<5; i++) {
+
 						pos = club.clubNextPosition(guard, this);
 						has_moved = push_remove(defenitions._ogre_club, pos[0], pos[1], club.positionX, club.positionY);
 
-					} while(!has_moved);
+						if(has_moved){
+							success = true;
+							break;
+						}
+					}
+
+					if(success==false){
+						System.out.print("\n\n\n===========================\n[Guard Club] No Space. Error.\n\n");
+						System.exit(0);
+					}
 
 					club.positionX = pos[0];
 					club.positionY = pos[1];

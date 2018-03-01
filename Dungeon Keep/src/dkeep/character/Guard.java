@@ -4,6 +4,8 @@ import java.util.Random;
 import dkeep.logic.*;
 
 public abstract class Guard extends Character {
+
+	public int stunned = 0;	// if 1, 2 = stunned
 	
 	public Guard(String[][] map){
 
@@ -14,13 +16,24 @@ public abstract class Guard extends Character {
 		int xMax = map.length-1;
 		int yMax = map[0].length-1;
 
-		int x, y;
+		int x=0, y=0;
 
-		do {
+		boolean success = false;
+
+		for(int i=0; i<5; i++) {
 			x = randomNumber(0, xMax);
 			y = randomNumber(0, yMax);
 
-		} while(!map[x][y].equals(defenitions._empty_cell));
+			if(map[x][y].equals(defenitions._empty_cell)){
+				success = true;
+				break;
+			}
+		}
+
+		if(success==false){
+			System.out.print("\n\n\n===========================\n[New Guard] No Space. Error.\n\n");
+			System.exit(0);
+		}
 
 		System.out.print("[Guard] new " + typeGuard() + "()\n");
 
@@ -53,7 +66,7 @@ public abstract class Guard extends Character {
 		// System.out.print("\n[>> "+count_available);
 
 		if(count_available == 0){
-			System.out.print("Error: No space for guard / club.");
+			System.out.print("\n\n\n===========================\nError: No space for guard / club.\n\n");
 			System.exit(0);
 		}
 
