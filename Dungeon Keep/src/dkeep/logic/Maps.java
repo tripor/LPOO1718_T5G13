@@ -30,7 +30,9 @@ public class Maps extends CurrentLevel {
 		{
 			{ "X","X","X","X","X" },
 			{ "X","H"," ","G","X" },
-			{ "I"," "," "
+			{ "I"," "," "," ","X" },
+			{ "I","k"," "," ","X" },
+			{ "X","X","X","X","X" }
 			
 			
 		}
@@ -51,6 +53,8 @@ public class Maps extends CurrentLevel {
 			return map_warehouse[0];
 		case SECOND:
 			return map_warehouse[1];
+		case TEST:
+			return map_warehouse[2];
 		default:
 			return map_warehouse[0];
 		}
@@ -66,6 +70,8 @@ public class Maps extends CurrentLevel {
 			return map_warehouse[0];
 		case SECOND:
 			return map_warehouse[1];
+		case TEST:
+			return map_warehouse[2];
 		default:
 			return map_warehouse[0];
 		}

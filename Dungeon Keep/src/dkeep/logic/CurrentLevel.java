@@ -3,7 +3,7 @@ package dkeep.logic;
 public abstract class CurrentLevel {
 	//DEFENITIONS
 	public static enum Level {
-		FIRST(1), SECOND(2);
+		FIRST(1), SECOND(2), TEST(0);
 
 		private int value;
 

@@ -4,11 +4,22 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class TestDungeonGameLogic {
+import dkeep.logic.*;
 
+public class TestDungeonGameLogic {
+	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testChangeLevel()
+	{
+		CurrentLevel current_level=new Maps();
+		assertEquals("The game doesn't star at level 1",CurrentLevel.Level.FIRST,current_level.game_level);
+	}
+	
+	@Test
+	public void testMoveHeroIntoToFreeCell()
+	{
+		CurrentLevel current_level=new Maps();
+		
 	}
 
 }
