@@ -1,6 +1,6 @@
 package dkeep.character;
 
-public class Character {
+public abstract class Character {
 	
 	public int positionX;
 	public int positionY;
