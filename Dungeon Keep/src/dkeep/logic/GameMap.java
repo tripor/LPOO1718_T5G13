@@ -105,6 +105,8 @@ public class GameMap {
 	// Class constructor
 	public GameMap() {
 
+		System.out.print("GameMap()\n\n");
+
 		/*
 		 * level 2 positions if hero.positionX = 7; hero.positionY = 1; guard.positionX
 		 * = 1; guard.positionY = 4;
@@ -115,9 +117,11 @@ public class GameMap {
 		hero.positionY = 1;
 
 		this.updateMap();
+
+		// LV 1, 1 Guard, Random Role
 		this.getRandomGuard();
-		this.getRandomGuard();
-		this.getRandomGuard();
+		guards.get(0).positionX = 1;
+		guards.get(0).positionY = 8;
 
 		// guard.positionX = 1;
 		// guard.positionY = 8;
@@ -133,17 +137,29 @@ public class GameMap {
 		case 1:
 			hero.positionX = 1;
 			hero.positionY = 1;
+
 			// guard.positionX = 1;
 			// guard.positionY = 8;
 		case 2:
 			// guard = new Ogre();
+
+			guards = new ArrayList<Guard>();
+
 			hero.positionX = 7;
 			hero.positionY = 1;
 			// guard.positionX = 1;
 			// guard.positionY = 4;
+
+			updateMap();
+			markPositions();
+
+			// before generating the guard
+			// need to mark hero first,
+			// otherwise, the guard may overlap the hero.
+			this.getRandomGuard();
+			this.getRandomGuard();
 		}
 		updateMap();
-
 		markPositions();
 	}
 
@@ -254,29 +270,32 @@ public class GameMap {
 	}
 
 	private boolean checkGuard() {
-		// if (!map[guard.positionX][guard.positionY].equals("g")) {
-		// 	if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero))
-		// 		return true;
-		// 	if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero))
-		// 		return true;
-		// 	if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero))
-		// 		return true;
-		// 	if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero))
-		// 		return true;
 
-		// 	if (current_level.game_level.getValue() == 2) {
+		for(Guard guard : guards){
 
-		// 		// if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
-		// 		// 	return true;
-		// 		// if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
-		// 		// 	return true;
-		// 		// if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
-		// 		// 	return true;
-		// 		// if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
-		// 		// 	return true;
-		// 	}
-		// }
+			if (!map[guard.positionX][guard.positionY].equals(defenitions._guard_sleep)) {
+				if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero))
+					return true;
+				if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero))
+					return true;
+				if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero))
+					return true;
+				if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero))
+					return true;
 
+				if (current_level.game_level.getValue() == 2) {
+
+					if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
+						return true;
+					if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
+						return true;
+					if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
+						return true;
+					if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
+						return true;
+				}
+			}
+		}
 		return false;
 	}
 
@@ -313,6 +332,34 @@ public class GameMap {
 		if (has_moved) {
 			hero.positionX = toX;
 			hero.positionY = toY;
+		}
+
+		for (Guard guard : guards){
+
+			int[] guard_new_pos = guard.guardNextPosition(guard, this);
+
+			toX = guard_new_pos[0];
+			toY = guard_new_pos[1];
+
+			// if current level is "2"
+			if (current_level.game_level.getValue() == 2) {
+				has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
+			}
+			// else
+			else {
+				// level 1
+				has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
+			}
+
+			if (has_moved) {
+				guard.positionX = toX;
+				guard.positionY = toY;
+
+				// if level 2, move the club also.
+				if (current_level.game_level.getValue() == 2) {
+					// TODO.
+				}
+			}
 		}
 
 		// int[] guard_new_pos = guard.guardNextPosition(guard, this);
