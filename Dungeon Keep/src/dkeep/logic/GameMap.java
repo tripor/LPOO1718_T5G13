@@ -439,7 +439,7 @@ public class GameMap {
 
 		for (Guard guard : guards){
 
-			System.out.print("Stunned = " + guard.stunned);
+			System.out.print("\nStunned = " + guard.stunned);
 
 			if(guard.stunned > 2){
 				// 0 = no stun;
@@ -463,6 +463,8 @@ public class GameMap {
 					toX = guard_new_pos[0];
 					toY = guard_new_pos[1];
 
+					System.out.print("\nto: " + toX + "," + toY);
+
 					// if current level is "2"
 					if (current_level.game_level.getValue() == 2) {
 						has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
@@ -480,7 +482,7 @@ public class GameMap {
 				}
 
 				if(success==false){
-					System.out.print("\n\n\n===========================\n[Guard] No Space. Error.\n\n");
+					System.out.print("\n===========================\n[Guard - " + guard.typeGuard() + "] No Space. Error.\n\n");
 					System.exit(0);
 				}
 
