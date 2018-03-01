@@ -14,8 +14,13 @@ public abstract class Guard extends Character {
 		int xMax = map.length-1;
 		int yMax = map[0].length-1;
 
-		int x = randomNumber(0, xMax);
-		int y = randomNumber(0, yMax);
+		int x, y;
+
+		do {
+			x = randomNumber(0, xMax);
+			y = randomNumber(0, yMax);
+
+		} while(!map[x][y].equals(defenitions._empty_cell));
 
 		System.out.print("[Guard] new " + typeGuard() + "()\n");
 
