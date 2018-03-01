@@ -101,7 +101,7 @@ public abstract class Guard extends Character {
 	 * 3 Left
 	 * 4 Right
 	 */
-	public abstract int[] guardNextPosition(Guard guard, GameMap gamearea);
+	public abstract int[] guardNextPosition(Character guard, GameMap gamearea);
 	
 	public abstract String typeGuard();
 }

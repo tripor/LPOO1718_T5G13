@@ -17,7 +17,10 @@ public class UserInput {
 	private int transformInput(String input)
 	
 	{
-		switch(input) {
+		if(input.length() < 1){
+			return -1;
+		}
+		switch(input.substring(0,1)) {
 			case "W": return 1;
 			case "w": return 1;
 			case "S": return 2;

@@ -25,14 +25,16 @@ public class GameMap {
 	public CurrentLevel current_level;
 
 	private void getRandomGuard() {
-		int last_guard, first_guard;
-		first_guard = 1;
-		last_guard = 3;
+
+		int total_typeOfGuard = 3;
 
 		Random rand = new Random();
-		int rand_result = rand.nextInt((last_guard - first_guard) + 1) + first_guard;
+		int rand_result = rand.nextInt(total_typeOfGuard)+1;
 		
 		// rand_result = 2;
+
+		Guard g = new Rookie(map);
+		// pick one and init it, it's useless.
 
 		switch (rand_result) {
 
@@ -40,18 +42,30 @@ public class GameMap {
 			// passing "map" is because need to fetch width & height of map.
 
 		case 1:
-			guards.add(new Rookie(map));
+			// g = new Rookie(map);
+			// // it is the default value of g.
 			System.out.println("Init Rookie.\n");
 			break;
 		case 2:
-			guards.add(new Drunken(map));
+			g = new Drunken(map);
 			System.out.println("Init Drunken.\n");
 			break;
 		case 3:
-			guards.add(new Suspicious(map));
+			g = new Suspicious(map);
 			System.out.println("Init Suspicious.\n");
 			break;
 		}
+
+		if (current_level.game_level.getValue() == 2) {
+			Club c = new Club(map);
+			int[] pos = c.clubNextPosition(g, this);
+			c.positionX = pos[0];
+			c.positionY = pos[1];
+
+			g.clubs.add(c);
+		}
+
+		guards.add(g);
 
 		// System.out.print("[Main]: " + this.map.length);
 
@@ -84,6 +98,14 @@ public class GameMap {
 
 			for (Guard g : guards){
 				map[g.positionX][g.positionY] = defenitions._crazy_ogre;
+
+				for (Club c : g.clubs){
+					map[c.positionX][c.positionY] = defenitions._ogre_club;
+				}
+			}
+
+			for (Club c : hero.clubs){
+				map[c.positionX][c.positionY] = defenitions._hero_club;
 			}
 
 			// int[] pos = club.clubNextPosition(guard, this);
@@ -120,6 +142,7 @@ public class GameMap {
 
 		// LV 1, 1 Guard, Random Role
 		this.getRandomGuard();
+
 		guards.get(0).positionX = 1;
 		guards.get(0).positionY = 8;
 
@@ -147,6 +170,19 @@ public class GameMap {
 
 			hero.positionX = 7;
 			hero.positionY = 1;
+
+			Club hero_club = new Club(map);
+
+			int heroClubPos[] = hero_club.clubNextPosition(hero, this);
+
+			hero_club.positionX = heroClubPos[0];
+			hero_club.positionY = heroClubPos[1];
+
+			System.out.print("\n[Hero Club] Hero is at " + hero.positionX + ", " + hero.positionY + ".");
+			System.out.print("\n[Hero Club] Hero Club is at " + hero_club.positionX + ", " + hero_club.positionY + ".\n\n");
+
+			hero.clubs.add(hero_club);
+
 			// guard.positionX = 1;
 			// guard.positionY = 4;
 
@@ -249,8 +285,12 @@ public class GameMap {
 			} else {
 				// guard
 
-				boolean can_move = (map[atX][atY].equals(defenitions._empty_cell)
-						|| map[atX][atY].equals(defenitions._lever));
+				boolean can_move = (
+						atX >= map.length
+						|| atY >= map[0].length
+						|| map[atX][atY].equals(defenitions._empty_cell)
+						|| map[atX][atY].equals(defenitions._lever)
+					);
 
 				// colision detection
 				if (!can_move) {
@@ -285,15 +325,19 @@ public class GameMap {
 
 				if (current_level.game_level.getValue() == 2) {
 
-					if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
-						return true;
-					if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
-						return true;
-					if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
-						return true;
-					if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
-						return true;
+					for(Club club : guard.clubs){
+
+						if (map[club.positionX + 1][club.positionY].equals(defenitions._hero))
+							return true;
+						if (map[club.positionX - 1][club.positionY].equals(defenitions._hero))
+							return true;
+						if (map[club.positionX][club.positionY + 1].equals(defenitions._hero))
+							return true;
+						if (map[club.positionX][club.positionY - 1].equals(defenitions._hero))
+							return true;
+					}
 				}
+
 			}
 		}
 		return false;
@@ -334,32 +378,59 @@ public class GameMap {
 			hero.positionY = toY;
 		}
 
+		for(Club club : hero.clubs){
+
+			int[] pos;
+
+			do{
+				pos = club.clubNextPosition(hero, this);
+				has_moved = push_remove(defenitions._hero_club, pos[0], pos[1], club.positionX, club.positionY);
+
+			} while(!has_moved);
+
+			club.positionX = pos[0];
+			club.positionY = pos[1];
+		}
+
 		for (Guard guard : guards){
 
-			int[] guard_new_pos = guard.guardNextPosition(guard, this);
+			do {
+				int[] guard_new_pos = guard.guardNextPosition(guard, this);
 
-			toX = guard_new_pos[0];
-			toY = guard_new_pos[1];
+				toX = guard_new_pos[0];
+				toY = guard_new_pos[1];
 
-			// if current level is "2"
-			if (current_level.game_level.getValue() == 2) {
-				has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
-			}
-			// else
-			else {
-				// level 1
-				has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
-			}
-
-			if (has_moved) {
-				guard.positionX = toX;
-				guard.positionY = toY;
-
-				// if level 2, move the club also.
+				// if current level is "2"
 				if (current_level.game_level.getValue() == 2) {
-					// TODO.
+					has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
+				}
+				// else
+				else {
+					// level 1
+					has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
+				}
+			} while(!has_moved);
+
+			guard.positionX = toX;
+			guard.positionY = toY;
+
+			// if level 2, move the club also.
+			if (current_level.game_level.getValue() == 2) {
+				for (Club club : guard.clubs){
+
+					int[] pos;
+
+					do{
+						pos = club.clubNextPosition(guard, this);
+						has_moved = push_remove(defenitions._ogre_club, pos[0], pos[1], club.positionX, club.positionY);
+
+					} while(!has_moved);
+
+					club.positionX = pos[0];
+					club.positionY = pos[1];
 				}
 			}
+
 		}
 
 		// int[] guard_new_pos = guard.guardNextPosition(guard, this);

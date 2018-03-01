@@ -5,8 +5,8 @@ import dkeep.logic.defenitions;
 
 public class Ogre extends Guard {
 
-	public int[] guardNextPosition(Guard guard, GameMap gamearea) {
-		
+	public int[] guardNextPosition(Character guard, GameMap gamearea) {
+
 		// =====LEVEL 2 STARTS.
 		int[] pos = new int[]{guard.positionX, guard.positionY};
 
@@ -42,11 +42,12 @@ public class Ogre extends Guard {
 			if (pos[0] < 0 || pos[1] < 0) {
 				// fail: out of border (left, top)
 			} else if (pos[0] >= gamearea.map.length) {
-				// fail: out of border (right)
-			} else if (pos[1] >= gamearea.map[0].length) {
 				// fail: out of border (bottom)
+			} else if (pos[1] >= gamearea.map[0].length) {
+				// fail: out of border (right)
 			} else if (!(gamearea.map[pos[0]][pos[1]].equals(defenitions._empty_cell)
-					|| gamearea.map[pos[0]][pos[1]].equals(defenitions._lever))) {
+					|| gamearea.map[pos[0]][pos[1]].equals(defenitions._lever)
+					|| gamearea.map[pos[0]][pos[1]].equals(defenitions._ogre_club))) {
 				// fail: it is a wall, a door, ...
 			} else {
 				success = true;
@@ -59,6 +60,8 @@ public class Ogre extends Guard {
 
 		}
 		// } while(!success);
+
+		System.out.print("\nguardNextPosition() - ["+pos[0]+","+pos[1]+"] \n");
 
 		return pos;
 	}

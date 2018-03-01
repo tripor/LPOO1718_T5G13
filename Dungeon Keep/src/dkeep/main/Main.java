@@ -12,7 +12,9 @@ public class Main {
 
 		boolean sair = false;
 
-		
+		// FOR TESTING
+		map.current_level.changeLevel(CurrentLevel.Level.SECOND);
+		map.updateLevel();
 		
 		while(sair==false)
 		{

@@ -4,7 +4,7 @@ import dkeep.logic.GameMap;
 
 public class Suspicious extends Guard {
 
-	public int[] guardNextPosition(Guard guard, GameMap gamearea) {
+	public int[] guardNextPosition(Character guard, GameMap gamearea) {
 		int[] pos = new int[] { guard.positionX, guard.positionY };
 
 		int reverse_movement = this.randomNumber(1, 3);

@@ -6,7 +6,7 @@ public class Drunken extends Guard {
 
 	private boolean sleep = false;
 
-	public int[] guardNextPosition(Guard guard, GameMap gamearea) {
+	public int[] guardNextPosition(Character guard, GameMap gamearea) {
 		int[] pos = new int[] { guard.positionX, guard.positionY };
 
 		if (sleep == true)// has fallen asleep

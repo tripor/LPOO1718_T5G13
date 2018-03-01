@@ -15,8 +15,12 @@ public class defenitions {
 	public static String _guard_sleep = "g";
 
 	public static String _crazy_ogre = "0";
+	public static String _ogre_stunned = "8";
 	public static String _ogre_at_key = "$";
 
 	public static String _ogre_club = "*";
 	public static String _club_at_key = "$";
+
+	public static String _hero_with_arm = "A";
+	public static String _hero_club = "@";
 }

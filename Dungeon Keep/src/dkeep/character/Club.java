@@ -4,8 +4,9 @@ import dkeep.logic.*;
 
 public class Club extends Ogre {
 
-	public int[] clubNextPosition(Guard guard, GameMap gamearea) {
+	public int[] clubNextPosition(Character guard, GameMap gamearea) {
 
+		System.out.print("\n[Club] clubNextPosition(" + guard.positionX + "," + guard.positionY + ")");
 		return guardNextPosition(guard, gamearea);
 	}
 
