@@ -67,4 +67,8 @@ public class Ogre extends Guard {
 		return "ogre";
 	}
 
+	public Ogre(String[][] map){
+		super(map);
+	}
+
 }

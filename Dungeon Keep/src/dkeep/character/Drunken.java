@@ -77,4 +77,8 @@ public class Drunken extends Guard {
 		return "drunken";
 	}
 
+	public Drunken(String[][] map){
+		super(map);
+	}
+
 }

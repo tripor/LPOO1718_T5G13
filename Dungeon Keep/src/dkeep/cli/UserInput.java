@@ -40,7 +40,7 @@ public class UserInput {
 	{
 		String input="";
 		
-		System.out.print("What is the movement you want to make? (W-Up, S-Down, A-Left, D-Right, P/0-Exit): ");
+		System.out.print("\nWhat is the movement you want to make?\n(W-Up, S-Down, A-Left, D-Right, P/0-Exit): ");
 		if(s.hasNextLine())
 		{
 			input = s.nextLine();
