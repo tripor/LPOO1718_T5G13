@@ -24,6 +24,9 @@ public abstract class CurrentLevel {
 	public CurrentLevel() {
 		game_level = Level.FIRST;
 	}
+	public CurrentLevel(CurrentLevel.Level nivel) {
+		game_level = nivel;
+	}
 
 	//METHODS
 	

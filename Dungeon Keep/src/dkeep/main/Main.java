@@ -7,14 +7,14 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		GameMap map = new GameMap();
+		System.out.println("Main");
+		
+		GameMap map = new Level2();
+		System.out.println("here");
 		UserInput user = new UserInput();
 
 		boolean sair = false;
 
-		// FOR TESTING
-		map.current_level.changeLevel(CurrentLevel.Level.SECOND);
-		map.updateLevel();
 		
 		while(sair==false)
 		{
@@ -36,9 +36,8 @@ public class Main {
 				int state=map.moveHeroTo(movement);
 				if(state==1)
 				{
-					if(map.current_level.game_level.getValue()==1){
-						map.current_level.changeLevel(CurrentLevel.Level.SECOND);
-						map.updateLevel();
+					if(map.getCurrent_level().game_level.getValue()==1){
+						map= new Level2();
 					}
 					else{
 						System.out.println("Victory");

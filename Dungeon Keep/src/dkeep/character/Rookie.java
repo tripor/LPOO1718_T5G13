@@ -37,6 +37,7 @@ public class Rookie extends Guard {
 
 	public Rookie(String[][] map){
 		super(map);
+		System.out.println("Init Rookie");
 	}
 
 }

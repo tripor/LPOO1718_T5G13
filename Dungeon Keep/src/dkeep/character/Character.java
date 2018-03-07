@@ -10,7 +10,7 @@ public abstract class Character {
 	public ArrayList<Club> clubs = new ArrayList<Club>();
 
 	public Character(){
-		System.out.print("\nInit Character.\n");
+		System.out.println("Init Character.");
 	}
 	
 }

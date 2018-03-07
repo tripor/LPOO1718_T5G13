@@ -42,6 +42,11 @@ public class Maps extends CurrentLevel {
 	{
 		super();
 	}
+	public Maps(CurrentLevel.Level nivel)
+	{
+		super(nivel);
+	}
+	
 	
 	
 	//Return the game map depending current on the game_state

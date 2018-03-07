@@ -22,13 +22,13 @@ public class Drunken extends Guard {
 					this.foward_walking = true;
 				}
 			}
-			gamearea.map[guard.positionX][guard.positionY] = "g";
+			gamearea.getMap()[guard.positionX][guard.positionY] = "g";
 		} else {
 			int is_going_sleep = this.randomNumber(1, 5); //decide if he is going to fall asleep
 
 			if (is_going_sleep == 5) {
 				sleep = true;
-				gamearea.map[guard.positionX][guard.positionY] = "g";
+				gamearea.getMap()[guard.positionX][guard.positionY] = "g";
 			} else {
 				if (this.foward_walking) { // if he is going forward
 					position_path++;
@@ -71,6 +71,14 @@ public class Drunken extends Guard {
 
 		}
 		return pos;
+	}
+
+	public boolean isSleep() {
+		return sleep;
+	}
+
+	public void setSleep(boolean sleep) {
+		this.sleep = sleep;
 	}
 
 	public String typeGuard() {

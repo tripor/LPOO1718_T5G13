@@ -41,13 +41,13 @@ public class Ogre extends Guard {
 
 			if (pos[0] < 0 || pos[1] < 0) {
 				// fail: out of border (left, top)
-			} else if (pos[0] >= gamearea.map.length) {
+			} else if (pos[0] >= gamearea.getMap().length) {
 				// fail: out of border (bottom)
-			} else if (pos[1] >= gamearea.map[0].length) {
+			} else if (pos[1] >= gamearea.getMap()[0].length) {
 				// fail: out of border (right)
-			} else if (!(gamearea.map[pos[0]][pos[1]].equals(defenitions._empty_cell)
-					|| gamearea.map[pos[0]][pos[1]].equals(defenitions._lever)
-					|| gamearea.map[pos[0]][pos[1]].equals(defenitions._ogre_club))) {
+			} else if (!(gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._empty_cell)
+					|| gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._lever)
+					|| gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._ogre_club))) {
 				// fail: it is a wall, a door, ...
 			} else {
 				success = true;

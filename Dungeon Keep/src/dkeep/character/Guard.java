@@ -10,6 +10,8 @@ public abstract class Guard extends Character {
 	public Guard(String[][] map){
 
 		super();
+		
+		System.out.println("Init Guard");
 
 		// System.out.print(map);
 
@@ -20,7 +22,7 @@ public abstract class Guard extends Character {
 
 		boolean success = false;
 
-		for(int i=0; i<5; i++) {
+		for(int i=0; i<xMax+yMax; i++) {
 			x = randomNumber(0, xMax);
 			y = randomNumber(0, yMax);
 
