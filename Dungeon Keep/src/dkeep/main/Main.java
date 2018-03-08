@@ -9,8 +9,7 @@ public class Main {
 
 		System.out.println("Main");
 		
-		GameMap map = new Level2();
-		System.out.println("here");
+		GameMap map = new Level1();
 		UserInput user = new UserInput();
 
 		boolean sair = false;

@@ -8,7 +8,7 @@ import dkeep.character.Guard;
 public class Level2 extends GameMap {
 
 	@Override
-	void markPositions() {
+	public void markPositions() {
 		map[hero.positionX][hero.positionY] = defenitions._hero_with_arm;
 		// map[guard.positionX][guard.positionY] = defenitions._crazy_ogre;
 
@@ -71,7 +71,7 @@ public class Level2 extends GameMap {
 	}
 
 	@Override
-	protected boolean checkGuard() {
+	public boolean checkGuard() {
 		boolean hit_ogre=false;
 		for (Club c : hero.clubs) {
 

@@ -109,6 +109,17 @@ public abstract class GameMap {
 
 			g.clubs.add(c);
 		}
+		else if (current_level.game_level.getValue() == 11 || current_level.game_level.getValue() == 12) {
+			g= new Ogre(map);
+			g.positionX=4;
+			g.positionY=4;
+			Club c = new Club(map);
+			int[] pos = c.clubNextPosition(g, this);
+			c.positionX = pos[0];
+			c.positionY = pos[1];
+
+			g.clubs.add(c);
+		}
 
 		guards.add(g);
 
@@ -139,7 +150,7 @@ public abstract class GameMap {
 		}
 	}
 
-	abstract void markPositions();
+	protected abstract void markPositions();
 
 	// Class constructor
 	public GameMap() {
@@ -289,7 +300,7 @@ public abstract class GameMap {
 		return true;
 	}
 
-	protected abstract boolean checkGuard();
+	public abstract boolean checkGuard();
 
 	// Move hero depending on the input and the guard depending on it's path
 	/*

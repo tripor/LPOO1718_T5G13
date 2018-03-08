@@ -1,13 +1,12 @@
 package dkeep.logic;
 
-import dkeep.character.Club;
 import dkeep.character.Guard;
 import dkeep.character.Drunken;
 
 public class Level1 extends GameMap {
 
 	@Override
-	void markPositions() {
+	public void markPositions() {
 		System.out.println("mark positions level1");
 
 		// mark default position in the map, for hero & guard
@@ -51,7 +50,7 @@ public class Level1 extends GameMap {
 	}
 
 	@Override
-	protected boolean checkGuard() {
+	public boolean checkGuard() {
 
 		for(Guard guard : guards){
 			if(map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned)){
