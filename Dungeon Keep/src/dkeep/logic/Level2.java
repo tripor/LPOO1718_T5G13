@@ -35,7 +35,6 @@ public class Level2 extends GameMap {
 	public Level2()
 	{
 		super();
-		System.out.println("Init Level2");
 
 		// guard = new Ogre();
 		this.current_level= new Maps(CurrentLevel.Level.SECOND);
@@ -53,8 +52,6 @@ public class Level2 extends GameMap {
 		hero_club.positionX = heroClubPos[0];
 		hero_club.positionY = heroClubPos[1];
 
-		System.out.print("\n[Hero Club] Hero is at " + hero.positionX + ", " + hero.positionY + ".");
-		System.out.print("\n[Hero Club] Hero Club is at " + hero_club.positionX + ", " + hero_club.positionY + ".\n\n");
 
 		hero.clubs.add(hero_club);
 
@@ -173,24 +170,17 @@ public class Level2 extends GameMap {
 
 			int[] pos = new int[2];
 
-			boolean success = false;
 			pos[0] = 0;
 			pos[1] = 0;
 
-			for(int i=0; i<5; i++) {
+			while(1==1) {
 
 				pos = club.clubNextPosition(hero, this);
 				has_moved = push_remove(defenitions._hero_club, pos[0], pos[1], club.positionX, club.positionY);
 
 				if(has_moved){
-					success = true;
 					break;
 				}
-			}
-
-			if(success==false){
-				System.out.print("\n\n\n===========================\n[Hero Club] No Space to move. Error.\n\n");
-				System.exit(0);
 			}
 
 			club.positionX = pos[0];
@@ -199,7 +189,6 @@ public class Level2 extends GameMap {
 
 		for (Guard guard : guards){
 
-			System.out.println("\nStunned = " + guard.stunned);
 
 			if(guard.stunned > 2){
 				// 0 = no stun;
@@ -214,28 +203,19 @@ public class Level2 extends GameMap {
 
 			if(guard.stunned == 0){
 
-				boolean success = false;
-
-				for(int i=0; i<5; i++) {
+				while(1==1) {
 
 					int[] guard_new_pos = guard.guardNextPosition(guard, this);
 
 					toX = guard_new_pos[0];
 					toY = guard_new_pos[1];
 
-					System.out.print("\nto: " + toX + "," + toY);
 						has_moved = push_remove(defenitions._crazy_ogre, guard.positionX, guard.positionY, guard.positionX, guard.positionY);
 						has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
 
 					if(has_moved){
-						success = true;
 						break;
 					}
-				}
-
-				if(success==false){
-					System.out.print("\n===========================\n[Guard - " + guard.typeGuard() + "] No Space. Error.\n\n");
-					System.exit(0);
 				}
 
 				guard.positionX = toX;
@@ -246,25 +226,17 @@ public class Level2 extends GameMap {
 				for (Club club : guard.clubs){
 
 					int[] pos = new int[2];
-
-					boolean success = false;
 					pos[0] = 0;
 					pos[1] = 0;
 
-					for(int i=0; i<5; i++) {
+					while(1==1) {
 
 						pos = club.clubNextPosition(guard, this);
 						has_moved = push_remove(defenitions._ogre_club, pos[0], pos[1], club.positionX, club.positionY);
 
 						if(has_moved){
-							success = true;
 							break;
 						}
-					}
-
-					if(success==false){
-						System.out.print("\n\n\n===========================\n[Guard Club] No Space. Error.\n\n");
-						System.exit(0);
 					}
 
 					club.positionX = pos[0];
@@ -311,6 +283,25 @@ public class Level2 extends GameMap {
 		}
 
 		return 0;
+	}
+	public boolean placeHero(int posX,int posY)
+	{
+		boolean has_moved;
+		if(this.map[hero.positionX][hero.positionY].equals(defenitions._hero_at_key))
+		{
+
+			has_moved = push_remove(defenitions._hero_at_key, posX, posY, hero.positionX, hero.positionY);
+		}
+		else
+			has_moved = push_remove(defenitions._hero_with_arm, posX, posY, hero.positionX, hero.positionY);
+
+		if (has_moved) {
+			hero.positionX = posX;
+			hero.positionY = posY;
+			return true;
+		}
+		
+		return false;
 	}
 
 }

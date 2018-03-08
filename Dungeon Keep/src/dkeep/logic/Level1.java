@@ -7,7 +7,6 @@ public class Level1 extends GameMap {
 
 	@Override
 	public void markPositions() {
-		System.out.println("mark positions level1");
 
 		// mark default position in the map, for hero & guard
 		map[hero.positionX][hero.positionY] = defenitions._hero;
@@ -24,7 +23,6 @@ public class Level1 extends GameMap {
 	
 	public Level1()
 	{
-		System.out.println("Init Level1");
 
 		/*
 		 * level 2 positions if hero.positionX = 7; hero.positionY = 1; guard.positionX
@@ -45,7 +43,6 @@ public class Level1 extends GameMap {
 		// guard.positionX = 1;
 		// guard.positionY = 8;
 
-		this.updateMap();
 		this.markPositions();
 	}
 
@@ -121,7 +118,6 @@ public class Level1 extends GameMap {
 				toX = guard_new_pos[0];
 				toY = guard_new_pos[1];
 
-				System.out.print("\nto: " + toX + "," + toY);
 
 				// level 1
 				if (guard.typeGuard() == "drunken" && ((Drunken) guard).isSleep() == true) {
@@ -141,8 +137,6 @@ public class Level1 extends GameMap {
 			}
 
 			if (success == false) {
-				System.out.print(
-						"\n===========================\n[Guard - " + guard.typeGuard() + "] No Space. Error.\n\n");
 				System.exit(0);
 			}
 
@@ -155,6 +149,18 @@ public class Level1 extends GameMap {
 		}
 
 		return 0;
+	}
+	public boolean placeHero(int posX,int posY)
+	{
+		boolean has_moved = push_remove(defenitions._hero, posX, posY, hero.positionX, hero.positionY);
+
+		if (has_moved) {
+			hero.positionX = posX;
+			hero.positionY = posY;
+			return true;
+		}
+		
+		return false;
 	}
 
 }

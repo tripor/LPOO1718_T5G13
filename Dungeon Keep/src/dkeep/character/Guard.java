@@ -6,11 +6,11 @@ import dkeep.logic.*;
 public abstract class Guard extends Character {
 
 	public int stunned = 0;	// if 1, 2 = stunned
+	public boolean sleep = false;
 	
 	public Guard(String[][] map){
 
 		super();
-		
 		System.out.println("Init Guard");
 
 		// System.out.print(map);
@@ -51,6 +51,10 @@ public abstract class Guard extends Character {
 	//    in the next loop, it will omit the side of wall,
 	//    which means only 3 sides to random.
 
+	public Guard() {
+		super();
+	}
+
 	//    if in the next loop, one more side is found to be a ... door?
 	//    then the third loop will only 2 sides to random.
 	protected int rd(int[] fail_pos){
@@ -76,7 +80,7 @@ public abstract class Guard extends Character {
 		// int max = 4, min = 3;
 
 		Random rand = new Random();
-		int rand_result = rand.nextInt((max-min) + 1) + min;
+		int rand_result = rand.nextInt(max-min + 1) + min;
 			// nextInt(): return min <= X < max
 
 		int count_order = 0;

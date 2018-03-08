@@ -14,7 +14,14 @@ public class TestLevel2 extends Level2 {
 
 	public boolean placeHero(int posX,int posY)
 	{
-		boolean has_moved = push_remove(defenitions._hero_with_arm, posX, posY, hero.positionX, hero.positionY);
+		boolean has_moved;
+		if(this.map[hero.positionX][hero.positionY].equals(defenitions._hero_at_key))
+		{
+
+			has_moved = push_remove(defenitions._hero_at_key, posX, posY, hero.positionX, hero.positionY);
+		}
+		else
+			has_moved = push_remove(defenitions._hero_with_arm, posX, posY, hero.positionX, hero.positionY);
 
 		if (has_moved) {
 			hero.positionX = posX;

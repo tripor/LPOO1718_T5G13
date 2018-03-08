@@ -4,7 +4,6 @@ import dkeep.logic.GameMap;
 
 public class Drunken extends Guard {
 
-	private boolean sleep = false;
 
 	public int[] guardNextPosition(Character guard, GameMap gamearea) {
 		int[] pos = new int[] { guard.positionX, guard.positionY };
@@ -28,7 +27,7 @@ public class Drunken extends Guard {
 
 			if (is_going_sleep == 5) {
 				sleep = true;
-				gamearea.getMap()[guard.positionX][guard.positionY] = "g";
+				gamearea.setMap("g", guard.positionX, guard.positionY);
 			} else {
 				if (this.foward_walking) { // if he is going forward
 					position_path++;
@@ -86,7 +85,7 @@ public class Drunken extends Guard {
 	}
 
 	public Drunken(String[][] map){
-		super(map);
+		super();
 	}
 
 }

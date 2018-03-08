@@ -27,16 +27,16 @@ public abstract class GameMap {
 		return map;
 	}
 
-	public void setMap(String[][] map) {
-		this.map = map;
+	public void setMap(String str,int posX,int posY) {
+		this.map[posX][posY]=str;
 	}
 
 	public String[][] getCopied_map() {
 		return copied_map;
 	}
 
-	public void setCopied_map(String[][] copied_map) {
-		this.copied_map = copied_map;
+	public void setCopied_map(String str,int posX,int posY) {
+		this.copied_map[posX][posY]=str;
 	}
 
 	public Hero getHero() {
@@ -64,41 +64,42 @@ public abstract class GameMap {
 	}
 
 	protected void getRandomGuard() {
-		System.out.println("Get Random Guard");
-
-		int total_typeOfGuard = 3;
-
-		Random rand = new Random();
-		int rand_result = rand.nextInt(total_typeOfGuard)+1;
-		
-		 //rand_result = 2;
 
 		Guard g;
-		// pick one and init it, it's useless.
+		
+		if (current_level.game_level.getValue() == 1) {
 
-		switch (rand_result) {
+			int total_typeOfGuard = 3;
+
+			Random rand = new Random();
+			int rand_result = rand.nextInt(total_typeOfGuard) + 1;
+
+			//rand_result = 2;
+
+			// pick one and init it, it's useless.
+
+			switch (rand_result) {
 
 			// inside Guard, posX & posY defined.
 			// passing "map" is because need to fetch width & height of map.
 
-		case 1:
-			g = new Rookie(map);
-			// // it is the default value of g.
-			System.out.println("Init Rookie.");
-			break;
-		case 2:
-			g = new Drunken(map);
-			System.out.println("Init Drunken.");
-			break;
-		case 3:
-			g = new Suspicious(map);
-			System.out.println("Init Suspicious.");
-			break;
-		default:
-			g = new Rookie(map);
-		}
+			case 1:
+				g = new Rookie(map);
+				// // it is the default value of g.
+				break;
+			case 2:
+				g = new Drunken(map);
+				break;
+			case 3:
+				g = new Suspicious(map);
+				break;
+			default:
+				g = new Rookie(map);
+			}
 
-		if (current_level.game_level.getValue() == 2) {
+			guards.add(g);
+
+		} else if (current_level.game_level.getValue() == 2) {
 			g= new Ogre(map);
 			g.positionX=1;
 			g.positionY=7;
@@ -108,20 +109,9 @@ public abstract class GameMap {
 			c.positionY = pos[1];
 
 			g.clubs.add(c);
-		}
-		else if (current_level.game_level.getValue() == 11 || current_level.game_level.getValue() == 12) {
-			g= new Ogre(map);
-			g.positionX=4;
-			g.positionY=4;
-			Club c = new Club(map);
-			int[] pos = c.clubNextPosition(g, this);
-			c.positionX = pos[0];
-			c.positionY = pos[1];
 
-			g.clubs.add(c);
+			guards.add(g);
 		}
-
-		guards.add(g);
 
 		// System.out.print("[Main]: " + this.map.length);
 
@@ -133,7 +123,6 @@ public abstract class GameMap {
 
 	// updates the game map depending on the currente level
 	protected void updateMap() {
-		System.out.println("Update Map");
 		// pointer only, need to copy
 		String[][] this_level_map = current_level.getMap();
 
@@ -154,7 +143,6 @@ public abstract class GameMap {
 
 	// Class constructor
 	public GameMap() {
-		System.out.println("Init Game map");
 	}
 
 
@@ -241,10 +229,7 @@ public abstract class GameMap {
 
 						str=defenitions._hero_at_key;
 						copied_map[atX][atY] = defenitions._empty_cell;
-
-						System.out.print("\nPush: " + atX + ", " + atY);
 						map[atX][atY] = str;
-						System.out.print("\nRemove: " + byeX + ", " + byeY);
 						map[byeX][byeY] = copied_map[byeX][byeY];
 						return true;
 
@@ -252,7 +237,9 @@ public abstract class GameMap {
 						openDoors();
 					}
 				}
-			} else if(str == defenitions._crazy_ogre || str == defenitions._ogre_at_key || str == defenitions._ogre_stunned) {
+			} else if (str == defenitions._crazy_ogre || str == defenitions._ogre_at_key
+					|| str == defenitions._ogre_stunned || str == defenitions._guard
+					|| str == defenitions._guard_sleep) {
 				// guard
 
 				boolean can_move = (atX > map.length || atY > map[0].length
@@ -271,7 +258,13 @@ public abstract class GameMap {
 			else if(str == defenitions._hero_club)
 			{
 				boolean can_move = (atX > map.length || atY > map[0].length
-						|| map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._lever) || map[atX][atY].equals(defenitions._ogre_club));
+						|| map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._ogre_club));
+				
+				if(map[atX][atY].equals(defenitions._lever) || map[atX][atY].equals(defenitions._club_at_key) || map[atX][atY].equals(defenitions._ogre_at_key) || map[atX][atY].equals(defenitions._hero_at_key))
+				{
+					can_move=true;
+					str=defenitions._club_at_key;
+				}
 
 				// colision detection
 				if (!can_move) {
@@ -281,19 +274,22 @@ public abstract class GameMap {
 			else if(str ==defenitions._ogre_club)
 			{
 				boolean can_move = (atX > map.length || atY > map[0].length
-						|| map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._lever));
+						|| map[atX][atY].equals(defenitions._empty_cell));
 
+				if(map[atX][atY].equals(defenitions._lever) || map[atX][atY].equals(defenitions._club_at_key) || map[atX][atY].equals(defenitions._ogre_at_key) || map[atX][atY].equals(defenitions._hero_at_key))
+				{
+					can_move=true;
+					str=defenitions._club_at_key;
+				}
 				// colision detection
 				if (!can_move) {
 					return false;
 				}
 			}
 
-			System.out.print("\nPush: " + atX + ", " + atY);
 			map[atX][atY] = str;
 		}
 		if ((byeX >= 0 && byeY >= 0 && map[byeX][byeY].equals(str))) {
-			System.out.print("\nRemove: " + byeX + ", " + byeY);
 			map[byeX][byeY] = copied_map[byeX][byeY];
 		}
 

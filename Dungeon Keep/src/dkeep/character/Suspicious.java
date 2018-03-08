@@ -58,7 +58,7 @@ public class Suspicious extends Guard {
 	}
 
 	public Suspicious(String[][] map){
-		super(map);
+		super();
 	}
 
 }
