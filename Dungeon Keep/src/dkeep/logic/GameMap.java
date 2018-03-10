@@ -144,7 +144,9 @@ public abstract class GameMap {
 	// Class constructor
 	public GameMap() {
 	}
-
+	
+	
+	protected abstract boolean printScreenExceptions(int posX,int posY);
 
 	// Prints in the screen the map and the characters
 	public void printscreen() {
@@ -153,29 +155,7 @@ public abstract class GameMap {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 
-				boolean char_printed = false;
-
-				// special handle for the key in level 2
-				if (current_level.game_level.getValue() == 2 && copied_map[i][j].equals(defenitions._lever)) {
-
-					if (map[i][j].equals(defenitions._crazy_ogre)) {
-
-						char_printed = true;
-						System.out.print(defenitions._ogre_at_key + "|");
-					} else if (map[i][j].equals(defenitions._ogre_club)) {
-
-						char_printed = true;
-						System.out.print(defenitions._club_at_key + "|");
-					} else if (map[i][j].equals(defenitions._hero)) {
-
-						char_printed = true;
-						defenitions._hero = defenitions._hero_at_key;
-						copied_map[i][j] = defenitions._empty_cell;
-						System.out.print(defenitions._hero_at_key + "|");
-					}
-				}
-
-				if (!char_printed) {
+				if (!this.printScreenExceptions(i, j)) {
 					System.out.print(map[i][j] + "|");
 				}
 			}

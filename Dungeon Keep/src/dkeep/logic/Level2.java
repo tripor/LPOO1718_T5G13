@@ -304,4 +304,32 @@ public class Level2 extends GameMap {
 		return false;
 	}
 
+	@Override
+	protected boolean printScreenExceptions(int posX, int posY) {
+
+		boolean char_printed = false;
+
+		// special handle for the key in level 2
+		if (copied_map[posX][posY].equals(defenitions._lever)) {
+
+			if (map[posX][posY].equals(defenitions._crazy_ogre)) {
+
+				char_printed = true;
+				System.out.print(defenitions._ogre_at_key + "|");
+			} else if (map[posX][posY].equals(defenitions._ogre_club)) {
+
+				char_printed = true;
+				System.out.print(defenitions._club_at_key + "|");
+			} else if (map[posX][posY].equals(defenitions._hero)) {
+
+				char_printed = true;
+				defenitions._hero = defenitions._hero_at_key;
+				copied_map[posX][posY] = defenitions._empty_cell;
+				System.out.print(defenitions._hero_at_key + "|");
+			}
+		}
+
+		return char_printed;
+	}
+
 }

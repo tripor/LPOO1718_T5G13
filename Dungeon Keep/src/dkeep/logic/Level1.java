@@ -163,4 +163,9 @@ public class Level1 extends GameMap {
 		return false;
 	}
 
+	@Override
+	protected boolean printScreenExceptions(int posX, int posY) {
+		return false;
+	}
+
 }
