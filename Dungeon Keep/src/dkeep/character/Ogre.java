@@ -1,6 +1,7 @@
 package dkeep.character;
 
 import dkeep.logic.GameMap;
+import dkeep.logic.defenitions;
 
 public class Ogre extends Guard {
 
@@ -64,6 +65,7 @@ public class Ogre extends Guard {
 
 	public Ogre(String[][] map){
 		super(map);
+		this.my_char=defenitions._crazy_ogre;
 	}
 
 }

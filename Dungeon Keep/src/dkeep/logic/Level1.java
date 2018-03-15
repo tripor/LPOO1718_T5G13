@@ -1,9 +1,47 @@
 package dkeep.logic;
 
+import java.util.Random;
+
+import dkeep.character.Drunken;
 import dkeep.character.Guard;
+import dkeep.character.Rookie;
+import dkeep.character.Suspicious;
 
 public class Level1 extends GameMap {
 
+	protected void getRandomGuard() {
+		Guard g;
+		int total_typeOfGuard = 3;
+
+		Random rand = new Random();
+		int rand_result = rand.nextInt(total_typeOfGuard) + 1;
+
+		//rand_result = 2;
+
+		// pick one and init it, it's useless.
+
+		switch (rand_result) {
+
+		// inside Guard, posX & posY defined.
+		// passing "map" is because need to fetch width & height of map.
+
+		case 1:
+			g = new Rookie(map);
+			// // it is the default value of g.
+			break;
+		case 2:
+			g = new Drunken(map);
+			break;
+		case 3:
+			g = new Suspicious(map);
+			break;
+		default:
+			g = new Rookie(map);
+		}
+
+		guards.add(g);
+	}
+	
 	@Override
 	public void markPositions() {
 
@@ -28,10 +66,10 @@ public class Level1 extends GameMap {
 		 * = 1; guard.positionY = 4;
 		 */
 		current_level = new Maps();
+		this.updateMap();
 
 		hero.positionX = 1;
 		hero.positionY = 1;
-		this.updateMap();
 
 		// LV 1, 1 Guard, Random Role
 		this.getRandomGuard();
@@ -47,12 +85,6 @@ public class Level1 extends GameMap {
 
 	@Override
 	public boolean checkGuard() {
-
-		for(Guard guard : guards){
-			if(map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned)){
-				guard.stunned = 1;
-			}
-		}
 
 		for(Guard guard : guards){
 
@@ -99,9 +131,8 @@ public class Level1 extends GameMap {
 		if (toX < 0 || toY < 0) {
 			return 1;
 		}
-
+		System.out.println(toX+ " " +toY);
 		boolean has_moved = this.hero.push_remove(toX, toY,this);
-
 		for (Guard guard : this.guards) {
 
 			boolean success = false;

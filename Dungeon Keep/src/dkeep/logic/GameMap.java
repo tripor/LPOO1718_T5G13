@@ -1,7 +1,5 @@
 package dkeep.logic;
 
-import java.util.Random;
-// import java.util.Iterator;
 import java.util.ArrayList;
 import dkeep.character.*;
 
@@ -63,59 +61,7 @@ public abstract class GameMap {
 		this.current_level = current_level;
 	}
 
-	protected void getRandomGuard() {
-
-		Guard g;
-		
-		if (current_level.game_level.getValue() == 1) {
-
-			int total_typeOfGuard = 3;
-
-			Random rand = new Random();
-			int rand_result = rand.nextInt(total_typeOfGuard) + 1;
-
-			//rand_result = 2;
-
-			// pick one and init it, it's useless.
-
-			switch (rand_result) {
-
-			// inside Guard, posX & posY defined.
-			// passing "map" is because need to fetch width & height of map.
-
-			case 1:
-				g = new Rookie(map);
-				// // it is the default value of g.
-				break;
-			case 2:
-				g = new Drunken(map);
-				break;
-			case 3:
-				g = new Suspicious(map);
-				break;
-			default:
-				g = new Rookie(map);
-			}
-
-			guards.add(g);
-
-		} else if (current_level.game_level.getValue() == 2) {
-			g= new Ogre(map);
-			g.positionX=1;
-			g.positionY=7;
-			Club c = new Club(map);
-			int[] pos = c.clubNextPosition(g, this);
-			c.positionX = pos[0];
-			c.positionY = pos[1];
-
-			g.clubs.add(c);
-
-			guards.add(g);
-		}
-
-		// System.out.print("[Main]: " + this.map.length);
-
-	}
+	protected abstract void getRandomGuard();
 	protected void setPositionInMap(String str,int posX,int posY)
 	{
 		map[posX][posY]=str;

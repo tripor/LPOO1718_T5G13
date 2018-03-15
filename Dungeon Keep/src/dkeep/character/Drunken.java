@@ -20,8 +20,8 @@ public class Drunken extends Guard {
 				} else {
 					this.foward_walking = true;
 				}
+				this.my_char="G";
 			}
-			this.my_char="g";
 		} else {
 			int is_going_sleep = this.randomNumber(1, 5); //decide if he is going to fall asleep
 

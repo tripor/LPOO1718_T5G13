@@ -11,7 +11,6 @@ public abstract class Guard extends Character {
 	public Guard(String[][] map){
 
 		super();
-		System.out.println("Init Guard");
 
 		// System.out.print(map);
 
@@ -33,16 +32,11 @@ public abstract class Guard extends Character {
 		}
 
 		if(success==false){
-			System.out.print("\n\n\n===========================\n[New Guard] No Space. Error.\n\n");
 			System.exit(0);
 		}
 
-		System.out.print("[Guard] new " + typeGuard() + "()\n");
-
 		positionX = x;
 		positionY = y;
-
-		System.out.print("[Guard] at " + positionX + ", " + positionY + ".\n");
 	}
 
 	// rd() will return a corner which had never failed.
@@ -113,8 +107,19 @@ public abstract class Guard extends Character {
 	public boolean push_remove(int toX, int toY, GameMap game) {
 		// guard
 
-		boolean can_move = ((game.getMap()[toX][toY].equals(defenitions._empty_cell) || game.getMap()[toX][toY].equals(defenitions._lever))
-				&& (toX<game.getMap().length || toY<game.getMap()[0].length ));
+		boolean can_move = ((toX < game.getMap().length || toY < game.getMap()[0].length)
+				&& (game.getMap()[toX][toY].equals(defenitions._empty_cell)
+						|| game.getMap()[toX][toY].equals(defenitions._lever)
+						|| game.getMap()[toX][toY].equals(defenitions._crazy_ogre)
+						||game.getMap()[toX][toY].equals(defenitions._ogre_at_key)));
+		if(game.getMap()[toX][toY].equals(defenitions._lever))
+		{
+			game.getMap()[toX][toY] = defenitions._ogre_at_key;
+			this.positionX=toX;
+			this.positionY=toY;
+			
+			return true;
+		}
 
 		// colision detection
 		if (!can_move) {

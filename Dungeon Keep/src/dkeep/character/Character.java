@@ -21,7 +21,6 @@ public abstract class Character {
 	// Move and delete the "trail"
 	public abstract boolean push_remove(int byeX, int byeY, GameMap game);
 	public Character(){
-		System.out.println("Init Character.");
 	}
 	
 }

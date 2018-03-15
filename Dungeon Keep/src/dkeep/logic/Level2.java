@@ -1,27 +1,29 @@
 package dkeep.logic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import dkeep.character.Club;
 import dkeep.character.Guard;
+import dkeep.character.Ogre;
 
 public class Level2 extends GameMap {
 
 	@Override
 	public void markPositions() {
-		map[hero.positionX][hero.positionY] = defenitions._hero_with_arm;
+		map[hero.positionX][hero.positionY] = hero.getMy_char();
 		// map[guard.positionX][guard.positionY] = defenitions._crazy_ogre;
 
 		for (Guard g : guards) {
-			map[g.positionX][g.positionY] = defenitions._crazy_ogre;
+			map[g.positionX][g.positionY] = defenitions._ogre_at_key;
 
 			for (Club c : g.clubs) {
-				map[c.positionX][c.positionY] = defenitions._ogre_club;
+				map[c.positionX][c.positionY] = c.getMy_char();
 			}
 		}
 
 		for (Club c : hero.clubs) {
-			map[c.positionX][c.positionY] = defenitions._hero_club;
+			map[c.positionX][c.positionY] = c.getMy_char();
 		}
 
 		// int[] pos = club.clubNextPosition(guard, this);
@@ -43,84 +45,73 @@ public class Level2 extends GameMap {
 
 		hero.positionX = 7;
 		hero.positionY = 1;
-		this.hero.setMy_char("A");
+		this.hero.setMy_char(defenitions._hero_with_arm);
 		
 
 		Club hero_club = new Club(map);
-
-		int heroClubPos[] = hero_club.clubNextPosition(hero, this);
-
-		hero_club.positionX = heroClubPos[0];
-		hero_club.positionY = heroClubPos[1];
-
+		hero_club.clubNextPosition(this, hero);
 
 		hero.clubs.add(hero_club);
+		Random rand = new Random();
+		int rand_result = rand.nextInt((5-1) + 1) + 1;
+		for(int i=1;i<=rand_result;i++)
+		{
 
-		// guard.positionX = 1;
-		// guard.positionY = 4;
-
-		// before generating the guard
-		// need to mark hero first,
-		// otherwise, the guard may overlap the hero.
-		this.getRandomGuard();
-		this.getRandomGuard();
-		updateMap();
+			this.getRandomGuard();
+		}
 		markPositions();
 	}
 
 	@Override
 	public boolean checkGuard() {
-		boolean hit_ogre=false;
 		for (Club c : hero.clubs) {
-
-			if (c.positionX + 1 < map.length && c.positionY < map[0].length
-					&& map[c.positionX + 1][c.positionY].equals(defenitions._crazy_ogre)) {
-				map[c.positionX + 1][c.positionY] = defenitions._ogre_stunned;
-				hit_ogre=true;
-			} else if (c.positionX < map.length && c.positionY + 1 < map[0].length
-					&& map[c.positionX][c.positionY + 1].equals(defenitions._crazy_ogre)) {
-				map[c.positionX][c.positionY + 1] = defenitions._ogre_stunned;
-				hit_ogre=true;
-			} else if (c.positionX - 1 < map.length && c.positionY < map[0].length
-					&& map[c.positionX - 1][c.positionY].equals(defenitions._crazy_ogre)) {
-				map[c.positionX - 1][c.positionY] = defenitions._ogre_stunned;
-				hit_ogre=true;
-			} else if (c.positionX < map.length && c.positionY - 1 < map[0].length
-					&& map[c.positionX][c.positionY - 1].equals(defenitions._crazy_ogre)) {
-				map[c.positionX][c.positionY - 1] = defenitions._ogre_stunned;
-				hit_ogre=true;
+			for(Guard g:this.guards)
+			{
+				System.out.println(c.positionX + " " + c.positionY + ":" + g.positionX+ " "+g.positionY);
+				if (g.positionX==c.positionX+1 && g.positionY==c.positionY) {
+					g.stunned=1;
+					g.setMy_char(defenitions._ogre_stunned);
+					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
+				} else if (g.positionX==c.positionX && g.positionY==c.positionY+1) {
+					g.stunned=1;
+					g.setMy_char(defenitions._ogre_stunned);
+					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
+				} else if (g.positionX==c.positionX-1 && g.positionY==c.positionY) {
+					g.stunned=1;
+					g.setMy_char(defenitions._ogre_stunned);
+					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
+				} else if (g.positionX==c.positionX && g.positionY==c.positionY-1) {
+					g.stunned=1;
+					g.setMy_char(defenitions._ogre_stunned);
+					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
+				}
+				System.out.println(g.stunned);
 			}
 		}
 
 		for (Guard guard : guards) {
-			if (map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned) && hit_ogre) {
-				guard.stunned = 1;
-			}
-		}
 
-		for (Guard guard : guards) {
-
-			if (!(map[guard.positionX][guard.positionY].equals(defenitions._guard_sleep)
-					|| map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned))) {
-				if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero) || map[guard.positionX + 1][guard.positionY].equals(defenitions._hero_with_arm) || map[guard.positionX + 1][guard.positionY].equals(defenitions._hero_at_key))
+			if (!map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned)) {
+				System.out.println(map[guard.positionX + 1][guard.positionY] + " " + map[guard.positionX - 1][guard.positionY]+ " "+ map[guard.positionX][guard.positionY + 1]+ " "+map[guard.positionX][guard.positionY - 1]);
+				if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero_with_arm) || map[guard.positionX + 1][guard.positionY].equals(defenitions._hero_at_key))
 					return true;
-				if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero) || map[guard.positionX - 1][guard.positionY].equals(defenitions._hero_with_arm) || map[guard.positionX - 1][guard.positionY].equals(defenitions._hero_at_key))
+				if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero_with_arm) || map[guard.positionX - 1][guard.positionY].equals(defenitions._hero_at_key))
 					return true;
-				if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero) || map[guard.positionX][guard.positionY + 1].equals(defenitions._hero_with_arm) || map[guard.positionX][guard.positionY + 1].equals(defenitions._hero_at_key))
+				if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero_with_arm) || map[guard.positionX][guard.positionY + 1].equals(defenitions._hero_at_key))
 					return true;
-				if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero) || map[guard.positionX][guard.positionY - 1].equals(defenitions._hero_with_arm) || map[guard.positionX][guard.positionY - 1].equals(defenitions._hero_at_key))
+				if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero_with_arm) || map[guard.positionX][guard.positionY - 1].equals(defenitions._hero_at_key))
 					return true;
 			}
 
 			for (Club club : guard.clubs) {
 
-				if (map[club.positionX + 1][club.positionY].equals(defenitions._hero) || map[club.positionX + 1][club.positionY].equals(defenitions._hero_with_arm) || map[club.positionX + 1][club.positionY].equals(defenitions._hero_at_key))
+				if (map[club.positionX + 1][club.positionY].equals(defenitions._hero_with_arm) || map[club.positionX + 1][club.positionY].equals(defenitions._hero_at_key))
 					return true;
-				if (map[club.positionX - 1][club.positionY].equals(defenitions._hero) || map[club.positionX - 1][club.positionY].equals(defenitions._hero_with_arm) || map[club.positionX - 1][club.positionY].equals(defenitions._hero_at_key))
+				if (map[club.positionX - 1][club.positionY].equals(defenitions._hero_with_arm) || map[club.positionX - 1][club.positionY].equals(defenitions._hero_at_key))
 					return true;
-				if (map[club.positionX][club.positionY + 1].equals(defenitions._hero) || map[club.positionX][club.positionY + 1].equals(defenitions._hero_with_arm) || map[club.positionX][club.positionY + 1].equals(defenitions._hero_at_key))
+				if (map[club.positionX][club.positionY + 1].equals(defenitions._hero_with_arm) || map[club.positionX][club.positionY + 1].equals(defenitions._hero_at_key))
 					return true;
-				if (map[club.positionX][club.positionY - 1].equals(defenitions._hero) || map[club.positionX][club.positionY - 1].equals(defenitions._hero_with_arm) || map[club.positionX][club.positionY - 1].equals(defenitions._hero_at_key))
+				if (map[club.positionX][club.positionY - 1].equals(defenitions._hero_with_arm) || map[club.positionX][club.positionY - 1].equals(defenitions._hero_at_key))
 					return true;
 			}
 
@@ -157,21 +148,7 @@ public class Level2 extends GameMap {
 		has_moved = this.hero.push_remove(toX, toY, this);
 
 		for (Club club : hero.clubs) {
-
-			int[] pos = new int[2];
-
-			pos[0] = 0;
-			pos[1] = 0;
-
-			for (;;) {
-
-				pos = club.clubNextPosition(hero, this);
-				has_moved = club.push_remove(pos[0], pos[1], this);
-
-				if (has_moved) {
-					break;
-				}
-			}
+			club.clubNextPosition(this, this.hero);
 		}
 
 		for (Guard guard : guards) {
@@ -181,10 +158,12 @@ public class Level2 extends GameMap {
 				// 1 = just stun (1st round);
 				// 2 = stun 2nd round;
 				guard.stunned = 0;
+				guard.setMy_char(defenitions._crazy_ogre);
 			}
 
 			if (guard.stunned > 0) {
 				guard.stunned++;
+				guard.push_remove(guard.positionX, guard.positionY, this);
 			}
 
 			if (guard.stunned == 0) {
@@ -206,20 +185,8 @@ public class Level2 extends GameMap {
 
 			// if level 2, move the club also.
 			for (Club club : guard.clubs) {
-
-				int[] pos = new int[2];
-				pos[0] = 0;
-				pos[1] = 0;
-
-				for (;;) {
-
-					pos = club.clubNextPosition(guard, this);
-					has_moved = club.push_remove(pos[0], pos[1], this);
-
-					if (has_moved) {
-						break;
-					}
-				}
+					club.clubNextPosition(this,guard);
+				
 			}
 
 		}
@@ -233,6 +200,23 @@ public class Level2 extends GameMap {
 	public boolean placeHero(int posX,int posY)
 	{
 		return this.hero.push_remove(posX, posY, this);
+	}
+
+	@Override
+	protected void getRandomGuard() {
+		Guard g;
+		g= new Ogre(map);
+		g.positionX=1;
+		g.positionY=7;
+		
+		Club c = new Club(map);
+		
+		c.clubNextPosition(this, g);
+
+		g.clubs.add(c);
+
+		guards.add(g);
+		
 	}
 
 	
