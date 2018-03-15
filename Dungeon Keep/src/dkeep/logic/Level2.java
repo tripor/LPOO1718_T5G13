@@ -53,7 +53,7 @@ public class Level2 extends GameMap {
 
 		hero.clubs.add(hero_club);
 		Random rand = new Random();
-		int rand_result = rand.nextInt((5-1) + 1) + 1;
+		int rand_result = rand.nextInt((2-1) + 1) + 1;
 		for(int i=1;i<=rand_result;i++)
 		{
 

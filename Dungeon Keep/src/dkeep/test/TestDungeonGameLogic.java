@@ -28,6 +28,7 @@ public class TestDungeonGameLogic {
 		Level1 jogo = new Level1();
 		jogo.markPositions();
 		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
+		assertEquals(defenitions._hero,jogo.getHero().getMy_char());
 		assertEquals(1, jogo.getHero().positionX);
 		assertEquals(1, jogo.getHero().positionY);
 		jogo.moveHeroTo(4);// Move right
@@ -57,6 +58,7 @@ public class TestDungeonGameLogic {
 		Level2 jogo = new Level2();
 		jogo.markPositions();
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
+		assertEquals(defenitions._hero_with_arm, jogo.getHero().getMy_char());
 		assertEquals(7, jogo.getHero().positionX);
 		assertEquals(1, jogo.getHero().positionY);
 		assertEquals(0,jogo.moveHeroTo(4));
@@ -66,6 +68,7 @@ public class TestDungeonGameLogic {
 		}
 		else
 		{
+			System.out.println("failed: "+jogo.getMap()[7][1]);
 			fail();
 		}
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][2]);
@@ -132,7 +135,7 @@ public class TestDungeonGameLogic {
 		Level2 jogo = new Level2();
 		assertTrue(jogo.placeHero(2, 6));
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[2][6]);
-		assertEquals(defenitions._crazy_ogre, jogo.getMap()[1][7]);
+		assertEquals(defenitions._ogre_at_key, jogo.getMap()[1][7]);
 		assertTrue(jogo.checkGuard());
 	}
 
@@ -178,6 +181,7 @@ public class TestDungeonGameLogic {
 		}
 		else
 		{
+			System.out.println("failed pick level 2: "+jogo.getMap()[1][2]);
 			fail();
 		}
 		assertEquals(defenitions._hero_at_key, jogo.getMap()[1][1]);
@@ -336,7 +340,7 @@ public class TestDungeonGameLogic {
 	public void testNumberGuard()
 	{
 		Level2 jogo = new Level2();
-		assertEquals(2,jogo.getGuards().size());
+		assertEquals(1,jogo.getGuards().size(),5);
 	}
 	
 	@Test

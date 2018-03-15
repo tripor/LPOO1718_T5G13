@@ -22,5 +22,5 @@ public class defenitions {
 	public static String _club_at_key = "$";
 
 	public static String _hero_with_arm = "A";
-	public static String _hero_club = "@";
+	public static String _hero_club = "*";
 }
