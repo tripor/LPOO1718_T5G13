@@ -15,7 +15,7 @@ public class Hero extends Character {
 				|| game.getMap()[toX][toY].equals(defenitions._opened_door)
 				|| game.getMap()[toX][toY].equals(defenitions._lever))
 				&& (toX < game.getMap().length || toY < game.getMap()[0].length));
-
+		System.out.println(can_move + " here " + game.getMap()[toX][toY]);
 		if (game.getMap()[toX][toY].equals(defenitions._door) && this.my_char.equals(defenitions._hero_at_key)) {
 			game.openDoors();
 			return false;

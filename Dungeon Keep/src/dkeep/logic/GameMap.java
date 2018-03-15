@@ -124,7 +124,7 @@ public abstract class GameMap {
 	protected void clearMap()
 	{
 		for (int i = 0; i < map.length; i++) {
-			map[i] = this.copied_map[i];
+			map[i] = this.copied_map[i].clone();
 		}
 	}
 
