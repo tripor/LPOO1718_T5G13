@@ -12,6 +12,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
+import javax.swing.JTextArea;
 
 public class Window {
 
@@ -46,6 +49,42 @@ public class Window {
 	 */
 	public Window() {
 		initialize();
+	}
+	
+	JTextArea lblContent;
+	
+	// CUSTOM FUNCTIONs
+	private boolean isNumeric(String s) {  
+	    return s != null && s.matches("\\d+");  
+	}
+	
+	
+	//=======================
+	//   ALL ACTION BELOW.
+	//=======================
+	private void startGame(String guard_type, int guard_count) {
+		
+		// NOTE: guard_type is [ Ogre | Rookie | Suspicious | Drunken ]
+		//   defined at "JComboBox" section in this java document.
+		
+		consoleLog("New Game Started. (Guard=" + guard_type + ", Number=" + guard_count + ")");
+	}
+	private void upPressed() {
+		consoleLog("UP");
+	}
+	private void downPressed() {
+		consoleLog("DOWN");
+	}
+	private void leftPressed() {
+		consoleLog("LEFT");
+	}
+	private void rightPressed() {
+		consoleLog("RIGHT");
+	}
+	
+	// TEMPORARY FUNCTION (Just for testing.)
+	private void consoleLog(String text) {
+		lblContent.setText(lblContent.getText() + "\n" + text);
 	}
 
 	/**
@@ -96,6 +135,20 @@ public class Window {
 		container.add(lblGuardPersonality, gbc_lblGuardPersonality);
 		
 		JComboBox guardPersonality = new JComboBox();
+		guardPersonality.addItem("Ogre");
+		guardPersonality.addItem("Rookie");
+		guardPersonality.addItem("Drunken");
+		guardPersonality.addItem("Suspicious");
+
+//		guardPersonality.addItemListener(new ItemListener() {
+//			@Override
+//			public void itemStateChanged(ItemEvent e) {
+//				if(ItemEvent.SELECTED == e.getStateChange()){
+//					// e.getItem().toString();
+//                }
+//			}
+//        });
+		
 		GridBagConstraints gbc_guardPersonality = new GridBagConstraints();
 		gbc_guardPersonality.insets = new Insets(0, 0, 5, 5);
 		gbc_guardPersonality.fill = GridBagConstraints.HORIZONTAL;
@@ -116,7 +169,8 @@ public class Window {
 		gbc_panel.gridy = 2;
 		container.add(panel, gbc_panel);
 		
-		JLabel lblContent = new JLabel("Content");
+		lblContent = new JTextArea();
+		lblContent.setText("Content");
 		panel.add(lblContent);
 		
 		JButton btnNewGame = new JButton("New Game");
@@ -126,13 +180,19 @@ public class Window {
 		gbc_btnNewGame.gridwidth = 2;
 		gbc_btnNewGame.gridx = 3;
 		gbc_btnNewGame.gridy = 2;
-		btnNewGame.addActionListener(new ActionListener()
-		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-			  lblContent.setText("New Game Started.");
-		  }
-		});
+		
+		btnNewGame.addActionListener(new ActionListener(){
+			  public void actionPerformed(ActionEvent e)
+			  {
+				  String guard_type  = guardPersonality.getSelectedItem().toString();
+				     int guard_count = (
+						isNumeric(numberOfOgres.getText())
+							? Integer.parseInt(numberOfOgres.getText())
+								: 0
+				    	);
+				  startGame(guard_type, guard_count);
+			  }
+			});
 		container.add(btnNewGame, gbc_btnNewGame);
 		
 		JButton btnUp = new JButton("Up");
@@ -142,6 +202,7 @@ public class Window {
 		gbc_btnUp.gridwidth = 2;
 		gbc_btnUp.gridx = 3;
 		gbc_btnUp.gridy = 4;
+		btnUp.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){upPressed();}});
 		container.add(btnUp, gbc_btnUp);
 		
 		JButton btnLeft = new JButton("Left");
@@ -149,12 +210,14 @@ public class Window {
 		gbc_btnLeft.insets = new Insets(0, 0, 0, 5);
 		gbc_btnLeft.gridx = 3;
 		gbc_btnLeft.gridy = 5;
+		btnLeft.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){leftPressed();}});
 		container.add(btnLeft, gbc_btnLeft);
 		
 		JButton btnRight = new JButton("Right");
 		GridBagConstraints gbc_btnRight = new GridBagConstraints();
 		gbc_btnRight.gridx = 4;
 		gbc_btnRight.gridy = 5;
+		btnRight.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){rightPressed();}});
 		container.add(btnRight, gbc_btnRight);
 		
 		JButton btnDown = new JButton("Down");
@@ -164,6 +227,7 @@ public class Window {
 		gbc_btnDown.gridwidth = 2;
 		gbc_btnDown.gridx = 3;
 		gbc_btnDown.gridy = 6;
+		btnDown.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){downPressed();}});
 		container.add(btnDown, gbc_btnDown);
 		
 		JButton btnExit = new JButton("Exit");
