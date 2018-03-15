@@ -53,6 +53,7 @@ public abstract class Guard extends Character {
 
 	public Guard() {
 		super();
+		this.my_char="G";
 	}
 
 	//    if in the next loop, one more side is found to be a ... door?
@@ -107,6 +108,28 @@ public abstract class Guard extends Character {
 		int rand_result = rand.nextInt((max-min) + 1) + min;
 		return rand_result;
 	}
+	
+	
+	public boolean push_remove(int toX, int toY, GameMap game) {
+		// guard
+
+		boolean can_move = ((game.getMap()[toX][toY].equals(defenitions._empty_cell) || game.getMap()[toX][toY].equals(defenitions._lever))
+				&& (toX<game.getMap().length || toY<game.getMap()[0].length ));
+
+		// colision detection
+		if (!can_move) {
+			return false;
+		}
+
+		game.getMap()[toX][toY] = this.my_char;
+		this.positionX=toX;
+		this.positionY=toY;
+		
+		return true;
+	}
+	
+	
+	
 
 
 	// OTHER THINGS...
@@ -120,7 +143,7 @@ public abstract class Guard extends Character {
 	 * 3 Left
 	 * 4 Right
 	 */
-	public abstract int[] guardNextPosition(Character guard, GameMap gamearea);
+	public abstract int[] guardNextPosition(GameMap gamearea);
 	
 	public abstract String typeGuard();
 }

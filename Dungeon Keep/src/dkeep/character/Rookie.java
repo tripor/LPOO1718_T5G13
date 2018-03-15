@@ -6,9 +6,9 @@ public class Rookie extends Guard {
 	
 	
 
-	public int[] guardNextPosition(Character guard, GameMap gamearea) {
+	public int[] guardNextPosition(GameMap gamearea) {
 
-		int[] pos = new int[] { guard.positionX, guard.positionY };
+		int[] pos = new int[] { this.positionX, this.positionY };
 		position_path++;
 		if (position_path > path.length)
 			position_path = 1;

@@ -9,7 +9,7 @@ public class TestLevel1 extends Level1 {
 		super();
 	}
 	
-	public boolean placeHero(int posX,int posY)
+	/*public boolean placeHero(int posX,int posY)
 	{
 		boolean has_moved = push_remove(defenitions._hero, posX, posY, hero.positionX, hero.positionY);
 
@@ -55,5 +55,5 @@ public class TestLevel1 extends Level1 {
 		}
 		
 		return 0;
-	}
+	}*/
 }

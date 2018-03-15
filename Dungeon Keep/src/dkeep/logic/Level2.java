@@ -43,6 +43,7 @@ public class Level2 extends GameMap {
 
 		hero.positionX = 7;
 		hero.positionY = 1;
+		this.hero.setMy_char("A");
 		
 
 		Club hero_club = new Club(map);
@@ -129,6 +130,7 @@ public class Level2 extends GameMap {
 
 	@Override
 	public int moveHeroTo(int type_movement) {
+		this.clearMap();
 		int toX = hero.positionX, toY = hero.positionY;
 		switch (type_movement) {
 		case 1:
@@ -152,132 +154,76 @@ public class Level2 extends GameMap {
 			return 1;
 		}
 		boolean has_moved;
-		if(this.map[hero.positionX][hero.positionY].equals(defenitions._hero_at_key))
-		{
+		has_moved = this.hero.push_remove(toX, toY, this);
 
-			has_moved = push_remove(defenitions._hero_at_key, toX, toY, hero.positionX, hero.positionY);
-		}
-		else
-			has_moved = push_remove(defenitions._hero_with_arm, toX, toY, hero.positionX, hero.positionY);
-
-		if (has_moved) {
-			hero.positionX = toX;
-			hero.positionY = toY;
-		}
-		
-
-		for(Club club : hero.clubs){
+		for (Club club : hero.clubs) {
 
 			int[] pos = new int[2];
 
 			pos[0] = 0;
 			pos[1] = 0;
 
-			while(1==1) {
+			for (;;) {
 
 				pos = club.clubNextPosition(hero, this);
-				has_moved = push_remove(defenitions._hero_club, pos[0], pos[1], club.positionX, club.positionY);
+				has_moved = club.push_remove(pos[0], pos[1], this);
 
-				if(has_moved){
+				if (has_moved) {
 					break;
 				}
 			}
-
-			club.positionX = pos[0];
-			club.positionY = pos[1];
 		}
 
-		for (Guard guard : guards){
+		for (Guard guard : guards) {
 
-
-			if(guard.stunned > 2){
+			if (guard.stunned > 2) {
 				// 0 = no stun;
 				// 1 = just stun (1st round);
 				// 2 = stun 2nd round;
 				guard.stunned = 0;
 			}
 
-			if(guard.stunned > 0){
+			if (guard.stunned > 0) {
 				guard.stunned++;
 			}
 
-			if(guard.stunned == 0){
+			if (guard.stunned == 0) {
 
-				while(1==1) {
+				for (;;) {
 
-					int[] guard_new_pos = guard.guardNextPosition(guard, this);
+					int[] guard_new_pos = guard.guardNextPosition(this);
 
 					toX = guard_new_pos[0];
 					toY = guard_new_pos[1];
 
-						has_moved = push_remove(defenitions._crazy_ogre, guard.positionX, guard.positionY, guard.positionX, guard.positionY);
-						has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
+					has_moved = guard.push_remove(toX, toY, this);
 
-					if(has_moved){
+					if (has_moved) {
 						break;
 					}
 				}
-
-				guard.positionX = toX;
-				guard.positionY = toY;
 			}
 
 			// if level 2, move the club also.
-				for (Club club : guard.clubs){
+			for (Club club : guard.clubs) {
 
-					int[] pos = new int[2];
-					pos[0] = 0;
-					pos[1] = 0;
+				int[] pos = new int[2];
+				pos[0] = 0;
+				pos[1] = 0;
 
-					while(1==1) {
+				for (;;) {
 
-						pos = club.clubNextPosition(guard, this);
-						has_moved = push_remove(defenitions._ogre_club, pos[0], pos[1], club.positionX, club.positionY);
+					pos = club.clubNextPosition(guard, this);
+					has_moved = club.push_remove(pos[0], pos[1], this);
 
-						if(has_moved){
-							break;
-						}
+					if (has_moved) {
+						break;
 					}
-
-					club.positionX = pos[0];
-					club.positionY = pos[1];
 				}
-			
+			}
 
 		}
 
-		// int[] guard_new_pos = guard.guardNextPosition(guard, this);
-
-		// toX = guard_new_pos[0];
-		// toY = guard_new_pos[1];
-
-		// // if current level is "2"
-		// if (current_level.game_level.getValue() == 2) {
-		// 	has_moved = push_remove(defenitions._crazy_ogre, toX, toY, guard.positionX, guard.positionY);
-		// }
-		// // else
-		// else {
-		// 	// level 1
-		// 	has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
-		// }
-
-		// if (has_moved) {
-		// 	guard.positionX = toX;
-		// 	guard.positionY = toY;
-
-		// 	// if level 2, move the club also.
-		// 	if (current_level.game_level.getValue() == 2) {
-		// 		int[] pos = club.clubNextPosition(guard, this);
-		// 		has_moved = push_remove(defenitions._ogre_club, pos[0], pos[1], club.positionX, club.positionY);
-
-		// 		if (has_moved) {
-		// 			club.positionX = pos[0];
-		// 			club.positionY = pos[1];
-		// 		}
-		// 	}
-		// }
-
-		// check if the guard sees the hero
 		if (this.checkGuard() == true) {
 			return 2;
 		}
@@ -286,50 +232,9 @@ public class Level2 extends GameMap {
 	}
 	public boolean placeHero(int posX,int posY)
 	{
-		boolean has_moved;
-		if(this.map[hero.positionX][hero.positionY].equals(defenitions._hero_at_key))
-		{
-
-			has_moved = push_remove(defenitions._hero_at_key, posX, posY, hero.positionX, hero.positionY);
-		}
-		else
-			has_moved = push_remove(defenitions._hero_with_arm, posX, posY, hero.positionX, hero.positionY);
-
-		if (has_moved) {
-			hero.positionX = posX;
-			hero.positionY = posY;
-			return true;
-		}
-		
-		return false;
+		return this.hero.push_remove(posX, posY, this);
 	}
 
-	@Override
-	protected boolean printScreenExceptions(int posX, int posY) {
-
-		boolean char_printed = false;
-
-		// special handle for the key in level 2
-		if (copied_map[posX][posY].equals(defenitions._lever)) {
-
-			if (map[posX][posY].equals(defenitions._crazy_ogre)) {
-
-				char_printed = true;
-				System.out.print(defenitions._ogre_at_key + "|");
-			} else if (map[posX][posY].equals(defenitions._ogre_club)) {
-
-				char_printed = true;
-				System.out.print(defenitions._club_at_key + "|");
-			} else if (map[posX][posY].equals(defenitions._hero)) {
-
-				char_printed = true;
-				defenitions._hero = defenitions._hero_at_key;
-				copied_map[posX][posY] = defenitions._empty_cell;
-				System.out.print(defenitions._hero_at_key + "|");
-			}
-		}
-
-		return char_printed;
-	}
+	
 
 }

@@ -1,7 +1,6 @@
 package dkeep.logic;
 
 import dkeep.character.Guard;
-import dkeep.character.Drunken;
 
 public class Level1 extends GameMap {
 
@@ -77,6 +76,7 @@ public class Level1 extends GameMap {
 
 	@Override
 	public int moveHeroTo(int type_movement) {
+		this.clearMap();
 		int toX = hero.positionX, toY = hero.positionY;
 		switch (type_movement) {
 		case 1:
@@ -100,12 +100,7 @@ public class Level1 extends GameMap {
 			return 1;
 		}
 
-		boolean has_moved = push_remove(defenitions._hero, toX, toY, hero.positionX, hero.positionY);
-
-		if (has_moved) {
-			hero.positionX = toX;
-			hero.positionY = toY;
-		}
+		boolean has_moved = this.hero.push_remove(toX, toY,this);
 
 		for (Guard guard : this.guards) {
 
@@ -113,22 +108,13 @@ public class Level1 extends GameMap {
 
 			for (int i = 0; i < 5; i++) {
 
-				int[] guard_new_pos = guard.guardNextPosition(guard, this);
+				int[] guard_new_pos = guard.guardNextPosition(this);
 
 				toX = guard_new_pos[0];
 				toY = guard_new_pos[1];
 
 
-				// level 1
-				if (guard.typeGuard() == "drunken" && ((Drunken) guard).isSleep() == true) {
-					success = true;
-					has_moved = push_remove(defenitions._guard_sleep, toX, toY, guard.positionX, guard.positionY);
-				} else
-				{
-					has_moved = push_remove(defenitions._guard, toX, toY, guard.positionX, guard.positionY);
-				}
-
-				
+				has_moved = guard.push_remove(toX, toY, this);
 				
 				if (has_moved) {
 					success = true;
@@ -139,9 +125,6 @@ public class Level1 extends GameMap {
 			if (success == false) {
 				System.exit(0);
 			}
-
-			guard.positionX = toX;
-			guard.positionY = toY;
 		}
 
 		if (checkGuard() == true) {
@@ -152,20 +135,7 @@ public class Level1 extends GameMap {
 	}
 	public boolean placeHero(int posX,int posY)
 	{
-		boolean has_moved = push_remove(defenitions._hero, posX, posY, hero.positionX, hero.positionY);
-
-		if (has_moved) {
-			hero.positionX = posX;
-			hero.positionY = posY;
-			return true;
-		}
-		
-		return false;
-	}
-
-	@Override
-	protected boolean printScreenExceptions(int posX, int posY) {
-		return false;
+		return this.hero.push_remove(posX, posY,this);
 	}
 
 }

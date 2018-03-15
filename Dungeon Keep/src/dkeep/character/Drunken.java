@@ -5,8 +5,8 @@ import dkeep.logic.GameMap;
 public class Drunken extends Guard {
 
 
-	public int[] guardNextPosition(Character guard, GameMap gamearea) {
-		int[] pos = new int[] { guard.positionX, guard.positionY };
+	public int[] guardNextPosition(GameMap gamearea) {
+		int[] pos = new int[] { this.positionX, this.positionY };
 
 		if (sleep == true)// has fallen asleep
 		{
@@ -21,13 +21,13 @@ public class Drunken extends Guard {
 					this.foward_walking = true;
 				}
 			}
-			gamearea.getMap()[guard.positionX][guard.positionY] = "g";
+			this.my_char="g";
 		} else {
 			int is_going_sleep = this.randomNumber(1, 5); //decide if he is going to fall asleep
 
 			if (is_going_sleep == 5) {
 				sleep = true;
-				gamearea.setMap("g", guard.positionX, guard.positionY);
+				this.my_char="g";
 			} else {
 				if (this.foward_walking) { // if he is going forward
 					position_path++;

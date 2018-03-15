@@ -12,7 +12,7 @@ public class TestLevel2 extends Level2 {
 		super();
 	}
 
-	public boolean placeHero(int posX,int posY)
+	/*public boolean placeHero(int posX,int posY)
 	{
 		boolean has_moved;
 		if(this.map[hero.positionX][hero.positionY].equals(defenitions._hero_at_key))
@@ -139,5 +139,5 @@ public class TestLevel2 extends Level2 {
 			club.positionY = pos[1];
 		}
 		return 0;
-	}
+	}*/
 }

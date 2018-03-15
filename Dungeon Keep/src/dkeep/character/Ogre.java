@@ -1,14 +1,13 @@
 package dkeep.character;
 
 import dkeep.logic.GameMap;
-import dkeep.logic.defenitions;
 
 public class Ogre extends Guard {
 
-	public int[] guardNextPosition(Character guard, GameMap gamearea) {
+	public int[] guardNextPosition(GameMap gamearea) {
 
 		// =====LEVEL 2 STARTS.
-		int[] pos = new int[]{guard.positionX, guard.positionY};
+		int[] pos = new int[]{this.positionX, this.positionY};
 
 		boolean success = false;
 
@@ -21,8 +20,8 @@ public class Ogre extends Guard {
 		for (int i = 0; i < fail_pos.length; i++) {
 
 			int rand_result = rd(fail_pos);
-			pos[0] = guard.positionX;
-			pos[1] = guard.positionY;
+			pos[0] = this.positionX;
+			pos[1] = this.positionY;
 
 			switch (rand_result) {
 			case 1: // UP
@@ -45,11 +44,6 @@ public class Ogre extends Guard {
 				// fail: out of border (bottom)
 			} else if (pos[1] >= gamearea.getMap()[0].length) {
 				// fail: out of border (right)
-			} else if (!(gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._empty_cell)
-					|| gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._lever)
-					|| gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._ogre_club)
-					|| gamearea.getMap()[pos[0]][pos[1]].equals(defenitions._club_at_key))) {
-				// fail: it is a wall, a door, ...
 			} else {
 				success = true;
 				break;
@@ -60,9 +54,6 @@ public class Ogre extends Guard {
 			}
 
 		}
-		// } while(!success);
-
-		System.out.print("\nguardNextPosition() - ["+pos[0]+","+pos[1]+"] \n");
 
 		return pos;
 	}

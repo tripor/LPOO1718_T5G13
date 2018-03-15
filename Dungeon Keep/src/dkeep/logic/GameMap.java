@@ -120,6 +120,13 @@ public abstract class GameMap {
 	{
 		map[posX][posY]=str;
 	}
+	
+	protected void clearMap()
+	{
+		for (int i = 0; i < map.length; i++) {
+			map[i] = this.copied_map[i];
+		}
+	}
 
 	// updates the game map depending on the currente level
 	protected void updateMap() {
@@ -146,7 +153,6 @@ public abstract class GameMap {
 	}
 	
 	
-	protected abstract boolean printScreenExceptions(int posX,int posY);
 
 	// Prints in the screen the map and the characters
 	public void printscreen() {
@@ -154,17 +160,14 @@ public abstract class GameMap {
 
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
-
-				if (!this.printScreenExceptions(i, j)) {
-					System.out.print(map[i][j] + "|");
-				}
+				System.out.print(map[i][j] + "|");
 			}
 			System.out.print("\n");
 		}
 	}
 
 	// Changes the I to S
-	protected void openDoors() {
+	public void openDoors() {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map.length; j++) {
 
@@ -177,104 +180,7 @@ public abstract class GameMap {
 		}
 	}
 
-	// Move and delete the "trail"
-	public boolean push_remove(String str, int atX, int atY, int byeX, int byeY) {
-
-		if (atX >= 0 && atY >= 0) {
-
-			if (str == defenitions._hero || str == defenitions._hero_at_key || str == defenitions._hero_with_arm) {
-
-				boolean can_move = (map[atX][atY].equals(defenitions._empty_cell)
-						|| map[atX][atY].equals(defenitions._opened_door) || map[atX][atY].equals(defenitions._lever) 
-						|| map[atX][atY].equals(defenitions._ogre_club)
-						|| map[atX][atY].equals(defenitions._club_at_key)
-						|| map[atX][atY].equals(defenitions._hero_club)
-						|| map[atX][atY].equals(defenitions._hero));
-
-				if (map[atX][atY].equals(defenitions._door) && str.equals(defenitions._hero_at_key)) {
-					openDoors();
-					return false;
-				}
-
-				// colision detection
-				if (!can_move) {
-					return false;
-				}
-
-				if (this.copied_map[atX][atY].equals(defenitions._lever)) // Open doors
-				{
-
-					if (current_level.game_level.getValue() == 2) {
-						// remove the key
-
-						str=defenitions._hero_at_key;
-						copied_map[atX][atY] = defenitions._empty_cell;
-						map[atX][atY] = str;
-						map[byeX][byeY] = copied_map[byeX][byeY];
-						return true;
-
-					} else {
-						openDoors();
-					}
-				}
-			} else if (str == defenitions._crazy_ogre || str == defenitions._ogre_at_key
-					|| str == defenitions._ogre_stunned || str == defenitions._guard
-					|| str == defenitions._guard_sleep) {
-				// guard
-
-				boolean can_move = (atX > map.length || atY > map[0].length
-						|| map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._lever)
-						|| map[atX][atY].equals(defenitions._ogre_club)
-						|| map[atX][atY].equals(defenitions._club_at_key)
-						|| map[atX][atY].equals(defenitions._ogre_stunned)
-						|| map[atX][atY].equals(defenitions._crazy_ogre)
-						|| map[atX][atY].equals(defenitions._ogre_at_key));
-
-				// colision detection
-				if (!can_move) {
-					return false;
-				}
-			}
-			else if(str == defenitions._hero_club)
-			{
-				boolean can_move = (atX > map.length || atY > map[0].length
-						|| map[atX][atY].equals(defenitions._empty_cell) || map[atX][atY].equals(defenitions._ogre_club));
-				
-				if(map[atX][atY].equals(defenitions._lever) || map[atX][atY].equals(defenitions._club_at_key) || map[atX][atY].equals(defenitions._ogre_at_key) || map[atX][atY].equals(defenitions._hero_at_key))
-				{
-					can_move=true;
-					str=defenitions._club_at_key;
-				}
-
-				// colision detection
-				if (!can_move) {
-					return false;
-				}
-			}
-			else if(str ==defenitions._ogre_club)
-			{
-				boolean can_move = (atX > map.length || atY > map[0].length
-						|| map[atX][atY].equals(defenitions._empty_cell));
-
-				if(map[atX][atY].equals(defenitions._lever) || map[atX][atY].equals(defenitions._club_at_key) || map[atX][atY].equals(defenitions._ogre_at_key) || map[atX][atY].equals(defenitions._hero_at_key))
-				{
-					can_move=true;
-					str=defenitions._club_at_key;
-				}
-				// colision detection
-				if (!can_move) {
-					return false;
-				}
-			}
-
-			map[atX][atY] = str;
-		}
-		if ((byeX >= 0 && byeY >= 0 && map[byeX][byeY].equals(str))) {
-			map[byeX][byeY] = copied_map[byeX][byeY];
-		}
-
-		return true;
-	}
+	
 
 	public abstract boolean checkGuard();
 
