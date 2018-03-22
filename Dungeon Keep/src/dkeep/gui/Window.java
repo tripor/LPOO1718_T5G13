@@ -16,8 +16,6 @@ import dkeep.logic.Level2;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -35,6 +33,7 @@ public class Window {
 	private JTextField numberOfOgres;
 	GameMap game;
 	ArrayList<JButton> buttons=new ArrayList<JButton>();
+	Graphic panel;
 
 	/**
 	 * Launch the application.
@@ -94,7 +93,8 @@ public class Window {
 		// NOTE: guard_type is [ Ogre | Rookie | Suspicious | Drunken ]
 		//   defined at "JComboBox" section in this java document.
 		game=new Level1(guard_type);
-		game.printMap(lblContent);
+		panel.setMap_to_print(game.getMap());
+		panel.repaint();
 		this.enableButtons();
 	}
 	private void moveHero(int movement)
@@ -105,8 +105,6 @@ public class Window {
 		{
 			if(game.getCurrent_level().game_level.getValue()==1){
 				game= new Level2(guard_count);
-				game.printscreen();
-				game.printMap(lblContent);
 				this.enableButtons();
 			}
 			else{
@@ -115,14 +113,14 @@ public class Window {
 		}
 		else if(state==2)
 		{
-			game.printscreen();
 			labelGameState("Defeat. You were caught!!!");
 		}
 		else
 		{
 			this.enableButtons();
 		}
-		game.printMap(lblContent);
+		panel.setMap_to_print(game.getMap());
+		panel.repaint();
 	}
 	private void upPressed() {
 		labelGameState("Hero moves UP");
@@ -171,6 +169,7 @@ public class Window {
 		JPanel container = new JPanel();
 		container.setBorder(new EmptyBorder(15, 15, 15, 15));
 		frame.getContentPane().add(container);
+		container.requestFocusInWindow(); 
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0};
@@ -226,7 +225,7 @@ public class Window {
 		gbc_guardPersonality.gridy = 1;
 		container.add(guardPersonality, gbc_guardPersonality);
 		
-		JPanel panel = new JPanel();
+		panel = new Graphic();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		panel.setBackground(Color.WHITE);
