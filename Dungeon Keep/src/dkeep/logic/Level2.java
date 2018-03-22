@@ -9,6 +9,7 @@ import dkeep.character.Ogre;
 
 public class Level2 extends GameMap {
 
+	private int x=1,y=7;
 	@Override
 	public void markPositions() {
 		map[hero.positionX][hero.positionY] = hero.getMy_char();
@@ -53,8 +54,33 @@ public class Level2 extends GameMap {
 
 		hero.clubs.add(hero_club);
 		Random rand = new Random();
-		int rand_result = rand.nextInt((2-1) + 1) + 1;
+		int rand_result = rand.nextInt((5-1) + 1) + 1;
 		for(int i=1;i<=rand_result;i++)
+		{
+
+			this.getRandomGuard();
+		}
+		markPositions();
+	}
+
+	public Level2(int guard_count) {
+		super();
+
+		// guard = new Ogre();
+		this.current_level= new Maps(CurrentLevel.Level.SECOND);
+		updateMap();
+		guards = new ArrayList<Guard>();
+
+		hero.positionX = 7;
+		hero.positionY = 1;
+		this.hero.setMy_char(defenitions._hero_with_arm);
+		
+
+		Club hero_club = new Club(map);
+		hero_club.clubNextPosition(this, hero);
+
+		hero.clubs.add(hero_club);
+		for(int i=1;i<=guard_count;i++)
 		{
 
 			this.getRandomGuard();
@@ -208,6 +234,7 @@ public class Level2 extends GameMap {
 		g= new Ogre(map);
 		g.positionX=1;
 		g.positionY=7;
+		x++;
 		
 		Club c = new Club(map);
 		

@@ -1,4 +1,4 @@
-package dkeep.main;
+package dkeep.gui;
 
 import java.awt.EventQueue;
 
@@ -9,11 +9,16 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import dkeep.logic.GameMap;
+import dkeep.logic.Level1;
+import dkeep.logic.Level2;
+
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -22,11 +27,14 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
+import java.awt.Font;
 
 public class Window {
 
 	private JFrame frame;
 	private JTextField numberOfOgres;
+	GameMap game;
+	ArrayList<JButton> buttons=new ArrayList<JButton>();
 
 	/**
 	 * Launch the application.
@@ -52,6 +60,10 @@ public class Window {
 	}
 	
 	JTextArea lblContent;
+	JLabel game_state_text;
+	
+	private String guard_type;
+	int guard_count;
 	
 	// CUSTOM FUNCTIONs
 	private boolean isNumeric(String s) {  
@@ -62,27 +74,86 @@ public class Window {
 	//=======================
 	//   ALL ACTION BELOW.
 	//=======================
-	private void startGame(String guard_type, int guard_count) {
+	
+	private void enableButtons()
+	{
+		for(JButton it: this.buttons)
+		{
+			it.setEnabled(true);
+		}
+	}
+	private void disableButtons()
+	{
+		for(JButton it: this.buttons)
+		{
+			it.setEnabled(false);
+		}
+	}
+	private void startGame() {
 		
 		// NOTE: guard_type is [ Ogre | Rookie | Suspicious | Drunken ]
 		//   defined at "JComboBox" section in this java document.
-		
-		consoleLog("New Game Started. (Guard=" + guard_type + ", Number=" + guard_count + ")");
+		game=new Level1(guard_type);
+		game.printMap(lblContent);
+		this.enableButtons();
+	}
+	private void moveHero(int movement)
+	{
+		this.disableButtons();
+		int state=game.moveHeroTo(movement);
+		if(state==1)
+		{
+			if(game.getCurrent_level().game_level.getValue()==1){
+				game= new Level2(guard_count);
+				game.printscreen();
+				game.printMap(lblContent);
+				this.enableButtons();
+			}
+			else{
+				labelGameState("Victory");
+			}
+		}
+		else if(state==2)
+		{
+			game.printscreen();
+			labelGameState("Defeat. You were caught!!!");
+		}
+		else
+		{
+			this.enableButtons();
+		}
+		game.printMap(lblContent);
 	}
 	private void upPressed() {
-		consoleLog("UP");
+		labelGameState("Hero moves UP");
+		moveHero(1);
 	}
 	private void downPressed() {
-		consoleLog("DOWN");
+		labelGameState("Hero moves DOWN");
+		moveHero(2);
 	}
 	private void leftPressed() {
-		consoleLog("LEFT");
+		labelGameState("Hero moves LEFT");
+		moveHero(3);
 	}
 	private void rightPressed() {
-		consoleLog("RIGHT");
+		labelGameState("Hero moves RIGHT");
+		moveHero(4);
+	}
+	private void exitPressed() {
+		System.exit(0);
 	}
 	
-	// TEMPORARY FUNCTION (Just for testing.)
+	private void notInteger()
+	{
+		consoleLog("The number introduced is not a integer or it's not between 1 and 5.");
+	}
+	
+	private void labelGameState(String text)
+	{
+		game_state_text.setText(text);
+	}
+	
 	private void consoleLog(String text) {
 		lblContent.setText(lblContent.getText() + "\n" + text);
 	}
@@ -134,8 +205,7 @@ public class Window {
 		gbc_lblGuardPersonality.gridy = 1;
 		container.add(lblGuardPersonality, gbc_lblGuardPersonality);
 		
-		JComboBox guardPersonality = new JComboBox();
-		guardPersonality.addItem("Ogre");
+		JComboBox<String> guardPersonality = new JComboBox<String>();
 		guardPersonality.addItem("Rookie");
 		guardPersonality.addItem("Drunken");
 		guardPersonality.addItem("Suspicious");
@@ -170,7 +240,7 @@ public class Window {
 		container.add(panel, gbc_panel);
 		
 		lblContent = new JTextArea();
-		lblContent.setText("Content");
+		lblContent.setFont(new Font("Courier New", Font.PLAIN, 13));
 		panel.add(lblContent);
 		
 		JButton btnNewGame = new JButton("New Game");
@@ -184,13 +254,19 @@ public class Window {
 		btnNewGame.addActionListener(new ActionListener(){
 			  public void actionPerformed(ActionEvent e)
 			  {
-				  String guard_type  = guardPersonality.getSelectedItem().toString();
-				     int guard_count = (
-						isNumeric(numberOfOgres.getText())
-							? Integer.parseInt(numberOfOgres.getText())
-								: 0
-				    	);
-				  startGame(guard_type, guard_count);
+				  guard_type  = guardPersonality.getSelectedItem().toString();
+				  if(isNumeric(numberOfOgres.getText()))
+				  {
+					  guard_count=Integer.parseInt(numberOfOgres.getText());
+					  if(guard_count<=5&&guard_count>=1)
+						  startGame();
+					  else
+						  notInteger();
+				  }
+				  else
+				  {
+					  notInteger();
+				  }
 			  }
 			});
 		container.add(btnNewGame, gbc_btnNewGame);
@@ -230,6 +306,12 @@ public class Window {
 		btnDown.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){downPressed();}});
 		container.add(btnDown, gbc_btnDown);
 		
+		this.buttons.add(btnUp);
+		this.buttons.add(btnDown);
+		this.buttons.add(btnRight);
+		this.buttons.add(btnLeft);
+		this.disableButtons();
+		
 		JButton btnExit = new JButton("Exit");
 		GridBagConstraints gbc_btnExit = new GridBagConstraints();
 		gbc_btnExit.anchor = GridBagConstraints.SOUTH;
@@ -237,6 +319,8 @@ public class Window {
 		gbc_btnExit.gridwidth = 2;
 		gbc_btnExit.gridx = 3;
 		gbc_btnExit.gridy = 8;
+		btnExit.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){exitPressed();}});
+
 		container.add(btnExit, gbc_btnExit);
 		
 		JLabel lblYouCanStart = new JLabel("You can start a new game.");
@@ -246,6 +330,7 @@ public class Window {
 		gbc_lblYouCanStart.gridwidth = 5;
 		gbc_lblYouCanStart.gridx = 0;
 		gbc_lblYouCanStart.gridy = 9;
+		game_state_text=lblYouCanStart;
 		container.add(lblYouCanStart, gbc_lblYouCanStart);
 	}
 

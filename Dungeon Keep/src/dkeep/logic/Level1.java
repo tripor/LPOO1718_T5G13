@@ -41,6 +41,28 @@ public class Level1 extends GameMap {
 
 		guards.add(g);
 	}
+	private void getSelectedGuard(String guard)
+	{
+		Guard g;
+		if(guard.equals("Rookie"))
+		{
+			g = new Rookie(map);
+		}
+		else if(guard.equals("Drunken"))
+		{
+			g = new Drunken(map);
+		}
+		else if(guard.equals("Suspicious"))
+		{
+			g = new Suspicious(map);
+		}
+		else
+		{
+			g = new Rookie(map);
+		}
+		
+		guards.add(g);
+	}
 	
 	@Override
 	public void markPositions() {
@@ -73,6 +95,26 @@ public class Level1 extends GameMap {
 
 		// LV 1, 1 Guard, Random Role
 		this.getRandomGuard();
+
+		guards.get(0).positionX = 1;
+		guards.get(0).positionY = 8;
+
+		// guard.positionX = 1;
+		// guard.positionY = 8;
+
+		this.markPositions();
+	}
+
+	public Level1(String guard_type) {
+		current_level = new Maps();
+		this.updateMap();
+
+		hero.positionX = 1;
+		hero.positionY = 1;
+
+		// LV 1, 1 Guard, Random Role
+		System.out.println(guard_type);
+		this.getSelectedGuard(guard_type);
 
 		guards.get(0).positionX = 1;
 		guards.get(0).positionY = 8;
