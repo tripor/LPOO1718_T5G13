@@ -16,18 +16,26 @@ import dkeep.logic.Level2;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
 import java.awt.Font;
 
-public class Window {
+@SuppressWarnings("serial")
+public class Window extends Graphic implements KeyListener,MouseListener {
 
 	private JFrame frame;
 	private JTextField numberOfOgres;
@@ -43,7 +51,7 @@ public class Window {
 			public void run() {
 				try {
 					Window window = new Window();
-					window.frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -56,6 +64,7 @@ public class Window {
 	 */
 	public Window() {
 		initialize();
+		this.frame.setVisible(true);
 	}
 	
 	JTextArea lblContent;
@@ -94,8 +103,14 @@ public class Window {
 		//   defined at "JComboBox" section in this java document.
 		game=new Level1(guard_type);
 		panel.setMap_to_print(game.getMap());
+		panel.setMap_background(game.getCopied_map());
+		panel.loadImages();
 		panel.repaint();
-		this.enableButtons();
+		//this.enableButtons();
+		panel.addKeyListener(this);
+		panel.setFocusable(true);
+		panel.requestFocusInWindow();
+		panel.addMouseListener(this);
 	}
 	private void moveHero(int movement)
 	{
@@ -120,6 +135,7 @@ public class Window {
 			this.enableButtons();
 		}
 		panel.setMap_to_print(game.getMap());
+		panel.setMap_background(game.getCopied_map());
 		panel.repaint();
 	}
 	private void upPressed() {
@@ -161,7 +177,7 @@ public class Window {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 600, 450);
+		frame.setBounds(100, 100, 1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -332,5 +348,81 @@ public class Window {
 		game_state_text=lblYouCanStart;
 		container.add(lblYouCanStart, gbc_lblYouCanStart);
 	}
+
+	private boolean pressed=false;
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if(pressed==false)
+		{
+			int key =e.getKeyCode();
+			if (key == KeyEvent.VK_LEFT) {
+	            this.leftPressed();
+	        }
+
+	        if (key == KeyEvent.VK_RIGHT) {
+	            this.rightPressed();
+	        }
+
+	        if (key == KeyEvent.VK_UP) {
+	            this.upPressed();
+	        }
+
+	        if (key == KeyEvent.VK_DOWN) {
+	            this.downPressed();
+	        }
+		}
+		pressed=true;
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		pressed=false;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub«
+		Dimension i = panel.getSize();
+		int x=panel.getX();
+		double right_x=x+i.getWidth();
+		int y=panel.getY();
+		double bottom_y=y+i.getHeight();
+		if(x<arg0.getX() && arg0.getX()<right_x && y<arg0.getY() && arg0.getY()<bottom_y)
+		{
+			panel.requestFocusInWindow();
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
