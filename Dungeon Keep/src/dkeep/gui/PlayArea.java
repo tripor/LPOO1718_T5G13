@@ -35,36 +35,22 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 
 @SuppressWarnings("serial")
-public class Window extends Graphic implements KeyListener,MouseListener {
+public class PlayArea extends Graphic implements KeyListener,MouseListener {
 
-	private JFrame frame;
+	public JFrame frame;
 	private JTextField numberOfOgres;
 	GameMap game;
 	ArrayList<JButton> buttons=new ArrayList<JButton>();
 	Graphic panel;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Window window = new Window();
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	private WindowGame window;
+	
+	private boolean paused=false;
 	/**
 	 * Create the application.
 	 */
-	public Window() {
+	public PlayArea(WindowGame window) {
 		initialize();
-		this.frame.setVisible(true);
+		this.window=window;
 	}
 	
 	JTextArea lblContent;
@@ -89,6 +75,7 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 		{
 			it.setEnabled(true);
 		}
+		this.paused=false;
 	}
 	private void disableButtons()
 	{
@@ -96,17 +83,19 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 		{
 			it.setEnabled(false);
 		}
+		this.paused=true;
 	}
 	private void startGame() {
 		
 		// NOTE: guard_type is [ Ogre | Rookie | Suspicious | Drunken ]
 		//   defined at "JComboBox" section in this java document.
+		this.consoleClear();
 		game=new Level1(guard_type);
 		panel.setMap_to_print(game.getMap());
 		panel.setMap_background(game.getCopied_map());
 		panel.loadImages();
 		panel.repaint();
-		//this.enableButtons();
+		this.enableButtons();
 		panel.addKeyListener(this);
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
@@ -155,7 +144,8 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 		moveHero(4);
 	}
 	private void exitPressed() {
-		System.exit(0);
+		window.playSetVisible(false);
+		window.menuSetVisible(true);
 	}
 	
 	private void notInteger()
@@ -171,6 +161,10 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 	private void consoleLog(String text) {
 		lblContent.setText(lblContent.getText() + "\n" + text);
 	}
+	
+	private void consoleClear() {
+		lblContent.setText("");
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -185,7 +179,6 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 		JPanel container = new JPanel();
 		container.setBorder(new EmptyBorder(15, 15, 15, 15));
 		frame.getContentPane().add(container);
-		container.requestFocusInWindow(); 
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] {0};
@@ -306,6 +299,7 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 		
 		JButton btnRight = new JButton("Right");
 		GridBagConstraints gbc_btnRight = new GridBagConstraints();
+		gbc_btnRight.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRight.gridx = 4;
 		gbc_btnRight.gridy = 5;
 		btnRight.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e){rightPressed();}});
@@ -353,7 +347,7 @@ public class Window extends Graphic implements KeyListener,MouseListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if(pressed==false)
+		if(pressed==false && !this.paused)
 		{
 			int key =e.getKeyCode();
 			if (key == KeyEvent.VK_LEFT) {

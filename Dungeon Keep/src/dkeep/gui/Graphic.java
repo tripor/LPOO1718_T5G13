@@ -27,14 +27,24 @@ public class Graphic extends JPanel  {
 	public void loadImages() 
 	{
 		try {
-			image.put("wall",ImageIO.read(new File("sprites/wall.png")));
-			image.put("floor",ImageIO.read(new File("sprites/floor.png")));
-			image.put("hero",ImageIO.read(new File("sprites/hero.png")));
-			image.put("ogre",ImageIO.read(new File("sprites/ogre.png")));
-			image.put("key",ImageIO.read(new File("sprites/key.png")));
-			image.put("club",ImageIO.read(new File("sprites/club.png")));
+			image.put(defenitions._wall,ImageIO.read(new File("sprites/wall.png")));
+			image.put(defenitions._empty_cell,ImageIO.read(new File("sprites/floor.png")));
+			image.put(defenitions._door,ImageIO.read(new File("sprites/wall.png")));
+			image.put(defenitions._opened_door,ImageIO.read(new File("sprites/floor.png")));
+			image.put(defenitions._lever,ImageIO.read(new File("sprites/key.png")));
+			image.put(defenitions._hero,ImageIO.read(new File("sprites/hero.png")));
+			image.put(defenitions._hero_at_key,ImageIO.read(new File("sprites/hero_with_key.png")));
+			image.put(defenitions._guard,ImageIO.read(new File("sprites/guard.png")));
+			image.put(defenitions._guard_sleep,ImageIO.read(new File("sprites/guard_sleep.png")));
+			image.put(defenitions._crazy_ogre,ImageIO.read(new File("sprites/ogre.png")));
+			image.put(defenitions._ogre_stunned,ImageIO.read(new File("sprites/ogre_stunned.png")));
+			image.put(defenitions._ogre_at_key,ImageIO.read(new File("sprites/ogre.png")));
+			image.put(defenitions._ogre_club,ImageIO.read(new File("sprites/club.png")));
+			image.put(defenitions._club_at_key,ImageIO.read(new File("sprites/club.png")));
+			image.put(defenitions._hero_club,ImageIO.read(new File("sprites/club.png")));
+			image.put(defenitions._hero_with_arm,ImageIO.read(new File("sprites/hero.png")));
 		} catch (IOException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -42,30 +52,8 @@ public class Graphic extends JPanel  {
 		super.paintComponent(g);
 		for (int i = 0; i < map_to_print.length; i++) {
 			for (int j = 0; j < map_to_print[i].length; j++) {
-				if (map_background[i][j].equals(defenitions._wall) || map_background[i][j].equals(defenitions._door)) {
-					g.drawImage(image.get("wall"), j * size_image, i * size_image, size_image, size_image, this);
-				} else if (map_background[i][j].equals(defenitions._empty_cell)
-						|| map_background[i][j].equals(defenitions._opened_door)) {
-					g.drawImage(image.get("floor"), j * size_image, i * size_image, size_image, size_image, this);
-				} else if (map_background[i][j].equals(defenitions._lever)) {
-					g.drawImage(image.get("floor"), j * size_image, i * size_image, size_image, size_image, this);
-					g.drawImage(image.get("key"), j * size_image, i * size_image, size_image, size_image, this);
-				} else {
-					g.drawImage(image.get("floor"), j * size_image, i * size_image, size_image, size_image, this);
-				}
-				if (map_to_print[i][j].equals(defenitions._hero)
-						|| map_to_print[i][j].equals(defenitions._hero_with_arm)) {
-					g.drawImage(image.get("hero"), j * size_image, i * size_image, size_image, size_image, this);
-				} else if (map_to_print[i][j].equals(defenitions._guard)
-						|| map_to_print[i][j].equals(defenitions._crazy_ogre)
-						|| map_to_print[i][j].equals(defenitions._ogre_at_key)
-						|| map_to_print[i][j].equals(defenitions._ogre_stunned)) {
-					g.drawImage(image.get("ogre"), j * size_image, i * size_image, size_image, size_image, this);
-				} else if (map_to_print[i][j].equals(defenitions._club_at_key)
-						|| map_to_print[i][j].equals(defenitions._hero_club)
-						|| map_to_print[i][j].equals(defenitions._ogre_club)) {
-					g.drawImage(image.get("club"), j * size_image, i * size_image, size_image, size_image, this);
-				}
+				g.drawImage(image.get(map_background[i][j]), j * size_image, i * size_image, size_image, size_image, this);
+				g.drawImage(image.get(map_to_print[i][j]), j * size_image, i * size_image, size_image, size_image, this);
 			}
 		}
 	}
