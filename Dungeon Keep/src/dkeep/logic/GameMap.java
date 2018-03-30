@@ -44,10 +44,6 @@ public abstract class GameMap {
 		return hero;
 	}
 
-	public void setHero(Hero hero) {
-		this.hero = hero;
-	}
-
 	public ArrayList<Guard> getGuards() {
 		return guards;
 	}
@@ -112,16 +108,6 @@ public abstract class GameMap {
 				System.out.print(map[i][j] + "|");
 			}
 			System.out.print("\n");
-		}
-	}
-	public void printMap(JTextArea console)
-	{
-		console.setText("");
-		for (int i = 0; i < map.length; i++) {
-			for (int j = 0; j < map[i].length; j++) {
-				console.setText(console.getText()+map[i][j]);
-			}
-			console.setText(console.getText()+"\n");
 		}
 	}
 

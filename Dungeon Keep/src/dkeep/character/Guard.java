@@ -141,7 +141,7 @@ public abstract class Guard extends Character {
 	
 	protected String[] path = {"L","D","D","D","D","L","L","L","L","L","L","D","R","R","R","R","R","R","R","U","U","U","U","U"};
 	protected int position_path=0;
-	protected boolean foward_walking=true;
+	public boolean foward_walking=true;
 	/*
 	 * 1 UP
 	 * 2 Down

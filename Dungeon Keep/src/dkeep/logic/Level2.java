@@ -93,51 +93,44 @@ public class Level2 extends GameMap {
 		for (Club c : hero.clubs) {
 			for(Guard g:this.guards)
 			{
-				System.out.println(c.positionX + " " + c.positionY + ":" + g.positionX+ " "+g.positionY);
 				if (g.positionX==c.positionX+1 && g.positionY==c.positionY) {
 					g.stunned=1;
-					g.setMy_char(defenitions._ogre_stunned);
 					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
 				} else if (g.positionX==c.positionX && g.positionY==c.positionY+1) {
 					g.stunned=1;
-					g.setMy_char(defenitions._ogre_stunned);
 					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
 				} else if (g.positionX==c.positionX-1 && g.positionY==c.positionY) {
 					g.stunned=1;
-					g.setMy_char(defenitions._ogre_stunned);
 					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
 				} else if (g.positionX==c.positionX && g.positionY==c.positionY-1) {
 					g.stunned=1;
-					g.setMy_char(defenitions._ogre_stunned);
 					this.setMap(defenitions._ogre_stunned, g.positionX, g.positionY);
 				}
-				System.out.println(g.stunned);
 			}
 		}
 
 		for (Guard guard : guards) {
 
-			if (!map[guard.positionX][guard.positionY].equals(defenitions._ogre_stunned)) {
-				System.out.println(map[guard.positionX + 1][guard.positionY] + " " + map[guard.positionX - 1][guard.positionY]+ " "+ map[guard.positionX][guard.positionY + 1]+ " "+map[guard.positionX][guard.positionY - 1]);
-				if (map[guard.positionX + 1][guard.positionY].equals(defenitions._hero_with_arm) || map[guard.positionX + 1][guard.positionY].equals(defenitions._hero_at_key))
+			if (!guard.sleep) {
+				if (hero.positionX==guard.positionX+1 && hero.positionY==guard.positionY)
 					return true;
-				if (map[guard.positionX - 1][guard.positionY].equals(defenitions._hero_with_arm) || map[guard.positionX - 1][guard.positionY].equals(defenitions._hero_at_key))
+				if (hero.positionX==guard.positionX-1 && hero.positionY==guard.positionY)
 					return true;
-				if (map[guard.positionX][guard.positionY + 1].equals(defenitions._hero_with_arm) || map[guard.positionX][guard.positionY + 1].equals(defenitions._hero_at_key))
+				if (hero.positionX==guard.positionX && hero.positionY==guard.positionY+1)
 					return true;
-				if (map[guard.positionX][guard.positionY - 1].equals(defenitions._hero_with_arm) || map[guard.positionX][guard.positionY - 1].equals(defenitions._hero_at_key))
+				if (hero.positionX==guard.positionX && hero.positionY==guard.positionY-1)
 					return true;
 			}
 
 			for (Club club : guard.clubs) {
 
-				if (map[club.positionX + 1][club.positionY].equals(defenitions._hero_with_arm) || map[club.positionX + 1][club.positionY].equals(defenitions._hero_at_key))
+				if (hero.positionX==club.positionX+1 && hero.positionY==club.positionY)
 					return true;
-				if (map[club.positionX - 1][club.positionY].equals(defenitions._hero_with_arm) || map[club.positionX - 1][club.positionY].equals(defenitions._hero_at_key))
+				if (hero.positionX==club.positionX-1 && hero.positionY==club.positionY)
 					return true;
-				if (map[club.positionX][club.positionY + 1].equals(defenitions._hero_with_arm) || map[club.positionX][club.positionY + 1].equals(defenitions._hero_at_key))
+				if (hero.positionX==club.positionX && hero.positionY==club.positionY+1)
 					return true;
-				if (map[club.positionX][club.positionY - 1].equals(defenitions._hero_with_arm) || map[club.positionX][club.positionY - 1].equals(defenitions._hero_at_key))
+				if (hero.positionX==club.positionX && hero.positionY==club.positionY-1)
 					return true;
 			}
 
@@ -226,6 +219,14 @@ public class Level2 extends GameMap {
 	public boolean placeHero(int posX,int posY)
 	{
 		return this.hero.push_remove(posX, posY, this);
+	}
+	public boolean placeGuard(int posX,int posY)
+	{
+		for (Guard guard : this.guards)
+		{
+			guard.push_remove(posX, posY,this);
+		}
+		return true;
 	}
 
 	@Override

@@ -2,8 +2,13 @@ package dkeep.test;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import org.junit.Test;
 
+import dkeep.character.Club;
+import dkeep.character.Guard;
 import dkeep.logic.*;
 
 /*Transforms the input:
@@ -51,26 +56,59 @@ public class TestDungeonGameLogic {
 		assertEquals(defenitions._hero, jogo.getMap()[1][3]);
 		assertEquals(1, jogo.getHero().positionX);
 		assertEquals(3, jogo.getHero().positionY);
+		
+		jogo = new Level1("Rookie");
+		jogo.markPositions();
+		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
+		assertEquals(defenitions._hero,jogo.getHero().getMy_char());
+		assertEquals(1, jogo.getHero().positionX);
+		assertEquals(1, jogo.getHero().positionY);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(1,it.positionX);
+			assertEquals(8,it.positionY);
+			assertEquals("rookie",it.typeGuard());
+		}
+		
+		jogo = new Level1("Suspicious");
+		jogo.markPositions();
+		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
+		assertEquals(defenitions._hero,jogo.getHero().getMy_char());
+		assertEquals(1, jogo.getHero().positionX);
+		assertEquals(1, jogo.getHero().positionY);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(1,it.positionX);
+			assertEquals(8,it.positionY);
+			assertEquals("suspicious",it.typeGuard());
+		}
+		
+		jogo = new Level1("Drunken");
+		jogo.markPositions();
+		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
+		assertEquals(defenitions._hero,jogo.getHero().getMy_char());
+		assertEquals(1, jogo.getHero().positionX);
+		assertEquals(1, jogo.getHero().positionY);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(1,it.positionX);
+			assertEquals(8,it.positionY);
+			assertEquals("drunken",it.typeGuard());
+		}
 	}
 
 	@Test
 	public void testMoveHeroIntoToFreeCellLevel2() {
 		Level2 jogo = new Level2();
 		jogo.markPositions();
+		jogo.getHero().clubs.clear();
+		jogo.getGuards().clear();
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
 		assertEquals(defenitions._hero_with_arm, jogo.getHero().getMy_char());
 		assertEquals(7, jogo.getHero().positionX);
 		assertEquals(1, jogo.getHero().positionY);
 		assertEquals(0,jogo.moveHeroTo(4));
-		if(jogo.getMap()[7][1].equals(defenitions._empty_cell) || jogo.getMap()[7][1].equals(defenitions._hero_club))
-		{
-			
-		}
-		else
-		{
-			System.out.println("failed: "+jogo.getMap()[7][1]);
-			fail();
-		}
+		assertEquals(defenitions._empty_cell, jogo.getMap()[7][1]);
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][2]);
 		assertEquals(7, jogo.getHero().positionX);
 		assertEquals(2, jogo.getHero().positionY);
@@ -92,7 +130,7 @@ public class TestDungeonGameLogic {
 	public void testMoveHeroToWallLevel1() {
 		Level1 jogo = new Level1();
 		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
-		jogo.moveHeroTo(3);
+		assertEquals(0,jogo.moveHeroTo(3));
 		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
 		jogo.moveHeroTo(1);
 		assertEquals(defenitions._hero, jogo.getMap()[1][1]);
@@ -107,8 +145,10 @@ public class TestDungeonGameLogic {
 	@Test
 	public void testMoveHeroToWallLevel2() {
 		Level2 jogo = new Level2();
+		jogo.getHero().clubs.clear();
+		jogo.getGuards().clear();
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
-		jogo.moveHeroTo(3);
+		assertEquals(0,jogo.moveHeroTo(3));
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
 		jogo.moveHeroTo(2);
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
@@ -124,18 +164,82 @@ public class TestDungeonGameLogic {
 	public void testGuardCaughtLevel1() {
 		Level1 jogo = new Level1();
 		assertTrue(jogo.placeHero(2, 8));
+		assertTrue(jogo.placeGuard(1, 8));
 		assertEquals(defenitions._hero, jogo.getMap()[2][8]);
 		assertEquals(defenitions._guard, jogo.getMap()[1][8]);
 		assertTrue(jogo.checkGuard());
+		jogo = new Level1();
+		assertTrue(jogo.placeHero(1, 7));
+		assertTrue(jogo.placeGuard(1, 8));
+		assertEquals(defenitions._hero, jogo.getMap()[1][7]);
+		assertEquals(defenitions._guard, jogo.getMap()[1][8]);
+		assertTrue(jogo.checkGuard());
+		jogo = new Level1();
+		assertTrue(jogo.placeHero(2, 8));
+		assertTrue(jogo.placeGuard(2, 7));
+		assertEquals(defenitions._hero, jogo.getMap()[2][8]);
+		assertEquals(defenitions._guard, jogo.getMap()[2][7]);
+		assertTrue(jogo.checkGuard());
+		jogo = new Level1();
+		assertTrue(jogo.placeHero(2, 8));
+		assertTrue(jogo.placeGuard(3, 8));
+		assertEquals(defenitions._hero, jogo.getMap()[2][8]);
+		assertEquals(defenitions._guard, jogo.getMap()[3][8]);
+		assertTrue(jogo.checkGuard());
+		
+		jogo= new Level1("Rookie");
+		assertTrue(jogo.placeHero(2, 8));
+		assertEquals(2,jogo.moveHeroTo(3));
 
 	}
 
 	@Test
 	public void testGuardCaughtLevel2() {
 		Level2 jogo = new Level2();
-		assertTrue(jogo.placeHero(2, 6));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[2][6]);
-		assertEquals(defenitions._ogre_at_key, jogo.getMap()[1][7]);
+		jogo.getHero().clubs.clear();
+		for(Guard it:jogo.getGuards())
+		{
+			it.clubs.clear();
+		}
+		assertTrue(jogo.placeHero(4, 5));
+		assertTrue(jogo.placeGuard(5, 5));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[4][5]);
+		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
+		assertTrue(jogo.checkGuard());
+		assertTrue(jogo.placeHero(6, 5));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[6][5]);
+		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
+		assertTrue(jogo.checkGuard());
+		assertTrue(jogo.placeHero(5, 4));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][4]);
+		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
+		assertTrue(jogo.checkGuard());
+		assertTrue(jogo.placeHero(5, 6));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][6]);
+		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
+		assertTrue(jogo.checkGuard());
+		
+		jogo = new Level2();
+		jogo.getHero().clubs.clear();
+		for(Guard it:jogo.getGuards())
+		{
+			for(Club et:it.clubs)
+			{
+				et.positionX=5;
+				et.positionY=5;
+			}
+		}
+		assertTrue(jogo.placeHero(4, 5));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[4][5]);
+		assertTrue(jogo.checkGuard());
+		assertTrue(jogo.placeHero(6, 5));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[6][5]);
+		assertTrue(jogo.checkGuard());
+		assertTrue(jogo.placeHero(5, 4));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][4]);
+		assertTrue(jogo.checkGuard());
+		assertTrue(jogo.placeHero(5, 6));
+		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][6]);
 		assertTrue(jogo.checkGuard());
 	}
 
@@ -219,13 +323,94 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testGuardMovementLevel1() {
-		Level1 jogo = new Level1();
-		jogo.moveHeroTo(4);
-		if (jogo.getMap()[1][7].equals(defenitions._guard) || jogo.getMap()[2][8].equals(defenitions._guard) || jogo.getMap()[1][8].equals(defenitions._guard_sleep)) {
-			assertTrue(true);
-		} else {
-			fail(jogo.getMap()[1][8]);
+		int[] x= new int[] {1,1,2,3,4,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,5,4,3,2};
+		int[] y= new int[] {8,7,7,7,7,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,8,8,8,8};
+		Level1 jogo = new Level1("Rookie");
+		for(int i=0;i<x.length;i++)
+		{
+			for(Guard it:jogo.getGuards())
+			{
+				assertEquals(x[i],it.positionX);
+				assertEquals(y[i],it.positionY);
+			}
+			jogo.moveHeroTo(3);
 		}
+		jogo = new Level1("Suspicious");
+		int i;
+		boolean sair=false;
+		for(i=0;;i++)
+		{
+			if(i==x.length) i=0;
+			for(Guard it:jogo.getGuards())
+			{
+				if(x[i]!=it.positionX) {
+					sair=true;
+				}
+				if(y[i]!=it.positionY) {
+					sair=true;
+				}
+			}
+			if(sair)break;
+			jogo.moveHeroTo(3);
+		}
+		i--;
+		i--;
+		if(i<0)i=x.length-1;
+		for(Guard it:jogo.getGuards())
+		{
+			assertFalse(it.foward_walking);
+			assertEquals(x[i],it.positionX);
+			assertEquals(y[i],it.positionY);
+			sair=false;
+			for(;;i--)
+			{
+				if(i<0) i=x.length-1;
+				for(Guard et:jogo.getGuards())
+				{
+					if(x[i]!=et.positionX) {
+						sair=true;
+					}
+					if(y[i]!=et.positionY) {
+						sair=true;
+					}
+				}
+				if(sair)break;
+				jogo.moveHeroTo(3);
+			}
+		}
+		i++;
+		i++;
+		if(i==x.length)i=0;
+		for(Guard it:jogo.getGuards())
+		{
+			assertTrue(it.foward_walking);
+			assertEquals(x[i],it.positionX);
+			assertEquals(y[i],it.positionY);
+		}
+		jogo = new Level1("Drunken");
+		sair=false;
+		for(i=0;;i++)
+		{
+			if(i==x.length) i=0;
+			for(Guard it:jogo.getGuards())
+			{
+				if(x[i]!=it.positionX) {
+					sair=true;
+				}
+				if(y[i]!=it.positionY) {
+					sair=true;
+				}
+			}
+			if(sair)break;
+			jogo.moveHeroTo(3);
+		}
+		i--;
+		if(i<0)i=x.length-1;
+		for(Guard it:jogo.getGuards())
+		{
+			assertTrue(it.sleep);
+		}
+		
 	}
 
 	@Test
@@ -324,17 +509,77 @@ public class TestDungeonGameLogic {
 	@Test
 	public void testStun()
 	{
-		Level2 jogo = new Level2();
-		jogo.getHero().clubs.get(0).positionX=5;
-		jogo.getHero().clubs.get(0).positionY=4;
-		jogo.setMap(defenitions._hero_club, 5, 4);
-		jogo.getGuards().get(0).positionX=6;
-		jogo.getGuards().get(0).positionY=4;
-		jogo.setMap(defenitions._crazy_ogre, 6, 4);
+		Level2 jogo = new Level2(1);
+		for(Club it:jogo.getHero().clubs)
+		{
+			it.positionX=4;
+			it.positionY=5;
+		}
+		for(Guard it:jogo.getGuards())
+		{
+			it.positionX=5;
+			it.positionY=5;
+		}
 		jogo.checkGuard();
-		assertEquals(defenitions._ogre_stunned,jogo.getMap()[jogo.getGuards().get(0).positionX][jogo.getGuards().get(0).positionY]);
-		jogo.moveHeroTo(3);
-		assertEquals(defenitions._ogre_stunned,jogo.getMap()[jogo.getGuards().get(0).positionX][jogo.getGuards().get(0).positionY]);
+		for(Guard it:jogo.getGuards())
+		{
+			it.sleep=true;
+			assertEquals(defenitions._ogre_stunned,jogo.getMap()[it.positionX][it.positionY]);
+		}
+		
+		jogo = new Level2(1);
+		for(Club it:jogo.getHero().clubs)
+		{
+			it.positionX=6;
+			it.positionY=5;
+		}
+		for(Guard it:jogo.getGuards())
+		{
+			it.positionX=5;
+			it.positionY=5;
+		}
+		jogo.checkGuard();
+		for(Guard it:jogo.getGuards())
+		{
+			it.sleep=true;
+			assertEquals(defenitions._ogre_stunned,jogo.getMap()[it.positionX][it.positionY]);
+		}
+		
+		jogo = new Level2(1);
+		for(Club it:jogo.getHero().clubs)
+		{
+			it.positionX=5;
+			it.positionY=4;
+		}
+		for(Guard it:jogo.getGuards())
+		{
+			it.positionX=5;
+			it.positionY=5;
+		}
+		jogo.checkGuard();
+		for(Guard it:jogo.getGuards())
+		{
+			it.sleep=true;
+			assertEquals(defenitions._ogre_stunned,jogo.getMap()[it.positionX][it.positionY]);
+		}
+		
+		jogo = new Level2(1);
+		for(Club it:jogo.getHero().clubs)
+		{
+			it.positionX=5;
+			it.positionY=6;
+		}
+		for(Guard it:jogo.getGuards())
+		{
+			it.positionX=5;
+			it.positionY=5;
+		}
+		jogo.checkGuard();
+		for(Guard it:jogo.getGuards())
+		{
+			it.sleep=true;
+			assertEquals(defenitions._ogre_stunned,jogo.getMap()[it.positionX][it.positionY]);
+		}
 	}
 	@Test
 	public void testNumberGuard()
@@ -398,6 +643,45 @@ public class TestDungeonGameLogic {
 				assertEquals(provar[0][i][j],new Maps(CurrentLevel.Level.NADA).getMap()[i][j]);
 			}
 		}
+	}
+	
+	@Test
+	public void testPrint()
+	{
+		String provar[][][] = new String[][][] {
+			{ 		{ "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" },
+					{ "X", " ", " ", " ", "I", " ", "X", " ", " ", "X" },
+					{ "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
+					{ "X", " ", "I", " ", "I", " ", "X", " ", " ", "X" },
+					{ "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
+					{ "I", " ", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "I", " ", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", "X", "X", " ", "X", "X", "X", "X", " ", "X" },
+					{ "X", " ", "I", " ", "I", " ", "X", "k", " ", "X" },
+					{ "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" } },
+
+			{ 		{ "X", "X", "X", "X", "X", "X", "X", "X", "X" }, 
+					{ "I", " ", " ", " ", " ", " ", " ", "k", "X" },
+					{ "X", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", " ", " ", " ", " ", " ", " ", " ", "X" },
+					{ "X", "X", "X", "X", "X", "X", "X", "X", "X" } }
+			
+
+		};
+		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+		System.setOut(new PrintStream(outContent));
+	    System.setErr(new PrintStream(errContent));
+	    
+	    Level1 jogo=new Level1();
+	    jogo.printscreen();
+	    assertEquals("\n\n\n\nX|X|X|X|X|X|X|X|X|X|\nX|H| | |I| |X| |G|X|\nX|X|X| |X|X|X| | |X|\nX| |I| |I| |X| | |X|\nX|X|X| |X|X|X| | |X|\nI| | | | | | | | |X|\nI| | | | | | | | |X|\nX|X|X| |X|X|X|X| |X|\nX| |I| |I| |X|k| |X|\nX|X|X|X|X|X|X|X|X|X|\n",outContent.toString());
+	    System.setOut(System.out);
+	    System.setErr(System.err);
 	}
 
 }

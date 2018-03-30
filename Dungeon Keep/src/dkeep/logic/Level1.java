@@ -113,7 +113,6 @@ public class Level1 extends GameMap {
 		hero.positionY = 1;
 
 		// LV 1, 1 Guard, Random Role
-		System.out.println(guard_type);
 		this.getSelectedGuard(guard_type);
 
 		guards.get(0).positionX = 1;
@@ -173,7 +172,6 @@ public class Level1 extends GameMap {
 		if (toX < 0 || toY < 0) {
 			return 1;
 		}
-		System.out.println(toX+ " " +toY);
 		boolean has_moved = this.hero.push_remove(toX, toY,this);
 		for (Guard guard : this.guards) {
 
@@ -209,6 +207,14 @@ public class Level1 extends GameMap {
 	public boolean placeHero(int posX,int posY)
 	{
 		return this.hero.push_remove(posX, posY,this);
+	}
+	public boolean placeGuard(int posX,int posY)
+	{
+		for (Guard guard : this.guards)
+		{
+			guard.push_remove(posX, posY,this);
+		}
+		return true;
 	}
 
 }
