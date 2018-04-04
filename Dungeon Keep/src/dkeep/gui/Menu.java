@@ -26,7 +26,7 @@ public class Menu {
 	private void initialize()
 	{
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 700);
+		frame.setBounds(50, 50, 500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -36,10 +36,10 @@ public class Menu {
 		frame.getContentPane().add(container);
 		
 		GridBagLayout gbl_container = new GridBagLayout();
-		gbl_container.columnWidths = new int[]{1,1,1};
-		gbl_container.rowHeights = new int[] {1,1,1,1,1};
-		gbl_container.columnWeights = new double[]{5,1,5};
-		gbl_container.rowWeights = new double[]{3,1,1,1,3};
+		gbl_container.columnWidths = new int[]{0};
+		gbl_container.rowHeights = new int[] {0};
+		gbl_container.columnWeights = new double[]{0};
+		gbl_container.rowWeights = new double[]{0};
 		container.setLayout(gbl_container);
 		
 		JButton btnPlay = new JButton("Play");
@@ -50,8 +50,9 @@ public class Menu {
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				window.playSetVisible(true);
 				window.menuSetVisible(false);
+				window.playSetVisible(true);
+				window.mapEditorSetVisible(false);
 			}
 		});
 		container.add(btnPlay, gbc_btnNewButton);
@@ -64,7 +65,9 @@ public class Menu {
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				window.menuSetVisible(false);
+				window.playSetVisible(false);
+				window.mapEditorSetVisible(true);
 			}
 		});
 		container.add(btnCreate, gbc_btnNewButton_1);

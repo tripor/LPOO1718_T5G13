@@ -1,6 +1,6 @@
 package dkeep.gui;
 
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.GridBagLayout;
@@ -16,8 +16,8 @@ import dkeep.logic.Level2;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+//import java.awt.event.FocusEvent;
+//import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -35,7 +35,7 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 
 @SuppressWarnings("serial")
-public class PlayArea extends Graphic implements KeyListener,MouseListener {
+public class PlayArea extends Graphic implements KeyListener, MouseListener {
 
 	public JFrame frame;
 	private JTextField numberOfOgres;
@@ -171,7 +171,7 @@ public class PlayArea extends Graphic implements KeyListener,MouseListener {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 700);
+		frame.setBounds(50, 50, 800, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -197,6 +197,7 @@ public class PlayArea extends Graphic implements KeyListener,MouseListener {
 		container.add(lblNumberOfOgres, gbc_lblNumberOfOgres);
 		
 		numberOfOgres = new JTextField();
+		numberOfOgres.setText("1");
 		GridBagConstraints gbc_numberOfOgres = new GridBagConstraints();
 		gbc_numberOfOgres.insets = new Insets(0, 0, 5, 5);
 		gbc_numberOfOgres.fill = GridBagConstraints.HORIZONTAL;
@@ -400,7 +401,7 @@ public class PlayArea extends Graphic implements KeyListener,MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub«
+		// TODO Auto-generated method stub
 		Dimension i = panel.getSize();
 		int x=panel.getX();
 		double right_x=x+i.getWidth();

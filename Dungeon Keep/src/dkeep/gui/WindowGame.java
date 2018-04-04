@@ -4,21 +4,35 @@ import java.awt.EventQueue;
 
 public class WindowGame {
 	
-	Menu menu;
-	PlayArea play;
+	Menu menu = null;
+	PlayArea play = null;
+	MapEditor mapEditor = null;
 	
 	public void menuSetVisible(boolean state)
 	{
-		menu.frame.setVisible(state);
+		if(menu != null) {
+			menu.frame.setVisible(state);
+		}
 	}
 	
 	public void playSetVisible(boolean state)
 	{
-		if(state)
-		{
-			play=new PlayArea(this);
+		if(state) {
+			play = new PlayArea(this);
+		}		
+		if(play != null) {
+			play.frame.setVisible(state);	
 		}
-		play.frame.setVisible(state);
+	}
+	
+	public void mapEditorSetVisible(boolean state)
+	{
+		if(state) {
+			mapEditor = new MapEditor(this);
+		}
+		if(mapEditor != null) {
+			mapEditor.frame.setVisible(state);
+		}
 	}
 	
 	
@@ -26,7 +40,7 @@ public class WindowGame {
 	EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
-				WindowGame me=new WindowGame();
+				WindowGame me = new WindowGame();
 				me.menu = new Menu(me);
 				me.menu.frame.setVisible(true);
 			} catch (Exception e) {
