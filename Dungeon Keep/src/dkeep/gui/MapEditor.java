@@ -1,49 +1,28 @@
 package dkeep.gui;
 
-//import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import java.awt.GridBagLayout;
-//import javax.swing.JLabel;
-//import java.awt.GridBagConstraints;
-//import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-//import dkeep.logic.GameMap;
-//import dkeep.logic.Level1;
-//import dkeep.logic.Level2;
-
-//import java.awt.Insets;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//import java.awt.event.FocusEvent;
-//import java.awt.event.FocusListener;
-//import java.awt.event.KeyEvent;
-//import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-//import java.util.ArrayList;
-
-//import javax.swing.JComboBox;
-//import javax.swing.JButton;
 import javax.swing.JPanel;
-//import java.awt.Color;
-//import java.awt.Dimension;
+
 import java.awt.GridLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import javax.swing.JButton;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JLabel;
+
 import java.awt.Color;
-//import java.awt.FlowLayout;
-//import javax.swing.JTextArea;
-//import java.awt.Font;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class MapEditor extends Graphic implements MouseListener {
 
 	public JFrame frame;
 	private WindowGame window;
+	public JLabel lblContent;
 	
 	/**
 	 * Create the application.
@@ -72,10 +51,10 @@ public class MapEditor extends Graphic implements MouseListener {
 		frame.getContentPane().add(container);
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] {0};
-		gridBagLayout.rowHeights = new int[]{0};
+		gridBagLayout.columnWidths = new int[] {0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0};
 		gridBagLayout.columnWeights = new double[] {0, 0, 0, 0, 0, 1};	// Double.MIN_VALUE
-		gridBagLayout.rowWeights = new double[]{0, 1};
+		gridBagLayout.rowWeights = new double[]{0, 1, 0.0};
 		container.setLayout(gridBagLayout);
 		
 		JLabel lblElement = new JLabel("Element");
@@ -85,55 +64,69 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_lblElement.gridy = 0;
 		container.add(lblElement, gbc_lblElement);
 		
-		JButton btnWall = new JButton("Wall");
-		GridBagConstraints gbc_btnWall = new GridBagConstraints();
-		gbc_btnWall.insets = new Insets(0, 0, 5, 5);
-		gbc_btnWall.gridx = 1;
-		gbc_btnWall.gridy = 0;
-		container.add(btnWall, gbc_btnWall);
+		JLabel lblWall = new JLabel("Wall");
+		GridBagConstraints gbc_lblWall = new GridBagConstraints();
+		gbc_lblWall.insets = new Insets(0, 0, 5, 5);
+		gbc_lblWall.gridx = 1;
+		gbc_lblWall.gridy = 0;
+		container.add(lblWall, gbc_lblWall);
 		
-		JButton btnOgre = new JButton("Ogre");
-		GridBagConstraints gbc_btnOgre = new GridBagConstraints();
-		gbc_btnOgre.insets = new Insets(0, 0, 5, 5);
-		gbc_btnOgre.gridx = 2;
-		gbc_btnOgre.gridy = 0;
-		container.add(btnOgre, gbc_btnOgre);
+		JLabel lblKey = new JLabel("Key");
+		GridBagConstraints gbc_lblKey = new GridBagConstraints();
+		gbc_lblKey.insets = new Insets(0, 0, 5, 5);
+		gbc_lblKey.gridx = 2;
+		gbc_lblKey.gridy = 0;
+		container.add(lblKey, gbc_lblKey);
 		
-		JButton btnKey = new JButton("Key");
-		GridBagConstraints gbc_btnKey = new GridBagConstraints();
-		gbc_btnKey.insets = new Insets(0, 0, 5, 5);
-		gbc_btnKey.gridx = 3;
-		gbc_btnKey.gridy = 0;
-		container.add(btnKey, gbc_btnKey);
+		JLabel lblOgre = new JLabel("Ogre");
+		GridBagConstraints gbc_lblOgre = new GridBagConstraints();
+		gbc_lblOgre.insets = new Insets(0, 0, 5, 5);
+		gbc_lblOgre.gridx = 3;
+		gbc_lblOgre.gridy = 0;
+		container.add(lblOgre, gbc_lblOgre);
 		
-		JButton btnExit = new JButton("Exit");
-		GridBagConstraints gbc_btnExit = new GridBagConstraints();
-		gbc_btnExit.insets = new Insets(0, 0, 5, 5);
-		gbc_btnExit.gridx = 4;
-		gbc_btnExit.gridy = 0;
-		container.add(btnExit, gbc_btnExit);
+		JLabel lblExit = new JLabel("Exit");
+		GridBagConstraints gbc_lblExit = new GridBagConstraints();
+		gbc_lblExit.insets = new Insets(0, 0, 5, 5);
+		gbc_lblExit.gridx = 4;
+		gbc_lblExit.gridy = 0;
+		container.add(lblExit, gbc_lblExit);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridwidth = 6;
-		gbc_panel.insets = new Insets(5, 0, 0, 0);
+		gbc_panel.insets = new Insets(5, 0, 5, 0);
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 1;
 		container.add(panel, gbc_panel);
+		
+		lblContent = new JLabel("Loading...");
+		GridBagConstraints gbc_lblContent = new GridBagConstraints();
+		gbc_lblContent.gridwidth = 6;
+		gbc_lblContent.insets = new Insets(0, 0, 0, 5);
+		gbc_lblContent.gridx = 0;
+		gbc_lblContent.gridy = 2;
+		container.add(lblContent, gbc_lblContent);
+
+		consoleLog("Init finished.");
+	}
+	
+	private void consoleLog(String text) {
+		lblContent.setText(text);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
+		consoleLog("Test");
 	}
 
 	@Override
