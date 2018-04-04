@@ -2,8 +2,6 @@ package dkeep.logic;
 
 import java.util.ArrayList;
 
-import javax.swing.JTextArea;
-
 import dkeep.character.*;
 
 public abstract class GameMap {

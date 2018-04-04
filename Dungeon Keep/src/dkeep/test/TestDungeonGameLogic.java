@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -195,7 +196,7 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testGuardCaughtLevel2() {
-		Level2 jogo = new Level2();
+		Level2 jogo = new Level2(1);
 		jogo.getHero().clubs.clear();
 		for(Guard it:jogo.getGuards())
 		{
@@ -203,20 +204,12 @@ public class TestDungeonGameLogic {
 		}
 		assertTrue(jogo.placeHero(4, 5));
 		assertTrue(jogo.placeGuard(5, 5));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[4][5]);
-		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
 		assertTrue(jogo.checkGuard());
 		assertTrue(jogo.placeHero(6, 5));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[6][5]);
-		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
 		assertTrue(jogo.checkGuard());
 		assertTrue(jogo.placeHero(5, 4));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][4]);
-		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
 		assertTrue(jogo.checkGuard());
 		assertTrue(jogo.placeHero(5, 6));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][6]);
-		assertEquals(defenitions._crazy_ogre, jogo.getMap()[5][5]);
 		assertTrue(jogo.checkGuard());
 		
 		jogo = new Level2();
@@ -230,16 +223,12 @@ public class TestDungeonGameLogic {
 			}
 		}
 		assertTrue(jogo.placeHero(4, 5));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[4][5]);
 		assertTrue(jogo.checkGuard());
 		assertTrue(jogo.placeHero(6, 5));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[6][5]);
 		assertTrue(jogo.checkGuard());
 		assertTrue(jogo.placeHero(5, 4));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][4]);
 		assertTrue(jogo.checkGuard());
 		assertTrue(jogo.placeHero(5, 6));
-		assertEquals(defenitions._hero_with_arm, jogo.getMap()[5][6]);
 		assertTrue(jogo.checkGuard());
 	}
 
@@ -270,12 +259,13 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testPickKeyLevel2() {
-		Level2 jogo = new Level2();
+		Level2 jogo = new Level2(1);
 		jogo.setCopied_map("k", 1, 2);
 		jogo.setMap("k", 1, 2);
 		assertEquals("k", jogo.getMap()[1][2]);
 		assertEquals("k", jogo.getCopied_map()[1][2]);
 		jogo.placeHero(1, 1);
+		jogo.getGuards().clear();
 		jogo.moveHeroTo(4);
 		assertEquals(defenitions._hero_at_key, jogo.getMap()[1][2]);
 		jogo.moveHeroTo(3);
@@ -415,95 +405,29 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testRandomLevel2() {
-		Level2 jogo = new Level2();
-		int posX = jogo.getGuards().get(0).positionX, posY = jogo.getGuards().get(0).positionY;
-		jogo.moveHeroTo(4);
-		if (jogo.getMap()[posX][posY].equals(jogo.getCopied_map()[posX][posY])
-				|| jogo.getMap()[posX][posY].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX][posY].equals(defenitions._ogre_club)) {
-
-		} else {
-			jogo.printscreen();
-			fail();
-		}
-		if (jogo.getMap()[posX][posY + 1].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX][posY + 1].equals(defenitions._ogre_at_key)) {
-
-		} else if (jogo.getMap()[posX][posY - 1].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX][posY - 1].equals(defenitions._ogre_at_key)) {
-
-		} else if (jogo.getMap()[posX + 1][posY].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX + 1][posY].equals(defenitions._ogre_at_key)) {
-
-		} else if (jogo.getMap()[posX - 1][posY].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX - 1][posY].equals(defenitions._ogre_at_key)) {
-
-		} else {
-			jogo.printscreen();
-			fail();
-		}
-		posX = jogo.getGuards().get(0).positionX;
-		posY = jogo.getGuards().get(0).positionY;
-		if (jogo.getMap()[posX][posY + 1].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX][posY + 1].equals(defenitions._ogre_club)) {
-
-		} else if (jogo.getMap()[posX][posY - 1].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX][posY - 1].equals(defenitions._ogre_club)) {
-
-		} else if (jogo.getMap()[posX + 1][posY].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX + 1][posY].equals(defenitions._ogre_club)) {
-
-		} else if (jogo.getMap()[posX - 1][posY].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX - 1][posY].equals(defenitions._ogre_club)) {
-
-		} else {
-			jogo.printscreen();
-			System.out.println(jogo.getGuards().get(0).clubs.get(0).positionX + " " + jogo.getGuards().get(0).clubs.get(0).positionY+ " " + jogo.getMap()[jogo.getGuards().get(0).clubs.get(0).positionX][jogo.getGuards().get(0).clubs.get(0).positionY]);
-			System.out.println(jogo.getGuards().get(1).clubs.get(0).positionX + " " + jogo.getGuards().get(1).clubs.get(0).positionY+ " " + jogo.getMap()[jogo.getGuards().get(1).clubs.get(0).positionX][jogo.getGuards().get(1).clubs.get(0).positionY]);
-			fail();
+		Level2 jogo = new Level2(2);
+		ArrayList<Integer> posX_guard= new ArrayList<Integer>();
+		ArrayList<Integer> posY_guard= new ArrayList<Integer>();
+		int i;
+		for(Guard it:jogo.getGuards())
+		{
+			posX_guard.add(it.positionX);
+			posY_guard.add(it.positionY);
 		}
 		jogo.moveHeroTo(3);
-		if (jogo.getMap()[posX][posY].equals(jogo.getCopied_map()[posX][posY])
-				|| jogo.getMap()[posX][posY].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX][posY].equals(defenitions._ogre_club)) {
-
-		} else {
-			jogo.printscreen();
-			fail();
-		}
-		if (jogo.getMap()[posX][posY + 1].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX][posY + 1].equals(defenitions._ogre_at_key)) {
-
-		} else if (jogo.getMap()[posX][posY - 1].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX][posY - 1].equals(defenitions._ogre_at_key)) {
-
-		} else if (jogo.getMap()[posX + 1][posY].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX + 1][posY].equals(defenitions._ogre_at_key)) {
-
-		} else if (jogo.getMap()[posX - 1][posY].equals(defenitions._crazy_ogre)
-				|| jogo.getMap()[posX - 1][posY].equals(defenitions._ogre_at_key)) {
-
-		} else {
-			jogo.printscreen();
-			fail();
-		}
-		posX = jogo.getGuards().get(0).positionX;
-		posY = jogo.getGuards().get(0).positionY;
-		if (jogo.getMap()[posX][posY + 1].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX][posY + 1].equals(defenitions._ogre_club)) {
-
-		} else if (jogo.getMap()[posX][posY - 1].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX][posY - 1].equals(defenitions._ogre_club)) {
-
-		} else if (jogo.getMap()[posX + 1][posY].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX + 1][posY].equals(defenitions._ogre_club)) {
-
-		} else if (jogo.getMap()[posX - 1][posY].equals(defenitions._club_at_key)
-				|| jogo.getMap()[posX - 1][posY].equals(defenitions._ogre_club)) {
-
-		} else {
-			jogo.printscreen();
-			fail();
+		i=0;
+		for(Guard it:jogo.getGuards())
+		{
+			if(posX_guard.get(i)+1==it.positionX && posY_guard.get(i)==it.positionY)
+				continue;
+			else if(posX_guard.get(i)-1==it.positionX && posY_guard.get(i)==it.positionY)
+				continue;
+			else if(posX_guard.get(i)==it.positionX && posY_guard.get(i)==it.positionY+1)
+				continue;
+			else if(posX_guard.get(i)==it.positionX && posY_guard.get(i)==it.positionY-1)
+				continue;
+			else
+				fail();
 		}
 	}
 	@Test

@@ -6,10 +6,8 @@ import dkeep.cli.*;
 public class Main {
 
 	public static void main(String[] args) {
-
-		System.out.println("Main");
 		
-		GameMap map = new Level2();
+		GameMap map = new Level2(5);
 		UserInput user = new UserInput();
 
 		boolean sair = false;

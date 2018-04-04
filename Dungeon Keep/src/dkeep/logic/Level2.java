@@ -16,7 +16,7 @@ public class Level2 extends GameMap {
 		// map[guard.positionX][guard.positionY] = defenitions._crazy_ogre;
 
 		for (Guard g : guards) {
-			map[g.positionX][g.positionY] = defenitions._ogre_at_key;
+			map[g.positionX][g.positionY] = g.getMy_char();
 
 			for (Club c : g.clubs) {
 				map[c.positionX][c.positionY] = c.getMy_char();
@@ -233,8 +233,16 @@ public class Level2 extends GameMap {
 	protected void getRandomGuard() {
 		Guard g;
 		g= new Ogre(map);
-		g.positionX=1;
-		g.positionY=7;
+		Random rand = new Random();
+		int posX = rand.nextInt(this.getMap().length-2) + 1;
+		int posY = rand.nextInt(this.getMap()[0].length-2) + 1;
+		while(posY >= hero.positionY-1 && hero.positionY+1 >= posY && posX >= hero.positionX-1 && hero.positionX+1 >= posX)
+		{
+			posX = rand.nextInt(this.getMap().length-2) + 1;
+			posY = rand.nextInt(this.getMap()[0].length-2) + 1;
+		}
+		g.positionX=posX;
+		g.positionY=posY;
 		x++;
 		
 		Club c = new Club(map);
