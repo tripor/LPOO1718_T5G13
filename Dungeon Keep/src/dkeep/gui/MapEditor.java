@@ -1,28 +1,41 @@
 package dkeep.gui;
 
 import javax.swing.JFrame;
-import javax.swing.border.EmptyBorder;
 
 import javax.swing.JPanel;
 
-import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
+
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import dkeep.logic.defenitions;
 
 @SuppressWarnings("serial")
 public class MapEditor extends Graphic implements MouseListener {
 
 	public JFrame frame;
 	private WindowGame window;
-	public JLabel lblContent;
+	private JTextField textField;
+	private JTextField textField_1;
+	private int tamanho_icon=50;
+	private String mouse_selected;
+	Graphic painel;
 	
 	/**
 	 * Create the application.
@@ -41,92 +54,249 @@ public class MapEditor extends Graphic implements MouseListener {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(50, 50, 800, 650);
+		frame.setBounds(50, 50, 1111, 899);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
-		// Container
-		JPanel container = new JPanel();
-		container.setBorder(new EmptyBorder(15, 15, 15, 15));
-		frame.getContentPane().add(container);
+		JPanel panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 59, 150, 98, 93, 93, 92, 82, 0};
+		gbl_panel.rowHeights = new int[]{23, 30, 15, 42, 682};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1};
+		gbl_panel.rowWeights = new double[]{0.0, 1, 1.0, 1.0, 1.0};
+		panel.setLayout(gbl_panel);
+		
+		JLabel lblWeight = new JLabel("Width");
+		GridBagConstraints gbc_lblWeight = new GridBagConstraints();
+		gbc_lblWeight.anchor = GridBagConstraints.EAST;
+		gbc_lblWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblWeight.gridx = 1;
+		gbc_lblWeight.gridy = 1;
+		panel.add(lblWeight, gbc_lblWeight);
+		
+		textField = new JTextField();
+		textField.setText("10");
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.anchor = GridBagConstraints.WEST;
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.gridx = 2;
+		gbc_textField.gridy = 1;
+		textField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				updateMap();
+			}
 
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] {0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0};
-		gridBagLayout.columnWeights = new double[] {0, 0, 0, 0, 0, 1};	// Double.MIN_VALUE
-		gridBagLayout.rowWeights = new double[]{0, 1, 0.0};
-		container.setLayout(gridBagLayout);
-		
-		JLabel lblElement = new JLabel("Element");
-		GridBagConstraints gbc_lblElement = new GridBagConstraints();
-		gbc_lblElement.insets = new Insets(0, 0, 5, 5);
-		gbc_lblElement.gridx = 0;
-		gbc_lblElement.gridy = 0;
-		container.add(lblElement, gbc_lblElement);
-		
-		JLabel lblWall = new JLabel("Wall");
-		GridBagConstraints gbc_lblWall = new GridBagConstraints();
-		gbc_lblWall.insets = new Insets(0, 0, 5, 5);
-		gbc_lblWall.gridx = 1;
-		gbc_lblWall.gridy = 0;
-		container.add(lblWall, gbc_lblWall);
-		
-		JLabel lblKey = new JLabel("Key");
-		GridBagConstraints gbc_lblKey = new GridBagConstraints();
-		gbc_lblKey.insets = new Insets(0, 0, 5, 5);
-		gbc_lblKey.gridx = 2;
-		gbc_lblKey.gridy = 0;
-		container.add(lblKey, gbc_lblKey);
+			public void removeUpdate(DocumentEvent e) {
+				updateMap();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				updateMap();
+			}
+		});
+		panel.add(textField, gbc_textField);
+		textField.setColumns(9);
+
+		JLabel lblHero = new JLabel("Hero");
+		GridBagConstraints gbc_lblHero = new GridBagConstraints();
+		gbc_lblHero.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_lblHero.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHero.gridx = 3;
+		gbc_lblHero.gridy = 1;
+		panel.add(lblHero, gbc_lblHero);
 		
 		JLabel lblOgre = new JLabel("Ogre");
 		GridBagConstraints gbc_lblOgre = new GridBagConstraints();
+		gbc_lblOgre.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_lblOgre.insets = new Insets(0, 0, 5, 5);
-		gbc_lblOgre.gridx = 3;
-		gbc_lblOgre.gridy = 0;
-		container.add(lblOgre, gbc_lblOgre);
+		gbc_lblOgre.gridx = 4;
+		gbc_lblOgre.gridy = 1;
+		panel.add(lblOgre, gbc_lblOgre);
 		
-		JLabel lblExit = new JLabel("Exit");
-		GridBagConstraints gbc_lblExit = new GridBagConstraints();
-		gbc_lblExit.insets = new Insets(0, 0, 5, 5);
-		gbc_lblExit.gridx = 4;
-		gbc_lblExit.gridy = 0;
-		container.add(lblExit, gbc_lblExit);
+		JLabel lblWall = new JLabel("Wall");
+		GridBagConstraints gbc_lblWall = new GridBagConstraints();
+		gbc_lblWall.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_lblWall.insets = new Insets(0, 0, 5, 5);
+		gbc_lblWall.gridx = 5;
+		gbc_lblWall.gridy = 1;
+		panel.add(lblWall, gbc_lblWall);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridwidth = 6;
-		gbc_panel.insets = new Insets(5, 0, 5, 0);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 1;
-		container.add(panel, gbc_panel);
+		JLabel lblDoor = new JLabel("Door");
+		GridBagConstraints gbc_lblDoor = new GridBagConstraints();
+		gbc_lblDoor.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_lblDoor.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDoor.gridx = 6;
+		gbc_lblDoor.gridy = 1;
+		panel.add(lblDoor, gbc_lblDoor);
 		
-		lblContent = new JLabel("Loading...");
-		GridBagConstraints gbc_lblContent = new GridBagConstraints();
-		gbc_lblContent.gridwidth = 6;
-		gbc_lblContent.insets = new Insets(0, 0, 0, 5);
-		gbc_lblContent.gridx = 0;
-		gbc_lblContent.gridy = 2;
-		container.add(lblContent, gbc_lblContent);
+		JLabel lblKey = new JLabel("Key");
+		GridBagConstraints gbc_lblKey = new GridBagConstraints();
+		gbc_lblKey.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_lblKey.insets = new Insets(0, 0, 5, 5);
+		gbc_lblKey.gridx = 7;
+		gbc_lblKey.gridy = 1;
+		panel.add(lblKey, gbc_lblKey);
+		
+		JLabel lblNewLabel = new JLabel("Height");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 1;
+		gbc_lblNewLabel.gridy = 2;
+		panel.add(lblNewLabel, gbc_lblNewLabel);
+		
+		textField_1 = new JTextField();
+		textField_1.setText("10");
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.anchor = GridBagConstraints.WEST;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.gridx = 2;
+		gbc_textField_1.gridy = 2;
+		panel.add(textField_1, gbc_textField_1);
+		textField_1.setColumns(9);
+		textField_1.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				updateMap();
+			}
 
+			public void removeUpdate(DocumentEvent e) {
+				updateMap();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				updateMap();
+			}
+		});
+
+		Graphic hero_icon = new Graphic();
+		hero_icon.name=defenitions._hero_with_arm;
+		GridBagConstraints gbc_hero_icon = new GridBagConstraints();
+		gbc_hero_icon.gridheight = 2;
+		gbc_hero_icon.insets = new Insets(0, 0, 5, 5);
+		gbc_hero_icon.fill = GridBagConstraints.BOTH;
+		gbc_hero_icon.gridx = 3;
+		gbc_hero_icon.gridy = 2;
+		panel.add(hero_icon, gbc_hero_icon);
+		hero_icon.loadImages();
+		hero_icon.printIcon(defenitions._hero_with_arm, this.tamanho_icon);
+		
+		Graphic ogre_icon = new Graphic();
+		ogre_icon.name=defenitions._crazy_ogre;
+		GridBagConstraints gbc_ogre_icon = new GridBagConstraints();
+		gbc_ogre_icon.gridheight = 2;
+		gbc_ogre_icon.insets = new Insets(0, 0, 5, 5);
+		gbc_ogre_icon.fill = GridBagConstraints.BOTH;
+		gbc_ogre_icon.gridx = 4;
+		gbc_ogre_icon.gridy = 2;
+		panel.add(ogre_icon, gbc_ogre_icon);
+		ogre_icon.loadImages();
+		ogre_icon.printIcon(defenitions._crazy_ogre, this.tamanho_icon);
+		
+		Graphic wall_icon = new Graphic();
+		wall_icon.name=defenitions._wall;
+		GridBagConstraints gbc_wall_icon = new GridBagConstraints();
+		gbc_wall_icon.gridheight = 2;
+		gbc_wall_icon.insets = new Insets(0, 0, 5, 5);
+		gbc_wall_icon.fill = GridBagConstraints.BOTH;
+		gbc_wall_icon.gridx = 5;
+		gbc_wall_icon.gridy = 2;
+		panel.add(wall_icon, gbc_wall_icon);
+		wall_icon.loadImages();
+		wall_icon.printIcon(defenitions._wall, this.tamanho_icon);
+		
+		Graphic door_icon = new Graphic();
+		door_icon.name=defenitions._door;
+		GridBagConstraints gbc_door_icon = new GridBagConstraints();
+		gbc_door_icon.gridheight = 2;
+		gbc_door_icon.insets = new Insets(0, 0, 5, 5);
+		gbc_door_icon.fill = GridBagConstraints.BOTH;
+		gbc_door_icon.gridx = 6;
+		gbc_door_icon.gridy = 2;
+		panel.add(door_icon, gbc_door_icon);
+		door_icon.loadImages();
+		door_icon.printIcon(defenitions._door, this.tamanho_icon);
+		
+		Graphic key_icon = new Graphic();
+		key_icon.name=defenitions._lever;
+		GridBagConstraints gbc_key_icon = new GridBagConstraints();
+		gbc_key_icon.gridheight = 2;
+		gbc_key_icon.insets = new Insets(0, 0, 5, 5);
+		gbc_key_icon.fill = GridBagConstraints.BOTH;
+		gbc_key_icon.gridx = 7;
+		gbc_key_icon.gridy = 2;
+		panel.add(key_icon, gbc_key_icon);
+		key_icon.loadImages();
+		key_icon.printIcon(defenitions._lever, this.tamanho_icon);
+		
+		painel = new Graphic();
+		painel.name="MAP";
+		FlowLayout flowLayout = (FlowLayout) painel.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		painel.setBackground(Color.WHITE);
+		GridBagConstraints gbc_painel = new GridBagConstraints();
+		gbc_painel.fill = GridBagConstraints.BOTH;
+		gbc_painel.gridwidth = 8;
+		gbc_painel.gridx = 1;
+		gbc_painel.gridy = 4;
+		panel.add(painel, gbc_painel);
+		painel.addMouseListener(this);
+		
+		painel.loadImages();
+		this.updateMap();
+		
+		hero_icon.addMouseListener(this);
+		ogre_icon.addMouseListener(this);
+		wall_icon.addMouseListener(this);
+		door_icon.addMouseListener(this);
+		key_icon.addMouseListener(this);
+		
 		consoleLog("Init finished.");
 	}
 	
+	private void updateMap()
+	{
+		int x,y;
+		if(!this.textField.getText().equals(""))
+			x=Integer.parseInt(this.textField.getText());
+		else
+			x=0;
+		if(!this.textField_1.getText().equals(""))
+			y=Integer.parseInt(this.textField_1.getText());
+		else
+			y=0;
+		if(x>1000)
+			x=1000;
+		if(y>1000)
+			y=1000;
+		painel.setBaseMap(x,y);
+		painel.repaint();
+	}
+	
 	private void consoleLog(String text) {
-		lblContent.setText(text);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		System.out.println("clicked");
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
-		consoleLog("Test");
+		if(e.getComponent().getName()!="MAP")
+		{
+			this.mouse_selected=e.getComponent().getName();
+		}
+		else
+		{
+			int j=e.getX()/this.size_image;
+			int i=e.getY()/this.size_image;
+			painel.map_to_print[i][j]=this.mouse_selected;
+			painel.map_background[i][j]=this.mouse_selected;
+			painel.repaint();
+		}
+		
 	}
 
 	@Override

@@ -14,10 +14,20 @@ import dkeep.logic.defenitions;
 @SuppressWarnings("serial")
 public class Graphic extends JPanel  {
 	
-	private String[][] map_to_print = new String[][] {{}};
-	private String[][] map_background = new String[][] {{}};
+	protected String[][] map_to_print = new String[][] {{}};
+	protected String[][] map_background = new String[][] {{}};
 	
-	private static int size_image=50;
+	protected String name;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	protected int size_image=50;
 	
 	private HashMap<String,BufferedImage> image= new HashMap<String,BufferedImage>();
 	
@@ -71,4 +81,36 @@ public class Graphic extends JPanel  {
 		this.map_background = map_background;
 	}
 
+	public void setBaseMap(int width,int height)
+	{
+		String[][] set = new String[width][height];
+		for(int i=0;i<width;i++)
+		{
+			for(int j=0;j<height;j++)
+			{
+				if(i==0 || i == width-1)
+				{
+					set[i][j]="X";
+				}
+				else if(j==0 || j == height-1)
+				{
+					set[i][j]="X";
+				}
+				else
+					set[i][j]=" ";
+			}
+		}
+		this.map_to_print=set;
+		this.map_background=set;
+	}
+	
+	public void printIcon(String tipo,int tamanho)
+	{
+		this.size_image=tamanho;
+		String[][] set = new String[1][1];
+		set[0][0]=tipo;
+		this.map_background=set;
+		this.map_to_print=set;
+		this.repaint();
+	}
 }
