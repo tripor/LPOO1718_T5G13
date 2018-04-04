@@ -64,7 +64,7 @@ public abstract class GameMap {
 		map[posX][posY]=str;
 	}
 	
-	protected void clearMap()
+	public void clearMap()
 	{
 		for (int i = 0; i < map.length; i++) {
 			map[i] = this.copied_map[i].clone();

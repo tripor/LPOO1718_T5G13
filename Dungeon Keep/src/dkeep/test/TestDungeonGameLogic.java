@@ -202,17 +202,25 @@ public class TestDungeonGameLogic {
 		{
 			it.clubs.clear();
 		}
-		assertTrue(jogo.placeHero(4, 5));
 		assertTrue(jogo.placeGuard(5, 5));
+		jogo.clearMap();
+		jogo.markPositions();
+		assertTrue(jogo.placeHero(4, 5));
 		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(6, 5));
 		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(5, 4));
 		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(5, 6));
 		assertTrue(jogo.checkGuard());
 		
-		jogo = new Level2();
+		jogo = new Level2(1);
 		jogo.getHero().clubs.clear();
 		for(Guard it:jogo.getGuards())
 		{
@@ -222,12 +230,49 @@ public class TestDungeonGameLogic {
 				et.positionY=5;
 			}
 		}
+		jogo.placeGuard(1, 1);
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(4, 5));
 		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(6, 5));
 		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(5, 4));
 		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
+		assertTrue(jogo.placeHero(5, 6));
+		assertTrue(jogo.checkGuard());
+		
+		jogo = new Level2(1);
+		jogo.getHero().clubs.clear();
+		for(Guard it:jogo.getGuards())
+		{
+			for(Club et:it.clubs)
+			{
+				et.positionX=5;
+				et.positionY=5;
+			}
+		}
+		jogo.placeGuard(5, 5);
+		jogo.clearMap();
+		jogo.markPositions();
+		assertTrue(jogo.placeHero(4, 5));
+		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
+		assertTrue(jogo.placeHero(6, 5));
+		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
+		assertTrue(jogo.placeHero(5, 4));
+		assertTrue(jogo.checkGuard());
+		jogo.clearMap();
+		jogo.markPositions();
 		assertTrue(jogo.placeHero(5, 6));
 		assertTrue(jogo.checkGuard());
 	}
@@ -242,7 +287,10 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testHeroCantExitLevel2() {
-		Level2 jogo = new Level2();
+		Level2 jogo = new Level2(1);
+		jogo.getGuards().clear();
+		jogo.clearMap();
+		jogo.markPositions();
 		jogo.placeHero(1, 1);
 		jogo.moveHeroTo(3);
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[1][1]);
@@ -260,12 +308,15 @@ public class TestDungeonGameLogic {
 	@Test
 	public void testPickKeyLevel2() {
 		Level2 jogo = new Level2(1);
+		jogo.getGuards().clear();
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
 		jogo.setCopied_map("k", 1, 2);
 		jogo.setMap("k", 1, 2);
 		assertEquals("k", jogo.getMap()[1][2]);
 		assertEquals("k", jogo.getCopied_map()[1][2]);
 		jogo.placeHero(1, 1);
-		jogo.getGuards().clear();
 		jogo.moveHeroTo(4);
 		assertEquals(defenitions._hero_at_key, jogo.getMap()[1][2]);
 		jogo.moveHeroTo(3);
@@ -296,8 +347,10 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testHeroLeaveLevel2() {
-		Level2 jogo = new Level2();
-
+		Level2 jogo = new Level2(1);
+		jogo.getGuards().clear();
+		jogo.clearMap();
+		jogo.markPositions();
 		jogo.setCopied_map("k", 1, 2);
 		jogo.setMap("k", 1, 2);
 		jogo.placeHero(1, 1);
@@ -330,7 +383,7 @@ public class TestDungeonGameLogic {
 		boolean sair=false;
 		for(i=0;;i++)
 		{
-			if(i==x.length) i=0;
+			if(i>=x.length) i=0;
 			for(Guard it:jogo.getGuards())
 			{
 				if(x[i]!=it.positionX) {
@@ -344,6 +397,7 @@ public class TestDungeonGameLogic {
 			jogo.moveHeroTo(3);
 		}
 		i--;
+		if(i<0)i=x.length-1;
 		i--;
 		if(i<0)i=x.length-1;
 		for(Guard it:jogo.getGuards())
@@ -369,8 +423,9 @@ public class TestDungeonGameLogic {
 			}
 		}
 		i++;
+		if(i>=x.length)i=0;
 		i++;
-		if(i==x.length)i=0;
+		if(i>=x.length)i=0;
 		for(Guard it:jogo.getGuards())
 		{
 			assertTrue(it.foward_walking);
@@ -405,29 +460,73 @@ public class TestDungeonGameLogic {
 
 	@Test
 	public void testRandomLevel2() {
-		Level2 jogo = new Level2(2);
+		Level2 jogo = new Level2(5);
 		ArrayList<Integer> posX_guard= new ArrayList<Integer>();
 		ArrayList<Integer> posY_guard= new ArrayList<Integer>();
 		int i;
 		for(Guard it:jogo.getGuards())
 		{
+			it.clubs.clear();
 			posX_guard.add(it.positionX);
 			posY_guard.add(it.positionY);
 		}
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
 		jogo.moveHeroTo(3);
-		i=0;
+		i=-1;
 		for(Guard it:jogo.getGuards())
 		{
-			if(posX_guard.get(i)+1==it.positionX && posY_guard.get(i)==it.positionY)
+			i++;
+			if(posX_guard.get(i).intValue()+1==it.positionX && posY_guard.get(i).intValue()==it.positionY)
 				continue;
-			else if(posX_guard.get(i)-1==it.positionX && posY_guard.get(i)==it.positionY)
+			else if(posX_guard.get(i).intValue()-1==it.positionX && posY_guard.get(i).intValue()==it.positionY)
 				continue;
-			else if(posX_guard.get(i)==it.positionX && posY_guard.get(i)==it.positionY+1)
+			else if(posX_guard.get(i).intValue()==it.positionX && posY_guard.get(i).intValue()==it.positionY+1)
 				continue;
-			else if(posX_guard.get(i)==it.positionX && posY_guard.get(i)==it.positionY-1)
+			else if(posX_guard.get(i).intValue()==it.positionX && posY_guard.get(i).intValue()==it.positionY-1)
 				continue;
 			else
+			{
 				fail();
+			}
+		}
+		jogo = new Level2(5);
+		posX_guard= new ArrayList<Integer>();
+		posY_guard= new ArrayList<Integer>();
+		for(Guard it:jogo.getGuards())
+		{
+			for(Club c:it.clubs)
+			{
+				posX_guard.add(c.positionX);
+				posY_guard.add(c.positionY);
+			}
+		}
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
+		jogo.moveHeroTo(3);
+		i=-1;
+		for(Guard it:jogo.getGuards())
+		{
+			for(Club c:it.clubs)
+			{
+				i++;
+				if(c.positionX==posX_guard.get(i).intValue() && c.positionY==posY_guard.get(i).intValue())
+					fail();
+				if(c.positionX==it.positionX+1 && c.positionY==it.positionY)
+					continue;
+				else if(c.positionX==it.positionX-1 && c.positionY==it.positionY)
+					continue;
+				else if(c.positionX==it.positionX && c.positionY==it.positionY+1)
+					continue;
+				else if(c.positionX==it.positionX && c.positionY==it.positionY-1)
+					continue;
+				else
+				{
+					fail();
+				}
+			}
 		}
 	}
 	@Test
@@ -572,7 +671,7 @@ public class TestDungeonGameLogic {
 	@Test
 	public void testPrint()
 	{
-		String provar[][][] = new String[][][] {
+		/*String provar[][][] = new String[][][] {
 			{ 		{ "X", "X", "X", "X", "X", "X", "X", "X", "X", "X" },
 					{ "X", " ", " ", " ", "I", " ", "X", " ", " ", "X" },
 					{ "X", "X", "X", " ", "X", "X", "X", " ", " ", "X" },
@@ -595,7 +694,7 @@ public class TestDungeonGameLogic {
 					{ "X", "X", "X", "X", "X", "X", "X", "X", "X" } }
 			
 
-		};
+		};*/
 		final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));

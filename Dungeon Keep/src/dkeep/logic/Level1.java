@@ -206,7 +206,8 @@ public class Level1 extends GameMap {
 	}
 	public boolean placeHero(int posX,int posY)
 	{
-		return this.hero.push_remove(posX, posY,this);
+		this.hero.push_remove(posX, posY,this);
+		return true;
 	}
 	public boolean placeGuard(int posX,int posY)
 	{
