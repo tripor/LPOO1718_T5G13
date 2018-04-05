@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import dkeep.logic.*;
 import dkeep.logic.character.Club;
+import dkeep.logic.character.Drunken;
 import dkeep.logic.character.Guard;
 
 /*Transforms the input:
@@ -379,155 +380,276 @@ public class TestDungeonGameLogic {
 			jogo.moveHeroTo(3);
 		}
 		jogo = new Level1("Suspicious");
-		int i;
+		int i=0;
 		boolean sair=false;
-		for(i=0;;i++)
+		int vezes_frente=0;
+		int vezes_tras=0;
+		for(int tempo=0;tempo<100000;tempo++)
 		{
-			if(i>=x.length) i=0;
+			jogo.moveHeroTo(3);
 			for(Guard it:jogo.getGuards())
 			{
-				if(x[i]!=it.positionX) {
-					sair=true;
-				}
-				if(y[i]!=it.positionY) {
-					sair=true;
-				}
-			}
-			if(sair)break;
-			jogo.moveHeroTo(3);
-		}
-		i--;
-		if(i<0)i=x.length-1;
-		i--;
-		if(i<0)i=x.length-1;
-		for(Guard it:jogo.getGuards())
-		{
-			assertFalse(it.foward_walking);
-			assertEquals(x[i],it.positionX);
-			assertEquals(y[i],it.positionY);
-			sair=false;
-			for(;;i--)
-			{
-				if(i<0) i=x.length-1;
-				for(Guard et:jogo.getGuards())
+				if(it.foward_walking)
 				{
-					if(x[i]!=et.positionX) {
-						sair=true;
-					}
-					if(y[i]!=et.positionY) {
-						sair=true;
-					}
+					i++;
+					vezes_frente++;
 				}
-				if(sair)break;
-				jogo.moveHeroTo(3);
+				else
+				{
+					vezes_tras++;
+					i--;
+				}
+				if(i<0)i=x.length-1;
+				if(i>=x.length)i=0;
+				assertEquals(x[i],it.positionX);
+				assertEquals(y[i],it.positionY);
 			}
 		}
-		i++;
-		if(i>=x.length)i=0;
-		i++;
-		if(i>=x.length)i=0;
-		for(Guard it:jogo.getGuards())
-		{
-			assertTrue(it.foward_walking);
-			assertEquals(x[i],it.positionX);
-			assertEquals(y[i],it.positionY);
-		}
+		assertEquals(66,100*vezes_frente/100000.0,2);
+		assertEquals(33,100*vezes_tras/100000.0,2);
 		jogo = new Level1("Drunken");
-		sair=false;
-		for(i=0;;i++)
-		{
-			if(i==x.length) i=0;
-			for(Guard it:jogo.getGuards())
-			{
-				if(x[i]!=it.positionX) {
-					sair=true;
+		sair = false;
+		for (i = 0;; i++) {
+			if (i == x.length)
+				i = 0;
+			for (Guard it : jogo.getGuards()) {
+				if (x[i] != it.positionX) {
+					sair = true;
 				}
-				if(y[i]!=it.positionY) {
-					sair=true;
+				if (y[i] != it.positionY) {
+					sair = true;
 				}
 			}
-			if(sair)break;
+			if (sair)
+				break;
 			jogo.moveHeroTo(3);
 		}
 		i--;
-		if(i<0)i=x.length-1;
-		for(Guard it:jogo.getGuards())
-		{
+		if (i < 0)
+			i = x.length - 1;
+		for (Guard it : jogo.getGuards()) {
 			assertTrue(it.sleep);
+			Drunken teste=(Drunken) it;
+			assertTrue(teste.isSleep());
 		}
-		
+		int vezes_acordado=0;
+		int vezes_dormir=0;
+		int vezes_para_frente=0;
+		int vezes_para_tras=0;
+		jogo = new Level1("Drunken");
+		for (int tempo = 0; tempo < 100000; tempo++) {
+			jogo.moveHeroTo(3);
+			for(Guard it:jogo.getGuards())
+			{
+				if(it.sleep)
+					vezes_dormir++;
+				else
+					vezes_acordado++;
+				if(it.foward_walking)
+					vezes_para_frente++;
+				else
+					vezes_para_tras++;
+			}
+		}
+		assertEquals(37,100*vezes_dormir/100000.0,2);
+		assertEquals(63,100*vezes_acordado/100000.0,2);
+		assertEquals(67,100*vezes_para_frente/100000.0,4);
+		assertEquals(33,100*vezes_para_tras/100000.0,4);
+
 	}
 
 	@Test
 	public void testRandomLevel2() {
-		Level2 jogo = new Level2(5);
-		ArrayList<Integer> posX_guard= new ArrayList<Integer>();
-		ArrayList<Integer> posY_guard= new ArrayList<Integer>();
+		Level2 jogo = new Level2(1);
 		int i;
 		for(Guard it:jogo.getGuards())
 		{
 			it.clubs.clear();
-			posX_guard.add(it.positionX);
-			posY_guard.add(it.positionY);
 		}
 		jogo.getHero().clubs.clear();
 		jogo.clearMap();
 		jogo.markPositions();
-		jogo.moveHeroTo(3);
-		i=-1;
-		for(Guard it:jogo.getGuards())
+		int vezes_up=0;
+		int vezes_down=0;
+		int vezes_left=0;
+		int vezes_right=0;
+		for(int tempo=0;tempo<100000;tempo++)
 		{
-			i++;
-			if(posX_guard.get(i).intValue()+1==it.positionX && posY_guard.get(i).intValue()==it.positionY)
-				continue;
-			else if(posX_guard.get(i).intValue()-1==it.positionX && posY_guard.get(i).intValue()==it.positionY)
-				continue;
-			else if(posX_guard.get(i).intValue()==it.positionX && posY_guard.get(i).intValue()==it.positionY+1)
-				continue;
-			else if(posX_guard.get(i).intValue()==it.positionX && posY_guard.get(i).intValue()==it.positionY-1)
-				continue;
-			else
+			jogo.placeGuard(5, 5);
+			jogo.moveHeroTo(3);
+			for(Guard it:jogo.getGuards())
 			{
-				fail();
-			}
-		}
-		jogo = new Level2(5);
-		posX_guard= new ArrayList<Integer>();
-		posY_guard= new ArrayList<Integer>();
-		for(Guard it:jogo.getGuards())
-		{
-			for(Club c:it.clubs)
-			{
-				posX_guard.add(c.positionX);
-				posY_guard.add(c.positionY);
-			}
-		}
-		jogo.getHero().clubs.clear();
-		jogo.clearMap();
-		jogo.markPositions();
-		jogo.moveHeroTo(3);
-		i=-1;
-		for(Guard it:jogo.getGuards())
-		{
-			for(Club c:it.clubs)
-			{
-				i++;
-				if(c.positionX==posX_guard.get(i).intValue() && c.positionY==posY_guard.get(i).intValue())
+				if(it.positionX!=5 && it.positionY!=5)
 					fail();
-				if(c.positionX==it.positionX+1 && c.positionY==it.positionY)
-					continue;
-				else if(c.positionX==it.positionX-1 && c.positionY==it.positionY)
-					continue;
-				else if(c.positionX==it.positionX && c.positionY==it.positionY+1)
-					continue;
-				else if(c.positionX==it.positionX && c.positionY==it.positionY-1)
-					continue;
-				else
+				switch(it.positionX)
 				{
-					fail();
+				case 4:vezes_up++;
+				break;
+				case 6:vezes_down++;
+				break;
+				}
+				switch(it.positionY)
+				{
+				case 4:vezes_left++;
+				break;
+				case 6:vezes_right++;
+				break;
 				}
 			}
 		}
+		assertEquals(25,100*vezes_up/100000,2);
+		assertEquals(25,100*vezes_down/100000,2);
+		assertEquals(25,100*vezes_left/100000,2);
+		assertEquals(25,100*vezes_right/100000,2);
+		jogo.placeGuard(5, 5);
+		jogo.setCopied_map("X", 5, 6);
+		jogo.setCopied_map("X", 5, 4);
+		jogo.setCopied_map("X", 6, 5);
+		jogo.setCopied_map("X", 4, 6);
+		jogo.setCopied_map("X", 4, 4);
+		jogo.setCopied_map("X", 3, 5);
+		
+		jogo.setMap("X", 5, 6);
+		jogo.setMap("X", 5, 4);
+		jogo.setMap("X", 6, 5);
+		jogo.setMap("X", 4, 6);
+		jogo.setMap("X", 4, 4);
+		jogo.setMap("X", 3, 5);
+		jogo.moveHeroTo(3);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(4,it.positionX);
+			assertEquals(5,it.positionY);
+		}
+		
+		jogo = new Level2(1);
+		for(Guard it:jogo.getGuards())
+		{
+			it.clubs.clear();
+		}
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
+		jogo.placeGuard(5, 5);
+		jogo.setCopied_map("X", 6, 5);
+		jogo.setCopied_map("X", 4, 5);
+		jogo.setCopied_map("X", 5, 4);
+		jogo.setCopied_map("X", 4, 6);
+		jogo.setCopied_map("X", 6, 6);
+		jogo.setCopied_map("X", 5, 7);
+		
+		jogo.setMap("X", 6, 5);
+		jogo.setMap("X", 4, 5);
+		jogo.setMap("X", 5, 4);
+		jogo.setMap("X", 4, 6);
+		jogo.setMap("X", 6, 6);
+		jogo.setMap("X", 5, 7);
+		jogo.moveHeroTo(3);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(5,it.positionX);
+			assertEquals(6,it.positionY);
+		}
+		
+		jogo = new Level2(1);
+		for(Guard it:jogo.getGuards())
+		{
+			it.clubs.clear();
+		}
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
+		jogo.placeGuard(5, 5);
+		jogo.setCopied_map("X", 6, 5);
+		jogo.setCopied_map("X", 4, 5);
+		jogo.setCopied_map("X", 5, 6);
+		jogo.setCopied_map("X", 4, 4);
+		jogo.setCopied_map("X", 6, 4);
+		jogo.setCopied_map("X", 5, 3);
+		
+		jogo.setMap("X", 6, 5);
+		jogo.setMap("X", 4, 5);
+		jogo.setMap("X", 5, 6);
+		jogo.setMap("X", 4, 4);
+		jogo.setMap("X", 6, 4);
+		jogo.setMap("X", 5, 3);
+		jogo.moveHeroTo(3);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(5,it.positionX);
+			assertEquals(4,it.positionY);
+		}
+		
+		jogo = new Level2(1);
+		for(Guard it:jogo.getGuards())
+		{
+			it.clubs.clear();
+		}
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
+		jogo.placeGuard(5, 5);
+		jogo.setCopied_map("X", 5, 4);
+		jogo.setCopied_map("X", 5, 6);
+		jogo.setCopied_map("X", 4, 5);
+		jogo.setCopied_map("X", 6, 4);
+		jogo.setCopied_map("X", 6, 6);
+		jogo.setCopied_map("X", 7, 5);
+		
+		jogo.setMap("X", 5, 4);
+		jogo.setMap("X", 5, 6);
+		jogo.setMap("X", 4, 5);
+		jogo.setMap("X", 6, 4);
+		jogo.setMap("X", 6, 6);
+		jogo.setMap("X", 7, 5);
+		jogo.moveHeroTo(3);
+		for(Guard it:jogo.getGuards())
+		{
+			assertEquals(6,it.positionX);
+			assertEquals(5,it.positionY);
+		}
+		
+		jogo = new Level2(1);
+		jogo.getHero().clubs.clear();
+		jogo.clearMap();
+		jogo.markPositions();
+		jogo.placeGuard(5, 5);
+
+		vezes_up=0;
+		vezes_down=0;
+		vezes_left=0;
+		vezes_right=0;
+		for(Guard it:jogo.getGuards())
+		{
+			for(Club c:it.clubs)
+			{
+				for(int tempo=0;tempo<100000;tempo++)
+				{
+					c.clubNextPosition(jogo, it);
+					switch (c.positionX) {
+					case 4:
+						vezes_up++;
+						break;
+					case 6:
+						vezes_down++;
+						break;
+					}
+					switch (c.positionY) {
+					case 4:
+						vezes_left++;
+						break;
+					case 6:
+						vezes_right++;
+						break;
+					}
+					jogo.clearMap();
+				}
+			}
+		}
+		assertEquals(25,100*vezes_up/100000,2);
+		assertEquals(25,100*vezes_down/100000.0,2);
+		assertEquals(25,100*vezes_left/100000.0,2);
+		assertEquals(25,100*vezes_right/100000.0,2);
 	}
 	@Test
 	public void testStun()
