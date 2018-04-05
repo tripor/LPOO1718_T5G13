@@ -1,10 +1,12 @@
 package dkeep.test;
 
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -461,7 +463,6 @@ public class TestDungeonGameLogic {
 	@Test
 	public void testRandomLevel2() {
 		Level2 jogo = new Level2(1);
-		int i;
 		for(Guard it:jogo.getGuards())
 		{
 			it.clubs.clear();

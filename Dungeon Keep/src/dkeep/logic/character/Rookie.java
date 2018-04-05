@@ -42,7 +42,6 @@ public class Rookie extends Guard {
 	}
 	/**
 	 * Cosntructor of the class Rookie
-	 * @param map
 	 */
 	public Rookie(){
 		super();
