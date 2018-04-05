@@ -1,13 +1,26 @@
 package dkeep.main;
 
 import dkeep.logic.*;
+
+import java.io.IOException;
+
 import dkeep.cli.*;
+import dkeep.gui.FileManager;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
 		GameMap map = new Level2(5);
+		FileManager file=new FileManager();
+		file.openFile();
+		file.setGame(1, map);
+		try {
+			file.closeFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		UserInput user = new UserInput();
 
 		boolean sair = false;

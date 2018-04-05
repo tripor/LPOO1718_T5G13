@@ -1,0 +1,20 @@
+Name
+Base Map
+Map
+9 9
+X;X;X;X;X;X;X;X;X
+I; ; ; ; ; ; ;k;X
+X; ; ; ; ; ; ; ;X
+X; ; ; ; ; ; ; ;X
+X; ; ; ; ; ; ; ;X
+X; ; ; ; ; ; ; ;X
+X; ; ; ; ; ; ; ;X
+X; ; ; ; ; ; ; ;X
+X;X;X;X;X;X;X;X;X
+Hero
+7 1
+Ogre
+
+7 1
+7 1
+7 1

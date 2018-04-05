@@ -59,7 +59,7 @@ public abstract class GameMap {
 		this.current_level = current_level;
 	}
 
-	protected abstract void getRandomGuard();
+	public abstract void getRandomGuard();
 	protected void setPositionInMap(String str,int posX,int posY)
 	{
 		map[posX][posY]=str;
@@ -90,7 +90,7 @@ public abstract class GameMap {
 		}
 	}
 
-	protected abstract void markPositions();
+	public abstract void markPositions();
 
 	// Class constructor
 	public GameMap() {

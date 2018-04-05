@@ -9,7 +9,7 @@ import dkeep.logic.character.Suspicious;
 
 public class Level1 extends GameMap {
 
-	protected void getRandomGuard() {
+	public void getRandomGuard() {
 		Guard g;
 		int total_typeOfGuard = 3;
 

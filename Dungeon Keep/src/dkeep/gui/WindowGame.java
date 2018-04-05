@@ -40,9 +40,12 @@ public class WindowGame {
 	EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
-				WindowGame me = new WindowGame();
+				/*WindowGame me = new WindowGame();
 				me.menu = new Menu(me);
-				me.menu.frame.setVisible(true);
+				me.menu.frame.setVisible(true);*/
+				FileManager file=new FileManager();
+				file.openFile();
+				file.closeFile();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

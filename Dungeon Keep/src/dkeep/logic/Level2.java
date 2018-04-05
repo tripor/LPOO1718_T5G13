@@ -231,7 +231,7 @@ public class Level2 extends GameMap {
 	}
 
 	@Override
-	protected void getRandomGuard() {
+	public void getRandomGuard() {
 		Guard g;
 		g= new Ogre(map);
 		Random rand = new Random();
