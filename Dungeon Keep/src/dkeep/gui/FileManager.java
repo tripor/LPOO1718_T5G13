@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import dkeep.logic.GameMap;
 import dkeep.logic.character.Club;
-import dkeep.logic.character.Ogre;
+import dkeep.logic.character.Guard;
 
 public class FileManager {
 	private File map_file = new File("maps.txt");
@@ -24,8 +24,15 @@ public class FileManager {
 	private boolean fileopened=false;
 	private ArrayList<String[][]> maps= new ArrayList<String[][]>();
 	private ArrayList<String> names= new ArrayList<String>();
-	private ArrayList<Integer> position_x=new ArrayList<Integer>();
-	private ArrayList<Integer> position_y=new ArrayList<Integer>();
+	private ArrayList<ArrayList<Integer>> position_x=new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Integer>> position_y=new ArrayList<ArrayList<Integer>>();
+
+	public ArrayList<String> getNames() {
+		return names;
+	}
+	public String[][] getMaps(int i) {
+		return maps.get(i);
+	}
 	public void openFile()
 	{
 		try {
@@ -42,9 +49,27 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
+	public void writeGame(GameMap jogo,String name)
+	{
+		this.maps.add(jogo.getCopied_map());
+		this.names.add(name);
+		ArrayList<Integer> add_x=new ArrayList<Integer>();
+		ArrayList<Integer> add_y=new ArrayList<Integer>();
+		add_x.add(jogo.getHero().positionX);
+		add_y.add(jogo.getHero().positionY);
+		for(Guard g:jogo.getGuards())
+		{
+			add_x.add(g.positionX);
+			add_y.add(g.positionY);
+		}
+		this.position_x.add(add_x);
+		this.position_y.add(add_y);
+	}
 	private void readAllMaps() throws IOException
 	{
 		String line = null;
+		ArrayList<Integer> add_x= new ArrayList<Integer>();
+		ArrayList<Integer> add_y= new ArrayList<Integer>();
 		while ((line = br.readLine()) != null) {
 			if(line.equals("Name"))
 			{
@@ -76,8 +101,8 @@ public class FileManager {
 			{
 				line = br.readLine();
 				String[] part=line.split(" ");
-				this.position_x.add(Integer.parseInt(part[0]));
-				this.position_y.add(Integer.parseInt(part[1]));
+				add_x.add(Integer.parseInt(part[0]));
+				add_y.add(Integer.parseInt(part[1]));
 			}
 			else if(line.equals("Ogre"))
 			{
@@ -87,16 +112,21 @@ public class FileManager {
 				{
 					line = br.readLine();
 					String[] part=line.split(" ");
-					this.position_x.add(Integer.parseInt(part[0]));
-					this.position_y.add(Integer.parseInt(part[1]));
+					add_x.add(Integer.parseInt(part[0]));
+					add_y.add(Integer.parseInt(part[1]));
 				}
+				this.position_x.add(add_x);
+				this.position_y.add(add_y);
+				add_x= new ArrayList<Integer>();
+				add_y= new ArrayList<Integer>();
 			}
 		}
 	}
 	
 	public void setGame(int number,GameMap game)
 	{
-		number--;
+		game.setCopied_map(new String[this.maps.get(number).length][this.maps.get(number)[0].length]);
+		game.setMap(new String[this.maps.get(number).length][this.maps.get(number)[0].length]);
 		for(int i=0;i<this.maps.get(number).length;i++)
 		{
 			for(int j=0;j<this.maps.get(number)[0].length;j++)
@@ -105,14 +135,15 @@ public class FileManager {
 				game.setMap(this.maps.get(number)[i][j], i, j);
 			}
 		}
-		game.getHero().positionX=this.position_x.get(0);
-		game.getHero().positionY=this.position_y.get(0); 
+		game.getHero().positionX=this.position_x.get(number).get(0);
+		game.getHero().positionY=this.position_y.get(number).get(0); 
+		game.getHero().clubs.get(0).clubNextPosition(game, game.getHero());
 		game.getGuards().clear();
-		for(int i=1;i<this.position_x.size();i++)
+		for(int i=1;i<this.position_x.get(number).size();i++)
 		{
 			game.getRandomGuard();
-			game.getGuards().get(i-1).positionX=this.position_x.get(i);
-			game.getGuards().get(i-1).positionY=this.position_y.get(i);
+			game.getGuards().get(i-1).positionX=this.position_x.get(number).get(i);
+			game.getGuards().get(i-1).positionY=this.position_y.get(number).get(i);
 			for(Club c:game.getGuards().get(i-1).clubs)
 			{
 				c.clubNextPosition(game, game.getGuards().get(i-1));
@@ -144,15 +175,15 @@ public class FileManager {
 			}
 			bw.write("Hero");
 			bw.newLine();
-			bw.write(this.position_x.get(0)+ " " +this.position_y.get(0));
+			bw.write(this.position_x.get(i).get(0)+ " " +this.position_y.get(i).get(0));
 			bw.newLine();
 			bw.write("Ogre");
 			bw.newLine();
-			bw.write(this.position_x.size()-1);
+			bw.write((this.position_x.get(i).size()-1) +"");
 			bw.newLine();
-			for(int j=1;j<this.position_x.size();j++)
+			for(int j=1;j<this.position_x.get(i).size();j++)
 			{
-				bw.write(this.position_x.get(0)+ " " +this.position_y.get(0));
+				bw.write(this.position_x.get(i).get(j)+ " " +this.position_y.get(i).get(j));
 				bw.newLine();
 			}
 			

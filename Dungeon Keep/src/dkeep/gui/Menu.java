@@ -11,16 +11,30 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.JComboBox;
 
 public class Menu {
 
 	public JFrame frame;
 	private WindowGame window;
+	JComboBox<String> comboBox;
+	
+	public void updateComboBox()
+	{
+		ArrayList<String> nomes=window.gestor.getNames();
+		for(int i=comboBox.getItemCount();i<nomes.size();i++)
+		{
+			comboBox.addItem(nomes.get(i));
+		}
+	}
 	
 	public Menu(WindowGame window)
 	{
-		this.initialize();
 		this.window=window;
+		this.initialize();
 	}
 	
 	private void initialize()
@@ -36,9 +50,9 @@ public class Menu {
 		frame.getContentPane().add(container);
 		
 		GridBagLayout gbl_container = new GridBagLayout();
-		gbl_container.columnWidths = new int[]{0};
+		gbl_container.columnWidths = new int[]{0, 0, 93};
 		gbl_container.rowHeights = new int[] {0};
-		gbl_container.columnWeights = new double[]{0};
+		gbl_container.columnWeights = new double[]{0, 0.0, 0.0};
 		gbl_container.rowWeights = new double[]{0};
 		container.setLayout(gbl_container);
 		
@@ -47,14 +61,7 @@ public class Menu {
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 1;
-		btnPlay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				window.menuSetVisible(false);
-				window.playSetVisible(true);
-				window.mapEditorSetVisible(false);
-			}
-		});
+		
 		container.add(btnPlay, gbc_btnNewButton);
 		
 		JButton btnCreate = new JButton("Create");
@@ -70,16 +77,44 @@ public class Menu {
 				window.mapEditorSetVisible(true);
 			}
 		});
+		
+		comboBox = new JComboBox<String>();
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 2;
+		gbc_comboBox.gridy = 1;
+		container.add(comboBox, gbc_comboBox);
 		container.add(btnCreate, gbc_btnNewButton_1);
+		ArrayList<String> nomes=window.gestor.getNames();
+		for(int i=0;i<nomes.size();i++)
+		{
+			comboBox.addItem(nomes.get(i));
+		}
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				window.menuSetVisible(false);
+				window.playSetVisible(true);
+				window.mapEditorSetVisible(false);
+				window.selected=comboBox.getSelectedIndex();
+			}
+		});
 		
 		JButton btnExit = new JButton("Exit");
 		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_2.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton_2.gridx = 1;
 		gbc_btnNewButton_2.gridy = 3;
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				try {
+					window.gestor.closeFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				System.exit(0);
 			}
 		});

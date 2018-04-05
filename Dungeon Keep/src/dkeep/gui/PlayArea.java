@@ -106,7 +106,13 @@ public class PlayArea extends Graphic implements KeyListener, MouseListener {
 		if(state==1)
 		{
 			if(game.getCurrent_level().game_level.getValue()==1){
-				game= new Level2(guard_count);
+				if(this.guard_count==0)
+				{
+					game=new Level2(1);
+					window.gestor.setGame(window.selected, game);
+				}
+				else
+					game= new Level2(guard_count);
 				this.enableButtons();
 			}
 			else{
@@ -195,7 +201,7 @@ public class PlayArea extends Graphic implements KeyListener, MouseListener {
 		container.add(lblNumberOfOgres, gbc_lblNumberOfOgres);
 		
 		numberOfOgres = new JTextField();
-		numberOfOgres.setText("1");
+		numberOfOgres.setText("");
 		GridBagConstraints gbc_numberOfOgres = new GridBagConstraints();
 		gbc_numberOfOgres.insets = new Insets(0, 0, 5, 5);
 		gbc_numberOfOgres.fill = GridBagConstraints.HORIZONTAL;
@@ -265,10 +271,15 @@ public class PlayArea extends Graphic implements KeyListener, MouseListener {
 				  if(isNumeric(numberOfOgres.getText()))
 				  {
 					  guard_count=Integer.parseInt(numberOfOgres.getText());
-					  if(guard_count<=5&&guard_count>=1)
+					  if(guard_count<=5&&guard_count>=0)
 						  startGame();
 					  else
 						  notInteger();
+				  }
+				  else if(numberOfOgres.getText().equals(""))
+				  {
+					  guard_count=0;
+					  startGame();
 				  }
 				  else
 				  {

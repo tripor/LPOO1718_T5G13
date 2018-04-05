@@ -17,7 +17,8 @@ public class Hero extends Character {
 				&& (toX < game.getMap().length || toY < game.getCopied_map()[0].length));
 
 		if (game.getMap()[toX][toY].equals(defenitions._door) && this.my_char.equals(defenitions._hero_at_key)) {
-			game.openDoors();
+			game.setCopied_map(defenitions._opened_door, toX, toY);
+			game.setMap(defenitions._opened_door, toX, toY);
 			game.setMap(this.my_char, this.positionX, this.positionY);
 			return false;
 		}
@@ -26,7 +27,6 @@ public class Hero extends Character {
 
 		if (game.getCopied_map()[toX][toY].equals(defenitions._lever)) // Open doors
 		{
-
 			if (game.getCurrent_level().game_level.getValue() == 2) {
 				// remove the key
 				game.setCopied_map(defenitions._empty_cell, toX, toY);

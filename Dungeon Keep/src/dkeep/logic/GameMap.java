@@ -12,6 +12,10 @@ public abstract class GameMap {
 	protected String[][] map;
 	protected String[][] copied_map;
 
+	public void setCopied_map(String[][] copied_map) {
+		this.copied_map = copied_map;
+	}
+
 	// init characters
 	protected Hero hero = new Hero();
 
@@ -19,6 +23,10 @@ public abstract class GameMap {
 	protected ArrayList<Guard> guards = new ArrayList<Guard>();
 
 	// Club club = new Club();
+
+	public void setHero(Hero hero) {
+		this.hero = hero;
+	}
 
 	// mark current level for display
 	protected CurrentLevel current_level;
@@ -37,6 +45,10 @@ public abstract class GameMap {
 
 	public void setCopied_map(String str,int posX,int posY) {
 		this.copied_map[posX][posY]=str;
+	}
+
+	public void setMap(String[][] map) {
+		this.map = map;
 	}
 
 	public Hero getHero() {
@@ -115,8 +127,8 @@ public abstract class GameMap {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map.length; j++) {
 
-				if (map[i][j] == defenitions._door) {
-
+				if (map[i][j].equals(defenitions._door)) {
+					
 					map[i][j] = defenitions._opened_door;
 					copied_map[i][j] = defenitions._opened_door;
 				}

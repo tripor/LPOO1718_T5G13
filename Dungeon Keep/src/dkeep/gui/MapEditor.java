@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 
@@ -23,7 +22,10 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import dkeep.logic.GameMap;
+import dkeep.logic.Level2;
 import dkeep.logic.defenitions;
+import dkeep.logic.character.Guard;
 import dkeep.logic.character.Hero;
 import dkeep.logic.character.Ogre;
 import javax.swing.JButton;
@@ -35,11 +37,12 @@ public class MapEditor extends Graphic implements MouseListener {
 	private WindowGame window;
 	private JTextField textWidth;
 	private JTextField textHeight;
+	private JLabel info;
 	private int tamanho_icon=50;
 	private String mouse_selected = null;
 	Graphic painel;
 	Hero hero= new Hero();
-	ArrayList<Ogre> guards=new ArrayList<Ogre>();
+	ArrayList<Guard> guards=new ArrayList<Guard>();
 	private JTextField textField_2;
 	
 	/**
@@ -158,6 +161,13 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_lblName.gridx = 9;
 		gbc_lblName.gridy = 1;
 		panel.add(lblName, gbc_lblName);
+		
+		info = new JLabel("");
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 10;
+		gbc_label.gridy = 1;
+		panel.add(info, gbc_label);
 		
 		JLabel lblHeight = new JLabel("Height");
 		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
@@ -279,15 +289,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_btnSave.gridx = 9;
 		gbc_btnSave.gridy = 3;
 		panel.add(btnSave, gbc_btnSave);
-		btnSave.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				
-			}
-			
-		});
+		
 		
 		painel = new Graphic();
 		painel.name="MAP";
@@ -316,12 +318,64 @@ public class MapEditor extends Graphic implements MouseListener {
 		hero.positionX=0;
 		hero.positionY=0;
 		
+		btnSave.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(hero.positionX==0 && hero.positionY==0)
+				{
+					InfoLog("Tem de inserir um heroi");
+				}
+				else if(textField_2.getText().equals(""))
+				{
+					InfoLog("Tem de inserir um nome para o mapa");
+				}
+				else
+				{
+					boolean key = false, door = false;
+					for (int i = 0; i < painel.map_background.length; i++) {
+						for (int j = 0; j < painel.map_background[i].length; j++) {
+							if (painel.map_background[i][j].equals(defenitions._lever)) {
+								key = true;
+							} else if (painel.map_background[i][j].equals(defenitions._door)
+									&& (i == 0 || i == painel.map_background.length - 1 || j == 0
+											|| j == painel.map_background[i].length - 1)) {
+								door = true;
+							}
+						}
+					}
+					if(key && door)
+					{
+						saveGameToFile();
+						frame.setVisible(false);
+						window.menuSetVisible(true);
+					}
+					else
+						InfoLog("There needs to be at least one key and one door on the edge of the map");
+				}
+				
+			}
+			
+		});
 		consoleLog("Init finished.");
 	}
 	
 	private void saveGameToFile()
 	{
-		
+		GameMap novo=new Level2(1);
+		novo.getGuards().clear();
+		novo.setGuards(guards);
+		novo.setCopied_map(new String[painel.map_background.length][painel.map_background[0].length]);
+		for(int i=0;i<painel.map_background.length;i++)
+		{
+			for(int j=0;j<painel.map_background[i].length;j++)
+			{
+				novo.setCopied_map(painel.map_background[i][j], i, j);
+			}
+		}
+		novo.setHero(this.hero);
+		System.out.println(info.getText());
+		window.gestor.writeGame(novo, this.textField_2.getText());
 	}
 	
 	
@@ -344,9 +398,11 @@ public class MapEditor extends Graphic implements MouseListener {
 		painel.repaint();
 	}
 	
+	private void InfoLog(String text) {
+		this.info.setText(text);
+	}
 	private void consoleLog(String text) {
 	}
-	
 	private void consolePrintMap(String[][] map) {
 
 		int i, j;
@@ -404,13 +460,15 @@ public class MapEditor extends Graphic implements MouseListener {
 					
 					
 					// REMOVE HERO.
-					hero.positionX = 0;
-					hero.positionY = 0;
-					
+					if(newX==hero.positionX && newY==hero.positionY)
+					{
+						hero.positionX = 0;
+						hero.positionY = 0;
+					}
 					
 					// REMOVE OGRE.
 					for(int index=0; index < this.guards.size(); index++) {
-						Ogre g = this.guards.get(index);
+						Ogre g = (Ogre) this.guards.get(index);
 						
 						// NOTE: in all files, positionX is Y-on-screen; positionY is X-on-screen. That's a lovely mistake. :)
 						if(g.positionX == newY
