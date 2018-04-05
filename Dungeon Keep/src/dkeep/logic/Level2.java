@@ -177,7 +177,7 @@ public class Level2 extends GameMap {
 			toY = hero.positionY + 1;
 			break;
 		}
-		if (toX < 0 || toY < 0 || toX>this.map.length || toY>this.map[0].length) {
+		if (toX < 0 || toY < 0 || toX>=this.map.length || toY>=this.map[0].length) {
 			return 1;
 		}
 		boolean has_moved;
