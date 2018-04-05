@@ -39,9 +39,10 @@ public class Graphic extends JPanel  {
 		try {
 			image.put(defenitions._wall,ImageIO.read(new File("sprites/wall.png")));
 			image.put(defenitions._empty_cell,ImageIO.read(new File("sprites/floor.png")));
-			image.put(defenitions._door,ImageIO.read(new File("sprites/wall.png")));
+			image.put(defenitions._door,ImageIO.read(new File("sprites/door_locked.png")));
 			image.put(defenitions._opened_door,ImageIO.read(new File("sprites/floor.png")));
 			image.put(defenitions._lever,ImageIO.read(new File("sprites/key.png")));
+			image.put(defenitions._raw_key,ImageIO.read(new File("sprites/key_raw.png")));
 			image.put(defenitions._hero,ImageIO.read(new File("sprites/hero.png")));
 			image.put(defenitions._hero_at_key,ImageIO.read(new File("sprites/hero_with_key.png")));
 			image.put(defenitions._guard,ImageIO.read(new File("sprites/guard.png")));
@@ -88,20 +89,20 @@ public class Graphic extends JPanel  {
 		this.map_background = map_background;
 	}
 
-	public void setBaseMap(int width,int height)
+	public void setBaseMap(int width, int height)
 	{
-		this.map_to_print=new String[width][height];
-		this.map_background=new String[width][height];
-		for(int i=0;i<width;i++)
+		this.map_to_print=new String[height][width];
+		this.map_background=new String[height][width];
+		for(int i=0;i<height;i++)
 		{
-			for(int j=0;j<height;j++)
+			for(int j=0;j<width;j++)
 			{
-				if(i==0 || i == width-1)
+				if(i==0 || i == height-1)
 				{
 					map_to_print[i][j]="X";
 					map_background[i][j]="X";
 				}
-				else if(j==0 || j == height-1)
+				else if(j==0 || j == width-1)
 				{
 					map_to_print[i][j]="X";
 					map_background[i][j]="X";

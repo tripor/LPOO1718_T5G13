@@ -33,10 +33,10 @@ public class MapEditor extends Graphic implements MouseListener {
 
 	public JFrame frame;
 	private WindowGame window;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField textWidth;
+	private JTextField textHeight;
 	private int tamanho_icon=50;
-	private String mouse_selected;
+	private String mouse_selected = null;
 	Graphic painel;
 	Hero hero= new Hero();
 	ArrayList<Ogre> guards=new ArrayList<Ogre>();
@@ -63,12 +63,12 @@ public class MapEditor extends Graphic implements MouseListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		frame.getContentPane().add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 59, 150, 98, 93, 93, 92, 82, 127, 0};
-		gbl_panel.rowHeights = new int[]{23, 30, 15, 42, 682};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1};
-		gbl_panel.rowWeights = new double[]{0.0, 1, 1.0, 1.0, 1.0};
+		gbl_panel.columnWidths = new int[]{15, 0, 50, 50, 50, 50, 50, 50, 50, 0, 0, 15};
+		gbl_panel.rowHeights = new int[]{15, 0, 0, 0, 0, 15};
+		gbl_panel.columnWeights = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 1};
+		gbl_panel.rowWeights = new double[]{0, 0, 0, 0, 1};
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblWeight = new JLabel("Width");
@@ -79,14 +79,15 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_lblWeight.gridy = 1;
 		panel.add(lblWeight, gbc_lblWeight);
 		
-		textField = new JTextField();
-		textField.setText("10");
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.anchor = GridBagConstraints.WEST;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 1;
-		textField.getDocument().addDocumentListener(new DocumentListener() {
+		textWidth = new JTextField();
+		textWidth.setText("10");
+		GridBagConstraints gbc_textWidth = new GridBagConstraints();
+		gbc_textWidth.fill = GridBagConstraints.BOTH;
+		gbc_textWidth.anchor = GridBagConstraints.WEST;
+		gbc_textWidth.insets = new Insets(0, 0, 5, 5);
+		gbc_textWidth.gridx = 2;
+		gbc_textWidth.gridy = 1;
+		textWidth.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				updateMap();
 			}
@@ -99,8 +100,8 @@ public class MapEditor extends Graphic implements MouseListener {
 				updateMap();
 			}
 		});
-		panel.add(textField, gbc_textField);
-		textField.setColumns(9);
+		panel.add(textWidth, gbc_textWidth);
+		textWidth.setColumns(9);
 
 		JLabel lblHero = new JLabel("Hero");
 		GridBagConstraints gbc_lblHero = new GridBagConstraints();
@@ -142,32 +143,41 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_lblKey.gridy = 1;
 		panel.add(lblKey, gbc_lblKey);
 		
+		JLabel lblClear = new JLabel("Clear");
+		GridBagConstraints gbc_lblClear = new GridBagConstraints();
+		gbc_lblClear.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_lblClear.insets = new Insets(0, 0, 5, 5);
+		gbc_lblClear.gridx = 8;
+		gbc_lblClear.gridy = 1;
+		panel.add(lblClear, gbc_lblClear);
+		
 		JLabel lblName = new JLabel("Name");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
-		gbc_lblName.anchor = GridBagConstraints.SOUTH;
+		gbc_lblName.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
-		gbc_lblName.gridx = 8;
+		gbc_lblName.gridx = 9;
 		gbc_lblName.gridy = 1;
 		panel.add(lblName, gbc_lblName);
 		
-		JLabel lblNewLabel = new JLabel("Height");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 1;
-		gbc_lblNewLabel.gridy = 2;
-		panel.add(lblNewLabel, gbc_lblNewLabel);
+		JLabel lblHeight = new JLabel("Height");
+		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
+		gbc_lblHeight.anchor = GridBagConstraints.EAST;
+		gbc_lblHeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHeight.gridx = 1;
+		gbc_lblHeight.gridy = 2;
+		panel.add(lblHeight, gbc_lblHeight);
 		
-		textField_1 = new JTextField();
-		textField_1.setText("10");
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.anchor = GridBagConstraints.WEST;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.gridx = 2;
-		gbc_textField_1.gridy = 2;
-		panel.add(textField_1, gbc_textField_1);
-		textField_1.setColumns(9);
-		textField_1.getDocument().addDocumentListener(new DocumentListener() {
+		textHeight = new JTextField();
+		textHeight.setText("10");
+		GridBagConstraints gbc_textHeight = new GridBagConstraints();
+		gbc_textHeight.fill = GridBagConstraints.BOTH;
+		gbc_textHeight.anchor = GridBagConstraints.WEST;
+		gbc_textHeight.insets = new Insets(0, 0, 5, 5);
+		gbc_textHeight.gridx = 2;
+		gbc_textHeight.gridy = 2;
+		panel.add(textHeight, gbc_textHeight);
+		textHeight.setColumns(9);
+		textHeight.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				updateMap();
 			}
@@ -191,7 +201,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_hero_icon.gridy = 2;
 		panel.add(hero_icon, gbc_hero_icon);
 		hero_icon.loadImages();
-		hero_icon.printIcon(defenitions._hero_with_arm, this.tamanho_icon);
+		hero_icon.printIcon(hero_icon.name, this.tamanho_icon);
 		
 		Graphic ogre_icon = new Graphic();
 		ogre_icon.name=defenitions._crazy_ogre;
@@ -203,7 +213,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_ogre_icon.gridy = 2;
 		panel.add(ogre_icon, gbc_ogre_icon);
 		ogre_icon.loadImages();
-		ogre_icon.printIcon(defenitions._crazy_ogre, this.tamanho_icon);
+		ogre_icon.printIcon(ogre_icon.name, this.tamanho_icon);
 		
 		Graphic wall_icon = new Graphic();
 		wall_icon.name=defenitions._wall;
@@ -215,7 +225,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_wall_icon.gridy = 2;
 		panel.add(wall_icon, gbc_wall_icon);
 		wall_icon.loadImages();
-		wall_icon.printIcon(defenitions._wall, this.tamanho_icon);
+		wall_icon.printIcon(wall_icon.name, this.tamanho_icon);
 		
 		Graphic door_icon = new Graphic();
 		door_icon.name=defenitions._door;
@@ -227,7 +237,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_door_icon.gridy = 2;
 		panel.add(door_icon, gbc_door_icon);
 		door_icon.loadImages();
-		door_icon.printIcon(defenitions._door, this.tamanho_icon);
+		door_icon.printIcon(door_icon.name, this.tamanho_icon);
 		
 		Graphic key_icon = new Graphic();
 		key_icon.name=defenitions._lever;
@@ -239,21 +249,34 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_key_icon.gridy = 2;
 		panel.add(key_icon, gbc_key_icon);
 		key_icon.loadImages();
-		key_icon.printIcon(defenitions._lever, this.tamanho_icon);
+		key_icon.printIcon(defenitions._raw_key, this.tamanho_icon);
+		
+		Graphic clear_icon = new Graphic();
+		clear_icon.name=defenitions._empty_cell;
+		GridBagConstraints gbc_clear_icon = new GridBagConstraints();
+		gbc_clear_icon.gridheight = 2;
+		gbc_clear_icon.insets = new Insets(0, 0, 5, 5);
+		gbc_clear_icon.fill = GridBagConstraints.BOTH;
+		gbc_clear_icon.gridx = 8;
+		gbc_clear_icon.gridy = 2;
+		panel.add(clear_icon, gbc_clear_icon);
+		clear_icon.loadImages();
+		clear_icon.printIcon(clear_icon.name, this.tamanho_icon);
 		
 		textField_2 = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 8;
+		gbc_textField_2.gridx = 9;
 		gbc_textField_2.gridy = 2;
 		panel.add(textField_2, gbc_textField_2);
 		textField_2.setColumns(10);
 		
 		JButton btnSave = new JButton("Save");
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
+		gbc_btnSave.anchor = GridBagConstraints.NORTHWEST;
 		gbc_btnSave.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSave.gridx = 8;
+		gbc_btnSave.gridx = 9;
 		gbc_btnSave.gridy = 3;
 		panel.add(btnSave, gbc_btnSave);
 		btnSave.addActionListener(new ActionListener() {
@@ -272,8 +295,9 @@ public class MapEditor extends Graphic implements MouseListener {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		painel.setBackground(Color.WHITE);
 		GridBagConstraints gbc_painel = new GridBagConstraints();
+		gbc_painel.insets = new Insets(0, 0, 5, 5);
 		gbc_painel.fill = GridBagConstraints.BOTH;
-		gbc_painel.gridwidth = 9;
+		gbc_painel.gridwidth = 10;
 		gbc_painel.gridx = 1;
 		gbc_painel.gridy = 4;
 		panel.add(painel, gbc_painel);
@@ -287,6 +311,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		wall_icon.addMouseListener(this);
 		door_icon.addMouseListener(this);
 		key_icon.addMouseListener(this);
+		clear_icon.addMouseListener(this);
 		
 		hero.positionX=0;
 		hero.positionY=0;
@@ -303,23 +328,37 @@ public class MapEditor extends Graphic implements MouseListener {
 	private void updateMap()
 	{
 		int x,y;
-		if(!this.textField.getText().equals(""))
-			x=Integer.parseInt(this.textField.getText());
+		if(!this.textWidth.getText().equals(""))
+			x=Integer.parseInt(this.textWidth.getText());
 		else
 			x=0;
-		if(!this.textField_1.getText().equals(""))
-			y=Integer.parseInt(this.textField_1.getText());
+		if(!this.textHeight.getText().equals(""))
+			y=Integer.parseInt(this.textHeight.getText());
 		else
 			y=0;
 		if(x>1000)
 			x=1000;
 		if(y>1000)
 			y=1000;
-		painel.setBaseMap(x,y);
+		painel.setBaseMap(x, y);
 		painel.repaint();
 	}
 	
 	private void consoleLog(String text) {
+	}
+	
+	private void consolePrintMap(String[][] map) {
+
+		int i, j;
+		
+		for(i=0; i<map.length; i++) {
+			
+			System.out.print("\n");
+			
+			for(j=0; j<map[i].length; j++) {
+				System.out.print(map[i][j]);
+			}
+		}
 	}
 
 	@Override
@@ -330,71 +369,171 @@ public class MapEditor extends Graphic implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+
+		System.out.println(e.getX() + "," + e.getY());
+		
 		// TODO Auto-generated method stub
-		if(e.getComponent().getName()!="MAP")
+		if(e.getComponent().getName() != "MAP")
 		{
-			this.mouse_selected=e.getComponent().getName();
+			this.mouse_selected = e.getComponent().getName();
+			// e.getComponent().getName() = defenitions.XXXXX;
 		}
 		else
 		{
-			int j=e.getX()/this.size_image;
-			int i=e.getY()/this.size_image;
-			if(j>=painel.map_to_print.length || j<0 || i<0 || i>=painel.map_to_print[0].length || !painel.map_to_print[j][i].equals(defenitions._empty_cell))
-			{
-				return;
-			}
-			if(this.mouse_selected.equals(defenitions._hero_with_arm))
-			{
-				if(j>0 && j<painel.map_background.length-1 && i>0 && i<painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell))
-				{
-					if(this.guards.size()!=0)
-					{
-						for(Ogre g:this.guards)
-						{
-							if(g.positionX==i && g.positionY==j)
-							{
-								return;
-							}
+			int newX = e.getX()/this.size_image;
+			int newY = e.getY()/this.size_image;
+			
+			if(this.mouse_selected != null) {
+				System.out.println("put " + this.mouse_selected + " at (" + newX + "," + newY + ")");
+				
+				// _hero_with_arm => map_to_print
+				// _crazy_ogre    => map_to_print
+				// (other)        => map_to_print && map_background
+				
+				if(newX >= painel.map_to_print[0].length || newX < 0) {
+					return;
+					// X overflows.
+				}
+				if(newY >= painel.map_to_print.length || newY < 0) {
+					return;
+					// Y overflows.
+				}
+				
+				if(this.mouse_selected.equals(defenitions._empty_cell)) {
+					// allow at any location.
+					
+					
+					// REMOVE HERO.
+					hero.positionX = 0;
+					hero.positionY = 0;
+					
+					
+					// REMOVE OGRE.
+					for(int index=0; index < this.guards.size(); index++) {
+						Ogre g = this.guards.get(index);
+						
+						// NOTE: in all files, positionX is Y-on-screen; positionY is X-on-screen. That's a lovely mistake. :)
+						if(g.positionX == newY
+							&& g.positionY == newX) {
+							
+							this.guards.remove(index);
 						}
-						painel.map_to_print[hero.positionX][hero.positionY]=painel.map_background[hero.positionX][hero.positionY];
-						hero.positionX=i;
-						hero.positionY=j;
-						painel.map_to_print[i][j]=this.mouse_selected;
-						painel.repaint();
-					}
-					else
-					{
-						painel.map_to_print[hero.positionX][hero.positionY]=painel.map_background[hero.positionX][hero.positionY];
-						hero.positionX=i;
-						hero.positionY=j;
-						painel.map_to_print[i][j]=this.mouse_selected;
-						painel.repaint();
 					}
 					
-				}
-			}
-			else if (this.mouse_selected.equals(defenitions._crazy_ogre)) {
-				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell)) {
-					Ogre novo=new Ogre(painel.map_to_print);
-					novo.positionX=i;
-					novo.positionY=j;
-					this.guards.add(novo);
-					painel.map_to_print[i][j]=this.mouse_selected;
-					painel.repaint();
-				}
-			}
-			else if (this.mouse_selected.equals(defenitions._wall) || this.mouse_selected.equals(defenitions._door) || this.mouse_selected.equals(defenitions._lever)) {
-				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell)) {
-					if(!painel.map_to_print[i][j].equals(defenitions._empty_cell))
-						return;
-					else
-					{
-						painel.map_to_print[i][j]=this.mouse_selected;
-						painel.map_background[i][j]=this.mouse_selected;
+					// KEEP WALL
+					if(newX == 0 || newX == painel.map_to_print[0].length-1 || newY == 0 || newY == painel.map_to_print.length-1) {
+
+						// Cannot change `mouse_selected`, do operations here instead.
+						
+						painel.map_background[newY][newX] = defenitions._wall;
+						
+						// SET ALL VALUES TO map_to_print
+						painel.map_to_print[newY][newX] = painel.map_background[newY][newX];
 						painel.repaint();
+						
+						return;
 					}
 				}
+				else if(this.mouse_selected.equals(defenitions._door)
+					&& painel.map_to_print[newY][newX].equals(defenitions._wall)) {
+					// for door, allow putting it on wall.
+				}
+				else if(!painel.map_to_print[newY][newX].equals(defenitions._empty_cell)) {
+					return;
+					// cell not empty.
+				}
+				
+				if(this.mouse_selected.equals(defenitions._hero_with_arm)){
+					
+					// remove the heroes before.
+					painel.map_to_print[hero.positionX][hero.positionY] = painel.map_background[hero.positionX][hero.positionY];
+					
+					// NOTE: in all files, positionX is Y-on-screen; positionY is X-on-screen. That's a lovely mistake. :)
+					hero.positionX = newY;
+					hero.positionY = newX;
+					
+				}
+				else if(this.mouse_selected.equals(defenitions._crazy_ogre)) {
+					
+					Ogre novo = new Ogre(painel.map_to_print);
+					novo.positionX = newY;
+					novo.positionY = newX;
+					this.guards.add(novo);
+				}
+				else {
+					painel.map_background[newY][newX] = this.mouse_selected;
+				}
+				
+				// SET ALL VALUES TO map_to_print
+				painel.map_to_print[newY][newX] = this.mouse_selected;
+				painel.repaint();
 			}
+			else {
+				System.out.println("th = " + newX + "," + newY);
+			}
+			
+			
+//			if(j>=painel.map_to_print.length || j<0 || i<0 || i>=painel.map_to_print[0].length || !painel.map_to_print[j][i].equals(defenitions._empty_cell))
+//			{
+//				return;
+//			}
+//			if(this.mouse_selected.equals(defenitions._hero_with_arm))
+//			{
+//				if(j>0 && j<painel.map_background.length-1 && i>0 && i<painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell))
+//				{
+//					if(this.guards.size()!=0)
+//					{
+//						for(Ogre g:this.guards)
+//						{
+//							if(g.positionX==i && g.positionY==j)
+//							{
+//								return;
+//							}
+//						}
+//						painel.map_to_print[hero.positionX][hero.positionY]=painel.map_background[hero.positionX][hero.positionY];
+//						hero.positionX=i;
+//						hero.positionY=j;
+//						painel.map_to_print[i][j]=this.mouse_selected;
+//						painel.repaint();
+//					}
+//					else
+//					{
+//						painel.map_to_print[hero.positionX][hero.positionY]=painel.map_background[hero.positionX][hero.positionY];
+//						hero.positionX=i;
+//						hero.positionY=j;
+//						painel.map_to_print[i][j]=this.mouse_selected;
+//						painel.repaint();
+//					}
+//					
+//				}
+//			}
+//			else if (this.mouse_selected.equals(defenitions._crazy_ogre)) {
+//				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell)) {
+//					Ogre novo=new Ogre(painel.map_to_print);
+//					novo.positionX=i;
+//					novo.positionY=j;
+//					this.guards.add(novo);
+//					painel.map_to_print[i][j]=this.mouse_selected;
+//					painel.repaint();
+//				}
+//			}
+//			else if (this.mouse_selected.equals(defenitions._wall) || this.mouse_selected.equals(defenitions._door) || this.mouse_selected.equals(defenitions._lever)) {
+//				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell)) {
+//					if(!painel.map_to_print[i][j].equals(defenitions._empty_cell))
+//						return;
+//					else
+//					{
+//						painel.map_to_print[i][j]=this.mouse_selected;
+//						painel.map_background[i][j]=this.mouse_selected;
+//						painel.repaint();
+//					}
+//				}
+//			}
+
+//			System.out.println("\n\n>> MAP BG");
+//			consolePrintMap(painel.map_background);
+//			System.out.println("\n\n>> MAP PRINT");
+//			consolePrintMap(painel.map_to_print);
 			
 		}
 		

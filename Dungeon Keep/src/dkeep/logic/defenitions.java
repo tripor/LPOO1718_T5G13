@@ -6,6 +6,7 @@ public class defenitions {
 	public static String _door = "I";
 	public static String _opened_door = "S";
 	public static String _lever = "k";
+	public static String _raw_key = "r";
 	public static String _empty_cell = " ";
 
 	public static String _hero = "H";
