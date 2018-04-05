@@ -302,7 +302,7 @@ public class MapEditor extends Graphic implements MouseListener {
 			}
 			if(this.mouse_selected.equals(defenitions._hero_with_arm))
 			{
-				if(j>0 && j<painel.map_background.length-1 && i>0 && i<painel.map_background[0].length)
+				if(j>0 && j<painel.map_background.length-1 && i>0 && i<painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell))
 				{
 					if(this.guards.size()!=0)
 					{
@@ -331,7 +331,7 @@ public class MapEditor extends Graphic implements MouseListener {
 				}
 			}
 			else if (this.mouse_selected.equals(defenitions._crazy_ogre)) {
-				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length) {
+				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell)) {
 					Ogre novo=new Ogre(painel.map_to_print);
 					novo.positionX=i;
 					novo.positionY=j;
@@ -340,12 +340,19 @@ public class MapEditor extends Graphic implements MouseListener {
 					painel.repaint();
 				}
 			}
-			else if (this.mouse_selected.equals(defenitions._wall)) {
-				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length) {
+			else if (this.mouse_selected.equals(defenitions._wall) || this.mouse_selected.equals(defenitions._door) || this.mouse_selected.equals(defenitions._lever)) {
+				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length && painel.map_background[i][j].equals(defenitions._empty_cell)) {
 					if(!painel.map_to_print[i][j].equals(defenitions._empty_cell))
 						return;
+					else
+					{
+						painel.map_to_print[i][j]=this.mouse_selected;
+						painel.map_background[i][j]=this.mouse_selected;
+						painel.repaint();
+					}
 				}
 			}
+			
 		}
 		
 	}
