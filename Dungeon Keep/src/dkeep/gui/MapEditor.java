@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import dkeep.logic.defenitions;
 import dkeep.logic.character.Hero;
 import dkeep.logic.character.Ogre;
+import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class MapEditor extends Graphic implements MouseListener {
@@ -37,6 +40,7 @@ public class MapEditor extends Graphic implements MouseListener {
 	Graphic painel;
 	Hero hero= new Hero();
 	ArrayList<Ogre> guards=new ArrayList<Ogre>();
+	private JTextField textField_2;
 	
 	/**
 	 * Create the application.
@@ -61,9 +65,9 @@ public class MapEditor extends Graphic implements MouseListener {
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 59, 150, 98, 93, 93, 92, 82, 0};
+		gbl_panel.columnWidths = new int[]{0, 59, 150, 98, 93, 93, 92, 82, 127, 0};
 		gbl_panel.rowHeights = new int[]{23, 30, 15, 42, 682};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1};
 		gbl_panel.rowWeights = new double[]{0.0, 1, 1.0, 1.0, 1.0};
 		panel.setLayout(gbl_panel);
 		
@@ -137,6 +141,14 @@ public class MapEditor extends Graphic implements MouseListener {
 		gbc_lblKey.gridx = 7;
 		gbc_lblKey.gridy = 1;
 		panel.add(lblKey, gbc_lblKey);
+		
+		JLabel lblName = new JLabel("Name");
+		GridBagConstraints gbc_lblName = new GridBagConstraints();
+		gbc_lblName.anchor = GridBagConstraints.SOUTH;
+		gbc_lblName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblName.gridx = 8;
+		gbc_lblName.gridy = 1;
+		panel.add(lblName, gbc_lblName);
 		
 		JLabel lblNewLabel = new JLabel("Height");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -229,6 +241,31 @@ public class MapEditor extends Graphic implements MouseListener {
 		key_icon.loadImages();
 		key_icon.printIcon(defenitions._lever, this.tamanho_icon);
 		
+		textField_2 = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 8;
+		gbc_textField_2.gridy = 2;
+		panel.add(textField_2, gbc_textField_2);
+		textField_2.setColumns(10);
+		
+		JButton btnSave = new JButton("Save");
+		GridBagConstraints gbc_btnSave = new GridBagConstraints();
+		gbc_btnSave.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSave.gridx = 8;
+		gbc_btnSave.gridy = 3;
+		panel.add(btnSave, gbc_btnSave);
+		btnSave.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+			}
+			
+		});
+		
 		painel = new Graphic();
 		painel.name="MAP";
 		FlowLayout flowLayout = (FlowLayout) painel.getLayout();
@@ -236,7 +273,7 @@ public class MapEditor extends Graphic implements MouseListener {
 		painel.setBackground(Color.WHITE);
 		GridBagConstraints gbc_painel = new GridBagConstraints();
 		gbc_painel.fill = GridBagConstraints.BOTH;
-		gbc_painel.gridwidth = 8;
+		gbc_painel.gridwidth = 9;
 		gbc_painel.gridx = 1;
 		gbc_painel.gridy = 4;
 		panel.add(painel, gbc_painel);
@@ -256,6 +293,12 @@ public class MapEditor extends Graphic implements MouseListener {
 		
 		consoleLog("Init finished.");
 	}
+	
+	private void saveGameToFile()
+	{
+		
+	}
+	
 	
 	private void updateMap()
 	{
