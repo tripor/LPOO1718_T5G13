@@ -2,6 +2,3 @@ component_depth: 2
 languages:
 -java
 -javascript
-teste:
-	include:
-		-Dungeon Keep/src/dkeep.test\.java
