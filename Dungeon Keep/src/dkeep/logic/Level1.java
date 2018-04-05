@@ -2,10 +2,10 @@ package dkeep.logic;
 
 import java.util.Random;
 
-import dkeep.character.Drunken;
-import dkeep.character.Guard;
-import dkeep.character.Rookie;
-import dkeep.character.Suspicious;
+import dkeep.logic.character.Drunken;
+import dkeep.logic.character.Guard;
+import dkeep.logic.character.Rookie;
+import dkeep.logic.character.Suspicious;
 
 public class Level1 extends GameMap {
 

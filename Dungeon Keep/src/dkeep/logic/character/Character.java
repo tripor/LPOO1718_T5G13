@@ -1,4 +1,4 @@
-package dkeep.character;
+package dkeep.logic.character;
 
 import java.util.ArrayList;
 

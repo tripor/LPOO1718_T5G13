@@ -7,12 +7,9 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
@@ -25,6 +22,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import dkeep.logic.defenitions;
+import dkeep.logic.character.Hero;
+import dkeep.logic.character.Ogre;
 
 @SuppressWarnings("serial")
 public class MapEditor extends Graphic implements MouseListener {
@@ -36,6 +35,8 @@ public class MapEditor extends Graphic implements MouseListener {
 	private int tamanho_icon=50;
 	private String mouse_selected;
 	Graphic painel;
+	Hero hero= new Hero();
+	ArrayList<Ogre> guards=new ArrayList<Ogre>();
 	
 	/**
 	 * Create the application.
@@ -250,6 +251,9 @@ public class MapEditor extends Graphic implements MouseListener {
 		door_icon.addMouseListener(this);
 		key_icon.addMouseListener(this);
 		
+		hero.positionX=0;
+		hero.positionY=0;
+		
 		consoleLog("Init finished.");
 	}
 	
@@ -292,9 +296,56 @@ public class MapEditor extends Graphic implements MouseListener {
 		{
 			int j=e.getX()/this.size_image;
 			int i=e.getY()/this.size_image;
-			painel.map_to_print[i][j]=this.mouse_selected;
-			painel.map_background[i][j]=this.mouse_selected;
-			painel.repaint();
+			if(j>=painel.map_to_print.length || j<0 || i<0 || i>=painel.map_to_print[0].length || !painel.map_to_print[j][i].equals(defenitions._empty_cell))
+			{
+				return;
+			}
+			if(this.mouse_selected.equals(defenitions._hero_with_arm))
+			{
+				if(j>0 && j<painel.map_background.length-1 && i>0 && i<painel.map_background[0].length)
+				{
+					if(this.guards.size()!=0)
+					{
+						for(Ogre g:this.guards)
+						{
+							if(g.positionX==i && g.positionY==j)
+							{
+								return;
+							}
+						}
+						painel.map_to_print[hero.positionX][hero.positionY]=painel.map_background[hero.positionX][hero.positionY];
+						hero.positionX=i;
+						hero.positionY=j;
+						painel.map_to_print[i][j]=this.mouse_selected;
+						painel.repaint();
+					}
+					else
+					{
+						painel.map_to_print[hero.positionX][hero.positionY]=painel.map_background[hero.positionX][hero.positionY];
+						hero.positionX=i;
+						hero.positionY=j;
+						painel.map_to_print[i][j]=this.mouse_selected;
+						painel.repaint();
+					}
+					
+				}
+			}
+			else if (this.mouse_selected.equals(defenitions._crazy_ogre)) {
+				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length) {
+					Ogre novo=new Ogre(painel.map_to_print);
+					novo.positionX=i;
+					novo.positionY=j;
+					this.guards.add(novo);
+					painel.map_to_print[i][j]=this.mouse_selected;
+					painel.repaint();
+				}
+			}
+			else if (this.mouse_selected.equals(defenitions._wall)) {
+				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length) {
+					if(!painel.map_to_print[i][j].equals(defenitions._empty_cell))
+						return;
+				}
+			}
 		}
 		
 	}

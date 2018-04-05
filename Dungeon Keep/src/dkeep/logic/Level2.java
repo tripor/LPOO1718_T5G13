@@ -3,9 +3,9 @@ package dkeep.logic;
 import java.util.ArrayList;
 import java.util.Random;
 
-import dkeep.character.Club;
-import dkeep.character.Guard;
-import dkeep.character.Ogre;
+import dkeep.logic.character.Club;
+import dkeep.logic.character.Guard;
+import dkeep.logic.character.Ogre;
 
 public class Level2 extends GameMap {
 

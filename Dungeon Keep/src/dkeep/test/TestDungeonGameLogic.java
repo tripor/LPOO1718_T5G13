@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import dkeep.character.Club;
-import dkeep.character.Guard;
 import dkeep.logic.*;
+import dkeep.logic.character.Club;
+import dkeep.logic.character.Guard;
 
 /*Transforms the input:
  * W-1 UP

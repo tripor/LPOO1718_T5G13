@@ -2,7 +2,8 @@ package dkeep.logic;
 
 import java.util.ArrayList;
 
-import dkeep.character.*;
+import dkeep.logic.character.Guard;
+import dkeep.logic.character.Hero;
 
 public abstract class GameMap {
 

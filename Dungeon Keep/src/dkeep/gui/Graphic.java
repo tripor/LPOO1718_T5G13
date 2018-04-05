@@ -71,7 +71,14 @@ public class Graphic extends JPanel  {
 		return map_to_print;
 	}
 	public void setMap_to_print(String[][] map_to_print) {
-		this.map_to_print = map_to_print;
+		this.map_to_print= new String[map_to_print.length][map_to_print[0].length];
+		for(int i=0;i<map_to_print.length;i++)
+		{
+			for(int j=0;j<map_to_print[0].length;j++)
+			{
+				this.map_to_print[i][j]=map_to_print[i][j];
+			}
+		}
 	}
 	public String[][] getMap_background() {
 		return map_background;
@@ -83,25 +90,29 @@ public class Graphic extends JPanel  {
 
 	public void setBaseMap(int width,int height)
 	{
-		String[][] set = new String[width][height];
+		this.map_to_print=new String[width][height];
+		this.map_background=new String[width][height];
 		for(int i=0;i<width;i++)
 		{
 			for(int j=0;j<height;j++)
 			{
 				if(i==0 || i == width-1)
 				{
-					set[i][j]="X";
+					map_to_print[i][j]="X";
+					map_background[i][j]="X";
 				}
 				else if(j==0 || j == height-1)
 				{
-					set[i][j]="X";
+					map_to_print[i][j]="X";
+					map_background[i][j]="X";
 				}
 				else
-					set[i][j]=" ";
+				{
+					map_to_print[i][j] = " ";
+					map_background[i][j] = " ";
+				}
 			}
 		}
-		this.map_to_print=set;
-		this.map_background=set;
 	}
 	
 	public void printIcon(String tipo,int tamanho)
