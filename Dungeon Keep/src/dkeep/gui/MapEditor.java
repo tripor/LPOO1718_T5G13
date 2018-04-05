@@ -344,12 +344,6 @@ public class MapEditor extends Graphic implements MouseListener {
 				if (j > 0 && j < painel.map_background.length - 1 && i > 0 && i < painel.map_background[0].length) {
 					if(!painel.map_to_print[i][j].equals(defenitions._empty_cell))
 						return;
-					else
-					{
-						painel.map_background[i][j]=this.mouse_selected;
-						painel.map_to_print[i][j]=this.mouse_selected;
-						painel.repaint();
-					}
 				}
 			}
 		}
