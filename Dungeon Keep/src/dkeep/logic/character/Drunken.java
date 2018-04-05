@@ -1,10 +1,16 @@
 package dkeep.logic.character;
 
 import dkeep.logic.GameMap;
-
+/**
+ * 
+ * Class the calculates the logic of the Drunken type guard
+ *
+ */
 public class Drunken extends Guard {
 
-
+	/**
+	 * calculates the guard next postition. Will also see if he has fallen asleep or waken up
+	 */
 	public int[] guardNextPosition(GameMap gamearea) {
 		int[] pos = new int[] { this.positionX, this.positionY };
 
@@ -71,20 +77,28 @@ public class Drunken extends Guard {
 		}
 		return pos;
 	}
-
+	/**
+	 * Gets the guard sleeping stat
+	 * @return boolean with the sleeping state
+	 */
 	public boolean isSleep() {
 		return sleep;
 	}
-
+	/**
+	 * Sets the guard sleeping state
+	 * @param sleep boolean the state i want the guard to be
+	 */
 	public void setSleep(boolean sleep) {
 		this.sleep = sleep;
 	}
-
+	
 	public String typeGuard() {
 		return "drunken";
 	}
-
-	public Drunken(String[][] map){
+	/**
+	 * Constructor of the class Drunken
+	 */
+	public Drunken(){
 		super();
 	}
 

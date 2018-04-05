@@ -513,7 +513,7 @@ public class MapEditor extends Graphic implements MouseListener {
 				}
 				else if(this.mouse_selected.equals(defenitions._crazy_ogre)) {
 					
-					Ogre novo = new Ogre(painel.map_to_print);
+					Ogre novo = new Ogre();
 					novo.positionX = newY;
 					novo.positionY = newX;
 					this.guards.add(novo);

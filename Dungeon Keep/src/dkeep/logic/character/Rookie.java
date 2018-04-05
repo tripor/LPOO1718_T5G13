@@ -1,11 +1,17 @@
 package dkeep.logic.character;
 
 import dkeep.logic.GameMap;
-
+/**
+ * 
+ * Class that implements the game logic of the guard of type Rookie
+ *
+ */
 public class Rookie extends Guard {
 	
 	
-
+	/**
+	 * Calculates the guard next position. This one has a fixed path
+	 */
 	public int[] guardNextPosition(GameMap gamearea) {
 
 		int[] pos = new int[] { this.positionX, this.positionY };
@@ -34,8 +40,11 @@ public class Rookie extends Guard {
 	public String typeGuard() {
 		return "rookie";
 	}
-
-	public Rookie(String[][] map){
+	/**
+	 * Cosntructor of the class Rookie
+	 * @param map
+	 */
+	public Rookie(){
 		super();
 	}
 

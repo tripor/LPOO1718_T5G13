@@ -6,9 +6,16 @@ import dkeep.logic.character.Drunken;
 import dkeep.logic.character.Guard;
 import dkeep.logic.character.Rookie;
 import dkeep.logic.character.Suspicious;
-
+/**
+ * 
+ * Class for the Level 1
+ *
+ */
 public class Level1 extends GameMap {
 
+	/**
+	 * Creates a random guard of 3 types: Rookie, Drunken, Suspicious; and adds it to the ArrayList
+	 */
 	public void getRandomGuard() {
 		Guard g;
 		int total_typeOfGuard = 3;
@@ -26,45 +33,50 @@ public class Level1 extends GameMap {
 		// passing "map" is because need to fetch width & height of map.
 
 		case 1:
-			g = new Rookie(map);
+			g = new Rookie();
 			// // it is the default value of g.
 			break;
 		case 2:
-			g = new Drunken(map);
+			g = new Drunken();
 			break;
 		case 3:
-			g = new Suspicious(map);
+			g = new Suspicious();
 			break;
 		default:
-			g = new Rookie(map);
+			g = new Rookie();
 		}
 
 		guards.add(g);
 	}
+	/**
+	 * Creates a guard and add it to the ArrayList guards
+	 * @param guard String:the type of guard i want to create. 
+	 */
 	private void getSelectedGuard(String guard)
 	{
 		Guard g;
 		if(guard.equals("Rookie"))
 		{
-			g = new Rookie(map);
+			g = new Rookie();
 		}
 		else if(guard.equals("Drunken"))
 		{
-			g = new Drunken(map);
+			g = new Drunken();
 		}
 		else if(guard.equals("Suspicious"))
 		{
-			g = new Suspicious(map);
+			g = new Suspicious();
 		}
 		else
 		{
-			g = new Rookie(map);
+			g = new Rookie();
 		}
 		
 		guards.add(g);
 	}
-	
-	@Override
+	/**
+	 * Sets the position of the hero and the guards on the top layer map
+	 */
 	public void markPositions() {
 
 		// mark default position in the map, for hero & guard
@@ -79,7 +91,9 @@ public class Level1 extends GameMap {
 		}
 
 	}
-	
+	/**
+	 * Constructor of level 1. Creates a hero and a random guard
+	 */
 	public Level1()
 	{
 
@@ -104,7 +118,10 @@ public class Level1 extends GameMap {
 
 		this.markPositions();
 	}
-
+	/**
+	 * Constructor of level 1. Creates a hero and a guard 
+	 * @param guard_type String: the type of guard i want to create
+	 */
 	public Level1(String guard_type) {
 		current_level = new Maps();
 		this.updateMap();
@@ -124,7 +141,10 @@ public class Level1 extends GameMap {
 		this.markPositions();
 	}
 
-	@Override
+	/**
+	 * Checks if the hero has been caught by the guard
+	 * @return true if caught or false if not
+	 */
 	public boolean checkGuard() {
 
 		for(Guard guard : guards){
@@ -147,7 +167,11 @@ public class Level1 extends GameMap {
 		return false;
 	}
 
-	@Override
+	/**
+	 * Moves the hero. 1-UP 2-DOWN 3-LEFT 4-RIGHT . Also updates the position of the guard
+	 * @param type_movement the type of movement of the guard 1-4
+	 * @return returns 0 if able to move, 1 if it left the map, 2 if caught 
+	 */
 	public int moveHeroTo(int type_movement) {
 		this.clearMap();
 		int toX = hero.positionX, toY = hero.positionY;
@@ -204,18 +228,26 @@ public class Level1 extends GameMap {
 
 		return 0;
 	}
-	public boolean placeHero(int posX,int posY)
+	/**
+	 * Places the hero in a position that i want
+	 * @param posX position X where i want the hero to be
+	 * @param posY position Y where i want the hero to be
+	 */
+	public void placeHero(int posX,int posY)
 	{
 		this.hero.push_remove(posX, posY,this);
-		return true;
 	}
-	public boolean placeGuard(int posX,int posY)
+	/**
+	 * Places all the guards in the i want to
+	 * @param posX position X where i want the guards to be
+	 * @param posY position Y where i want the guards to be
+	 */
+	public void placeGuard(int posX,int posY)
 	{
 		for (Guard guard : this.guards)
 		{
 			guard.push_remove(posX, posY,this);
 		}
-		return true;
 	}
 
 }

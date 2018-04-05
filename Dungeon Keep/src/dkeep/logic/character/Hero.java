@@ -2,14 +2,23 @@ package dkeep.logic.character;
 
 import dkeep.logic.GameMap;
 import dkeep.logic.defenitions;
-
+/**
+ * 
+ * Class that implements the logic of the Hero
+ *
+ */
 public class Hero extends Character {
 
+	/**
+	 * Constructor of the class Hero
+	 */
 	public Hero(){
 		super();
 		this.my_char=defenitions._hero;
 	}
-	
+	/**
+	 * Check if the hero can move to the position i want to. If its a lever it will open the door. If a key he will pick it up and if he tries to open a door with a key it will open it
+	 */
 	public boolean push_remove(int toX, int toY, GameMap game) {
 		boolean can_move = ((game.getMap()[toX][toY].equals(defenitions._empty_cell)
 				|| game.getMap()[toX][toY].equals(defenitions._opened_door)

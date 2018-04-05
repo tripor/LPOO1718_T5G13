@@ -1,5 +1,9 @@
 package dkeep.logic;
-
+/**
+ * 
+ * class that mantains some string for use, each with a name apropriate to the situation
+ *
+ */
 public class defenitions {
 	/* ======DEFINITIONS====== */
 	public static String _wall = "X";

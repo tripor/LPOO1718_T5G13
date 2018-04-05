@@ -1,9 +1,15 @@
 package dkeep.logic.character;
 
 import dkeep.logic.GameMap;
-
+/**
+ * 
+ * Class the implements the logic of the guard Suspicious
+ *
+ */
 public class Suspicious extends Guard {
-
+	/**
+	 * Calculates the guard next position and he can randomly change it course
+	 */
 	public int[] guardNextPosition( GameMap gamearea) {
 		int[] pos = new int[] { this.positionX, this.positionY };
 
@@ -52,12 +58,16 @@ public class Suspicious extends Guard {
 		}
 		return pos;
 	}
-
+	/**
+	 * 
+	 */
 	public String typeGuard() {
 		return "suspicious";
 	}
-
-	public Suspicious(String[][] map){
+	/**
+	 * Constructor of the class Suspicious
+	 */
+	public Suspicious(){
 		super();
 	}
 

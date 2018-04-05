@@ -5,53 +5,31 @@ import dkeep.logic.*;
 
 public abstract class Guard extends Character {
 
+	/**
+	 * Saves amount of turns the guard has been stunned
+	 */
 	public int stunned = 0;	// if 1, 2 = stunned
+	/**
+	 * Save the sleeping state of the guard
+	 */
 	public boolean sleep = false;
-	
-	public Guard(String[][] map){
-
-		super();
-
-		// System.out.print(map);
-
-		int xMax = map.length-1;
-		int yMax = map[0].length-1;
-
-		int x=0, y=0;
-
-		boolean success = false;
-
-		for(int i=0; i<xMax+yMax; i++) {
-			x = randomNumber(0, xMax);
-			y = randomNumber(0, yMax);
-
-			if(map[x][y].equals(defenitions._empty_cell)){
-				success = true;
-				break;
-			}
-		}
-
-		if(success==false){
-			System.exit(0);
-		}
-
-		positionX = x;
-		positionY = y;
-	}
-
-	// rd() will return a corner which had never failed.
-
-	// e.g., it failed because there is a wall,
-	//    in the next loop, it will omit the side of wall,
-	//    which means only 3 sides to random.
-
+	/**
+	 * Constructor of the class 
+	 */
 	public Guard() {
 		super();
 		this.my_char="G";
 	}
-
-	//    if in the next loop, one more side is found to be a ... door?
-	//    then the third loop will only 2 sides to random.
+	/**
+	 * rd() will return a corner which had never failed.
+	 * e.g., it failed because there is a wall,
+	 * in the next loop, it will omit the side of wall,
+	 * which means only 3 sides to random.
+	 * if in the next loop, one more side is found to be a ... door?
+	 * then the third loop will only 2 sides to random.
+	 * @param fail_pos array with position that haven't fail for the guard to move to
+	 * @return a movement for the guard to move to
+	 */
 	protected int rd(int[] fail_pos){
 
 		int count_available = 0;
@@ -64,10 +42,7 @@ public abstract class Guard extends Character {
 			}
 		}
 
-		// System.out.print("\n[>> "+count_available);
-
 		if(count_available == 0){
-			System.out.print("\n\n\n===========================\nError: No space for guard / club.\n\n");
 			System.exit(0);
 		}
 
@@ -103,7 +78,9 @@ public abstract class Guard extends Character {
 		return rand_result;
 	}
 	
-	
+	/**
+	 * Check if the guard can move to the position i want him to go
+	 */
 	public boolean push_remove(int toX, int toY, GameMap game) {
 		// guard
 
@@ -141,6 +118,9 @@ public abstract class Guard extends Character {
 	
 	protected String[] path = {"L","D","D","D","D","L","L","L","L","L","L","D","R","R","R","R","R","R","R","U","U","U","U","U"};
 	protected int position_path=0;
+	/**
+	 * Walking direction of the guard
+	 */
 	public boolean foward_walking=true;
 	/*
 	 * 1 UP
@@ -148,7 +128,15 @@ public abstract class Guard extends Character {
 	 * 3 Left
 	 * 4 Right
 	 */
+	/**
+	 * Calculates the guard next position
+	 * @param gamearea the current game
+	 * @return array int with 2 position corresponding to the new position X and Y of the guard
+	 */
 	public abstract int[] guardNextPosition(GameMap gamearea);
-	
+	/**
+	 * Gets the type of guard
+	 * @return String with the type of guard
+	 */
 	public abstract String typeGuard();
 }

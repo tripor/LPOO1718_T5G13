@@ -2,9 +2,15 @@ package dkeep.logic.character;
 
 import dkeep.logic.GameMap;
 import dkeep.logic.defenitions;
-
+/**
+ * 
+ * Class that implements the logic of the Ogre
+ *
+ */
 public class Ogre extends Guard {
-
+	/**
+	 * Calculates the ogre next position. It a random position
+	 */
 	public int[] guardNextPosition(GameMap gamearea) {
 
 		// =====LEVEL 2 STARTS.
@@ -58,13 +64,17 @@ public class Ogre extends Guard {
 
 		return pos;
 	}
-
+	/**
+	 * 
+	 */
 	public String typeGuard() {
 		return "ogre";
 	}
-
-	public Ogre(String[][] map){
-		super(map);
+	/**
+	 * Constructor of the class Ogre
+	 */
+	public Ogre(){
+		super();
 		this.my_char=defenitions._crazy_ogre;
 	}
 

@@ -1,9 +1,18 @@
 package dkeep.logic.character;
 
 import dkeep.logic.*;
-
+/**
+ * 
+ * Class that make the logic of the club
+ *
+ */
 public class Club extends Ogre {
 
+	/**
+	 * Calculates the next position of the club depending on the position of the owner
+	 * @param gamearea the current game
+	 * @param my_owner the owner of the club
+	 */
 	public void clubNextPosition(GameMap gamearea, Character my_owner) {
 		this.positionX=my_owner.positionX;
 		this.positionY=my_owner.positionY;
@@ -59,11 +68,16 @@ public class Club extends Ogre {
 		
 		
 	}
-
-	public Club(String[][] map){
-		super(map);
+	/**
+	 * Cosntructor of the class CLub
+	 */
+	public Club(){
+		super();
 		this.my_char=defenitions._ogre_club;
 	}
+	/**
+	 * Check if the club if able to move to the position i want to
+	 */
 	public boolean push_remove(int toX, int toY, GameMap game) {
 
 		boolean can_move = ((game.getMap()[toX][toY].equals(defenitions._empty_cell)

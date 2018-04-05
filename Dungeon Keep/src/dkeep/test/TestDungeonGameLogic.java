@@ -153,10 +153,10 @@ public class TestDungeonGameLogic {
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
 		jogo.moveHeroTo(2);
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][1]);
-		assertTrue(jogo.placeHero(1, 1));
+		jogo.placeHero(1, 1);
 		jogo.moveHeroTo(1);
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[1][1]);
-		assertTrue(jogo.placeHero(7, 7));
+		jogo.placeHero(7, 7);
 		jogo.moveHeroTo(4);
 		assertEquals(defenitions._hero_with_arm, jogo.getMap()[7][7]);
 	}
@@ -164,32 +164,32 @@ public class TestDungeonGameLogic {
 	@Test
 	public void testGuardCaughtLevel1() {
 		Level1 jogo = new Level1();
-		assertTrue(jogo.placeHero(2, 8));
-		assertTrue(jogo.placeGuard(1, 8));
+		jogo.placeHero(2, 8);
+		jogo.placeGuard(1, 8);
 		assertEquals(defenitions._hero, jogo.getMap()[2][8]);
 		assertEquals(defenitions._guard, jogo.getMap()[1][8]);
 		assertTrue(jogo.checkGuard());
 		jogo = new Level1();
-		assertTrue(jogo.placeHero(1, 7));
-		assertTrue(jogo.placeGuard(1, 8));
+		jogo.placeHero(1, 7);
+		jogo.placeGuard(1, 8);
 		assertEquals(defenitions._hero, jogo.getMap()[1][7]);
 		assertEquals(defenitions._guard, jogo.getMap()[1][8]);
 		assertTrue(jogo.checkGuard());
 		jogo = new Level1();
-		assertTrue(jogo.placeHero(2, 8));
-		assertTrue(jogo.placeGuard(2, 7));
+		jogo.placeHero(2, 8);
+		jogo.placeGuard(2, 7);
 		assertEquals(defenitions._hero, jogo.getMap()[2][8]);
 		assertEquals(defenitions._guard, jogo.getMap()[2][7]);
 		assertTrue(jogo.checkGuard());
 		jogo = new Level1();
-		assertTrue(jogo.placeHero(2, 8));
-		assertTrue(jogo.placeGuard(3, 8));
+		jogo.placeHero(2, 8);
+		jogo.placeGuard(3, 8);
 		assertEquals(defenitions._hero, jogo.getMap()[2][8]);
 		assertEquals(defenitions._guard, jogo.getMap()[3][8]);
 		assertTrue(jogo.checkGuard());
 		
 		jogo= new Level1("Rookie");
-		assertTrue(jogo.placeHero(2, 8));
+		jogo.placeHero(2, 8);
 		assertEquals(2,jogo.moveHeroTo(3));
 
 	}
@@ -202,22 +202,22 @@ public class TestDungeonGameLogic {
 		{
 			it.clubs.clear();
 		}
-		assertTrue(jogo.placeGuard(5, 5));
+		jogo.placeGuard(5, 5);
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(4, 5));
+		jogo.placeHero(4, 5);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(6, 5));
+		jogo.placeHero(6, 5);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(5, 4));
+		jogo.placeHero(5, 4);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(5, 6));
+		jogo.placeHero(5, 6);
 		assertTrue(jogo.checkGuard());
 		
 		jogo = new Level2(1);
@@ -233,19 +233,19 @@ public class TestDungeonGameLogic {
 		jogo.placeGuard(1, 1);
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(4, 5));
+		jogo.placeHero(4, 5);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(6, 5));
+		jogo.placeHero(6, 5);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(5, 4));
+		jogo.placeHero(5, 4);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(5, 6));
+		jogo.placeHero(5, 6);
 		assertTrue(jogo.checkGuard());
 		
 		jogo = new Level2(1);
@@ -261,19 +261,19 @@ public class TestDungeonGameLogic {
 		jogo.placeGuard(5, 5);
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(4, 5));
+		jogo.placeHero(4, 5);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(6, 5));
+		jogo.placeHero(6, 5);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(5, 4));
+		jogo.placeHero(5, 4);
 		assertTrue(jogo.checkGuard());
 		jogo.clearMap();
 		jogo.markPositions();
-		assertTrue(jogo.placeHero(5, 6));
+		jogo.placeHero(5, 6);
 		assertTrue(jogo.checkGuard());
 	}
 
