@@ -109,12 +109,6 @@ public class Menu {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				try {
-					window.gestor.closeFile();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				System.exit(0);
 			}
 		});
